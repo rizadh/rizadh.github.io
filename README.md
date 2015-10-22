@@ -1,2 +1,0 @@
-# rizadh.github.io
-P
