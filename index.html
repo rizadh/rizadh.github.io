@@ -39,36 +39,25 @@
         transform: translateX(-50%);
         text-align: center;
 
-        color: hsla(240, 5%, 50%, 1);
+        color: hsla(240, 5%, 70%, 1);
 
-        font-family: 'roboto_condensedregular';
+        font-family: 'roboto_condensedlight';
         font-size: 1.25em;
         line-height: 1.25em;
     }
 
-    .glow {
+    #glow-bar {
         position: absolute;
         left: 0;
-        bottom: 0;
+        top: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to top,
-            hsla(180, 100%, 50%, 1),
-            hsla(180, 100%, 50%, 1) 2px,
-            hsla(180, 100%, 50%, 0) 2px
-        ), radial-gradient(ellipse 60% 4em at 50% 100%,
-            hsla(180, 50%, 50%, 0.2),
-            hsla(180, 50%, 50%, 0)
-        );
-    }
-
-    .glow-top {
-        top: 0;
         background: linear-gradient(to bottom,
             hsla(180, 100%, 50%, 1),
-            hsla(180, 100%, 50%, 1) 2px,
-            hsla(180, 100%, 50%, 0) 2px
-        ), radial-gradient(ellipse 60% 4em at 50% 0,
+            hsla(180, 100%, 50%, 1) 5px,
+            hsla(180, 0%, 0%, 0.2) 5px,
+            hsla(180, 0%, 0%, 0) 10px
+        ), radial-gradient(ellipse 50% 4em at 50% 0,
             hsla(180, 50%, 50%, 0.2),
             hsla(180, 50%, 50%, 0)
         );
@@ -77,9 +66,7 @@
 </style>
 
 <body>
-    <div class="glow glow-top">
-    </div>
-    <div class="glow glow-bottom">
+    <div id="glow-bar">
     </div>
     <div id="construction-message-title">
         This webpage is under construction.
