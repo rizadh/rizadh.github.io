@@ -11,38 +11,81 @@
 <script src="libraries/js/velocity.min.js"></script>
 <script src="libraries/js/velocity.ui.min.js"></script>
 <style>
+
     body {
         background-color: hsla(240, 5%, 20%, 1);
     }
 
-    div {
+    #construction-message-title {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        width: 100%;
+        transform: translateX(-50%);
+        text-align: center;
+
+        color: hsla(240, 5%, 100%, 1);
+
+        font-size: 2em;
+        font-family: 'roboto_condensedregular';
+        text-transform: uppercase;
+    }
+
+    #construction-message-desc {
         position: absolute;
         top: 50%;
         left: 50%;
         width: 100%;
-        transform: translate(-50%,-50%);
+        transform: translateX(-50%);
         text-align: center;
 
-        color: hsla(0, 0%, 100%, 0.5);
+        color: hsla(240, 5%, 50%, 1);
 
         font-family: 'roboto_condensedregular';
         font-size: 1.25em;
-        line-height: 1.5em;
+        line-height: 1.25em;
     }
 
-    h1 {
-        font-size: 1.6em;
-        font-family: 'robotoregular';
-        color: white;
+    .glow {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top,
+            hsla(180, 100%, 50%, 1),
+            hsla(180, 100%, 50%, 1) 2px,
+            hsla(180, 100%, 50%, 0) 2px
+        ), radial-gradient(ellipse 60% 4em at 50% 100%,
+            hsla(180, 50%, 50%, 0.2),
+            hsla(180, 50%, 50%, 0)
+        );
     }
+
+    .glow-top {
+        top: 0;
+        background: linear-gradient(to bottom,
+            hsla(180, 100%, 50%, 1),
+            hsla(180, 100%, 50%, 1) 2px,
+            hsla(180, 100%, 50%, 0) 2px
+        ), radial-gradient(ellipse 60% 4em at 50% 0,
+            hsla(180, 50%, 50%, 0.2),
+            hsla(180, 50%, 50%, 0)
+        );
+    }
+
 </style>
 
 <body>
-    <div>
-        <h1>
-            We're still working on it!
-        </h1>
-        Expect some good stuff very soon!
+    <div class="glow glow-top">
+    </div>
+    <div class="glow glow-bottom">
+    </div>
+    <div id="construction-message-title">
+        This webpage is under construction.
+    </div>
+    <div id="construction-message-desc">
+        Still working on it. Check back soon for some yummy stuff!
     </div>
 </body>
 </html>
