@@ -1,0 +1,61 @@
+@import "partials/_fontface";
+@import "partials/_normalize";
+@import "partials/_roboto";
+
+body {
+    background-color: hsla(240, 5%, 20%, 1);
+}
+
+#construction-message-title {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 100%;
+    transform: translateX(-50%);
+    text-align: center;
+
+    color: hsla(0, 0%, 100%, 1);
+
+    font-size: 2em;
+    font-family: 'roboto_condensedregular';
+    text-transform: uppercase;
+}
+
+#construction-message-desc {
+    @extend #construction-message-title;
+
+    top: 50%;
+
+    color: hsla(0, 0%, 70%, 1);
+
+    font-family: 'roboto_condensedlight';
+    font-size: 1.25em;
+    line-height: 1.25em;
+    text-transform: none;
+}
+
+#glow-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom,
+        hsla(180, 100%, 50%, 1),
+        hsla(180, 100%, 50%, 1) 5px,
+        hsla(180, 0%, 0%, 0.2) 5px,
+        hsla(180, 0%, 0%, 0) 10px
+    ), radial-gradient(ellipse 100% 4em at 50% 0,
+        hsla(180, 50%, 50%, 0.4),
+        hsla(180, 50%, 50%, 0)
+    ), radial-gradient(ellipse 75% 4em at 50% 0,
+        hsla(180, 50%, 50%, 0.3),
+        hsla(180, 50%, 50%, 0)
+    ), radial-gradient(ellipse 50% 4em at 50% 0,
+        hsla(180, 50%, 50%, 0.2),
+        hsla(180, 50%, 50%, 0)
+    ), radial-gradient(ellipse 25% 4em at 50% 0,
+        hsla(180, 50%, 50%, 0.1),
+        hsla(180, 50%, 50%, 0)
+    );
+}
