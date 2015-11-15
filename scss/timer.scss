@@ -1,3 +1,7 @@
+@import "partials/_normalize";
+@import "partials/_fontface";
+@import "partials/_roboto";
+
 body {
     background: hsla(240, 5%, 20%, 1);
 }
