@@ -1,14 +1,12 @@
 body {
-    background: hsla(240, 100%, 30%, 1);
+    background: hsla(240, 5%, 20%, 1);
 }
 
 #dial {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 500px;
-    height: 500px;
+    width: 50%;
+    height: 50%;
     transform: translate(-50%, -50%);
-    background: yellow;
-    border-radius: 250px;
 }
