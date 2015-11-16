@@ -1,4 +1,5 @@
 $(function() {
+    // Automatically begin demo mode when page is loaded
     $("body").velocity(
         {
             tween: 0.999999
@@ -6,12 +7,20 @@ $(function() {
             duration: 5000,
             progress: function(elements, complete, remaining, start, tweenValue) {
                 setDial($("#dial-ring path"), 50, tweenValue);
-                $("#dial-text").html(Math.round(tweenValue*100)+"%");
+                var second = ("00"+(60-Math.round(tweenValue*60))).slice(-2);
+                $("#dial-text").html("0:"+second);
             },
             loop: true,
-            easing: "easeOut"
+            easing: "linear"
         }
-    )
+    );
+});
+
+$(window).on('load resize orientationChange', function(event) {
+    var max_length = Math.min($(window).width(), $(window).height());
+    $("#dial-text").velocity({
+        fontSize: max_length/4
+    }, 0)
 });
 
 function setDial(dial, radius, progress) {
