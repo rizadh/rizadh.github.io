@@ -4,6 +4,7 @@
 
 body {
     background: hsla(240, 5%, 20%, 1);
+    overflow: hidden;
 }
 
 #dial {
@@ -31,17 +32,4 @@ body {
     color: white;
     font-family: 'robotoregular';
     font-size: 2em;
-}
-
-#setup {
-    display: none;
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    left: 25%;
-    top: 25%;
-    -webkit-backdrop-filter: blur(50px);
-    box-shadow: 0 0 5px black;
-    background-color: hsla(0, 0%, 75%, 0.5);
-    border-radius: 5px;
 }
