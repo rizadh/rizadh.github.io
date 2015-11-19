@@ -9,11 +9,10 @@ body {
 
 #dial {
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: 10%;
+    top: 10%;
     width: 80%;
     height: 80%;
-    transform: translate(-50%, -50%);
 }
 
 #dial-ring {
@@ -25,9 +24,12 @@ body {
 }
 
 #dial-text {
-    @extend #dial;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: auto;
     height: auto;
+    transform: translate(-50%, -50%);
 
     color: white;
     font-family: 'robotoregular';

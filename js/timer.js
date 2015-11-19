@@ -2,7 +2,7 @@ var WHOLE_CIRCLE = 0.99999;
 
 $(function() {
     // Automatically begin demo mode when page is loaded
-    setTime(prompt("Enter seconds"));
+    setTime(prompt("Enter time you want to countdown to (in seconds):"));
 });
 
 $(window).on('load resize orientationChange', function(event) {
@@ -70,8 +70,8 @@ function changeDialText(new_text) {
 }
 
 function setTime(sec) {
-    if (sec > 36000) {
-        alert("Too high input")
+    if (sec >= 36000) {
+        setTime(prompt("The time you entered was too high. Enter a time less than 36000 seconds"));
         return;
     }
     // Convert seconds to milliseconds
@@ -102,9 +102,6 @@ function setTime(sec) {
                 // Create text to be inserted into dial
                 var dial_text = (hours > 0 ? hours + ":" : "") + (hours + minutes  > 0 ? minutes + ":" : "") + seconds;
                 if ($("#dial-text").data("text") != dial_text) {
-                    console.log("Minutes: " + minutes);
-                    console.log("Seconds: " + seconds);
-                    console.log("Hours: " + hours);
                     changeDialText(dial_text);
                 }
             },

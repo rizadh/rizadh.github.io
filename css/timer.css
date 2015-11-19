@@ -465,15 +465,12 @@ body {
   background: #303036;
   overflow: hidden; }
 
-#dial, #dial-text {
+#dial {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 10%;
+  top: 10%;
   width: 80%;
-  height: 80%;
-  -webkit-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%); }
+  height: 80%; }
 
 #dial-ring {
   position: absolute;
@@ -483,8 +480,14 @@ body {
   height: 100%; }
 
 #dial-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: auto;
   height: auto;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   color: white;
   font-family: 'robotoregular';
   font-size: 2em; }
