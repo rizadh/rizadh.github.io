@@ -26,15 +26,29 @@ function setDial(dial, radius, progress) {
 /** Change text of dial smoothly */
 function changeDialText(new_text) {
     var current_text = $("#dial-text").text();
+    var diff_chars = differentChars(new_text, current_text);
+
+    if (new_text.length !== current_text.length) {
+        var fill_array = [];
+        for (var i = 0; i < (Math.abs(current_text.length - new_text.length)); i++) {
+            fill_array[i] = Math.min(new_text.length,current_text.length) + i;
+        }
+
+        console.log("Diff char was: " + diff_chars);
+        console.log("Fill arry was: " + fill_array);
+        diff_chars = diff_chars.concat(fill_array);
+        console.log("Now they are: " + diff_chars);
+    }
+
     $("#dial-text.old").remove();
     $("#dial-text")
         .clone()
         .addClass("old")
         .appendTo($("#dial"))
-        .html(spanAtIndexes(current_text, differentChars(new_text, current_text)));
+        .html(spanAtIndexes(current_text, diff_chars));
     $("#dial-text")
-    .data("text",new_text)
-    .html(spanAtIndexes(new_text, differentChars(new_text, current_text)))
+    .data("text", new_text)
+    .html(spanAtIndexes(new_text, diff_chars))
     .children("span")
     .css("opacity",0)
     .velocity({
@@ -45,7 +59,7 @@ function changeDialText(new_text) {
             $("#dial-text:not(.old) span").css("opacity", t);
             $("#dial-text.old span").css("opacity",1-t);
         },
-        finish: function() {
+        complete: function() {
             $("#dial-text.old").remove();
         },
         easing: "easeInOut"
@@ -56,7 +70,9 @@ function changeDialText(new_text) {
 function spanAtIndexes(text, indexes) {
     var new_text = text.split("");
     for (var i = 0; i < indexes.length; i++) {
-        new_text[indexes[i]] = "<span>" + text[indexes[i]] + "</span>"
+        if (indexes[i] < new_text.length) {
+            new_text[indexes[i]] = "<span class='same-text'>" + text[indexes[i]] + "</span>"
+        }
     }
     return new_text
 }
