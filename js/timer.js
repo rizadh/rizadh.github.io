@@ -1,3 +1,4 @@
+// SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLE_CIRCLE = 0.99999;
 
 $(function() {
@@ -5,6 +6,7 @@ $(function() {
     setTime(prompt("Enter time you want to countdown to (in seconds):"));
 });
 
+// Set size of text to maximize use of dial area when page is loaded and when viewport changes
 $(window).on('load resize orientationChange', function(event) {
     var max_length = Math.min(window.innerHeight, window.innerWidth);
     $("#dial-text").css("font-size",max_length/5);
@@ -21,55 +23,58 @@ function setDial(dial, radius, progress) {
     dial.siblings("circle").attr("fill", "hsla(" + (120 * (1 - progress)) + ", 100%, 50%, 0.1)");
 }
 
-function closeDial() {
-    $("#Clip circle").css("transform-origin", "50% 50%").velocity({
-        scale: 0
-    }, 500);
-    $("#dial").velocity("stop");
-
-    var cur_complete = $("#dial-ring path").data("complete");
-    $("#dial").velocity({
-        tween: [1,0]
-    }, {
-        duration: 500,
-        progress: function(elements, complete, remaining, start, tweenValue) {
-            setDial($("#dial-ring path"), 50, cur_complete + tweenValue * (WHOLE_CIRCLE - cur_complete));
-        }
-    });
-}
-
-function openDial() {
-    $("#dial-text").velocity({
-        opacity: 1
-    }, {
-        duration: 200
-    });
-    $("#Clip circle").css("transform-origin", "50% 50%").velocity({
-        scale: 1
-    }, 500);
-    $("#dial").velocity("stop");
-}
-
+/** Change text of dial smoothly */
 function changeDialText(new_text) {
+    var current_text = $("#dial-text").text();
     $("#dial-text.old").remove();
-    $("#dial-text").clone().addClass("old").appendTo($("#dial"));
-    $("#dial-text").data("text",new_text).css("opacity",0).html(new_text).velocity({
+    $("#dial-text")
+        .clone()
+        .addClass("old")
+        .appendTo($("#dial"))
+        .html(spanAtIndexes(current_text, differentChars(new_text, current_text)));
+    $("#dial-text")
+    .data("text",new_text)
+    .html(spanAtIndexes(new_text, differentChars(new_text, current_text)))
+    .children("span")
+    .css("opacity",0)
+    .velocity({
         tween: 1
     }, {
-        duration: 0,
+        duration: 250,
         progress: function(e, c, r, s, t) {
-            $("#dial-text").not(".old").css("opacity",t);
-            $("#dial-text.old").css("opacity",1-t);
+            $("#dial-text:not(.old) span").css("opacity", t);
+            $("#dial-text.old span").css("opacity",1-t);
         },
         finish: function() {
             $("#dial-text.old").remove();
         },
-        easing: "linear"
+        easing: "easeInOut"
     });
+}
 
+/** Given some text, wrap characters at the given indexes with span tags */
+function spanAtIndexes(text, indexes) {
+    var new_text = text.split("");
+    for (var i = 0; i < indexes.length; i++) {
+        new_text[indexes[i]] = "<span>" + text[indexes[i]] + "</span>"
+    }
+    return new_text
+}
+
+/** Find different characters between two string and return their indexes */
+function differentChars(string1, string2) {
+    var different_character_index_list = [];
+    for (i = 0; i < Math.min(string1.length,string2.length); i++) {
+        if (string1[i] !== string2[i]) {
+            different_character_index_list.push(i);
+        }
+    }
+
+    return different_character_index_list;
 }
 
 function setTime(sec) {
+    // More than 36000 seconds equates to 10 hours+, which does not fit in the dial
     if (sec >= 36000) {
         setTime(prompt("The time you entered was too high. Enter a time less than 36000 seconds"));
         return;
