@@ -4,6 +4,10 @@ var WHOLE_CIRCLE = 0.99999;
 $(function() {
     // Automatically begin demo mode when page is loaded
     setTime(prompt("Enter time you want to countdown to (in seconds):"));
+
+    $("#dial").velocity({
+        rotateX: 0.8
+    }, 500);
 });
 
 // Set size of text to maximize use of dial area when page is loaded and when viewport changes
@@ -33,11 +37,7 @@ function changeDialText(new_text) {
         for (var i = 0; i < (Math.abs(current_text.length - new_text.length)); i++) {
             fill_array[i] = Math.min(new_text.length,current_text.length) + i;
         }
-
-        console.log("Diff char was: " + diff_chars);
-        console.log("Fill arry was: " + fill_array);
         diff_chars = diff_chars.concat(fill_array);
-        console.log("Now they are: " + diff_chars);
     }
 
     $("#dial-text.old").remove();
@@ -47,23 +47,23 @@ function changeDialText(new_text) {
         .appendTo($("#dial"))
         .html(spanAtIndexes(current_text, diff_chars));
     $("#dial-text")
-    .data("text", new_text)
-    .html(spanAtIndexes(new_text, diff_chars))
-    .children("span")
-    .css("opacity",0)
-    .velocity({
-        tween: 1
-    }, {
-        duration: 250,
-        progress: function(e, c, r, s, t) {
-            $("#dial-text:not(.old) span").css("opacity", t);
-            $("#dial-text.old span").css("opacity",1-t);
-        },
-        complete: function() {
-            $("#dial-text.old").remove();
-        },
-        easing: "easeInOut"
-    });
+        .data("text", new_text)
+        .html(spanAtIndexes(new_text, diff_chars))
+        .children("span")
+        .css("opacity",0)
+        .velocity({
+            tween: 1
+        }, {
+            duration: 200,
+            progress: function(e, c, r, s, t) {
+                $("#dial-text:not(.old) span").css("opacity", t);
+                $("#dial-text.old span").css("opacity",1-t);
+            },
+            complete: function() {
+                $("#dial-text.old").remove();
+            },
+            easing: "linear"
+        });
 }
 
 /** Given some text, wrap characters at the given indexes with span tags */
@@ -128,7 +128,7 @@ function setTime(sec) {
             },
             easing: "linear",
             complete: function() {
-                changeDialText("Done");
+                changeDialText("0");
             }
         }
     );
