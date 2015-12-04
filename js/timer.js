@@ -2,7 +2,11 @@
 var WHOLE_CIRCLE = 0.99999;
 
 $(function() {
+    // Enable FastClick
+    FastClick.attach(document.body);
+    // Clear display and show default message
     setDisplayTime("");
+    // Set click events for on-screen keys
     $("#input-keypad td").click(function() {
         key_value = $(this).text();
         if (key_value == "Clear") {
@@ -14,6 +18,7 @@ $(function() {
             setDisplayTime(new_text);
         }
     });
+    // Set click event for edit button
     $("#edit-button").click(function() {
         editTime();
     });
@@ -125,8 +130,7 @@ function startTimer() {
     $("#input-keypad td").velocity("fadeOut", 200);
     $("#edit-button").velocity("fadeIn", 100);
     $("#dial-ring").velocity({
-        opacity: [1, 0],
-        scale: [1, 0.5]
+        opacity: [1, 0]
     }, {
         easing: "easeOutExpo",
         display: "block",
