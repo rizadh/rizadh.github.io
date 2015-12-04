@@ -1,14 +1,13 @@
+"use strict"
 // SVG arcs cannot form a complete circle so a value close to 1 is used
-var WHOLE_CIRCLE = 0.99999;
+var WHOLE_CIRCLE = 0.99999999;
 
 $(function() {
-    // Enable FastClick
-    FastClick.attach(document.body);
     // Clear display and show default message
     setDisplayTime("");
     // Set click events for on-screen keys
-    $("#input-keypad td").click(function() {
-        key_value = $(this).text();
+    $("#input-keypad td").on("tap", function() {
+        var key_value = $(this).text();
         if (key_value == "Clear") {
             setDisplayTime("");
         } else if (key_value == "Start") {
@@ -19,7 +18,7 @@ $(function() {
         }
     });
     // Set click event for edit button
-    $("#edit-button").click(function() {
+    $("#edit-button").on("tap", function() {
         editTime();
     });
 });
@@ -49,12 +48,12 @@ function setDial(dial, radius, progress) {
     var dial_path = move_to_center + move_to_start + make_arc;
 
     // Set path
-    dial.attr("d", dial_path)
+    dial.attr("d", dial_path);
 }
 
 function setTime(sec) {
     // Convert seconds to milliseconds
-    dial_time = sec*1000;
+    var dial_time = sec*1000;
     $("#dial-ring path").velocity(
         {
             // Can't go to 1 with SVG arc
@@ -65,7 +64,7 @@ function setTime(sec) {
             progress: function(elements, complete, remaining, start, tweenValue) {
                 setDial($("#dial-ring path"), 50, tweenValue);
                 // Find seconds rounded up
-                var seconds = Math.ceil((remaining/1000));
+                var seconds = Math.ceil(remaining/1000);
                 // Find minutes rounded down
                 var minutes = Math.floor(seconds/60) % 60;
                 // Find hours rounded down
@@ -121,42 +120,62 @@ function setDisplayTime(text, actual) {
 }
 
 function startTimer() {
-    $("#input-display").velocity({
-        height: "90%"
-    }, {
-        duration: 400,
-        easing: "easeOutExpo",
-    });
-    $("#input-keypad td").velocity("fadeOut", 200);
-    $("#edit-button").velocity("fadeIn", 100);
-    $("#dial-ring").velocity({
-        opacity: [1, 0]
-    }, {
-        easing: "easeOutExpo",
-        display: "block",
-        duration: 400
-    });
+    // Shrink display
+    $("#input-display")
+        .velocity("stop")
+        .velocity({
+            height: "90%"
+        }, {
+            duration: 400,
+            easing: "easeOutExpo",
+        });
 
+    // Fade out keys
+    $("#input-keypad td")
+        .velocity("stop")
+        .velocity("fadeOut", 200);
+
+    // Fade in edit button
+    $("#edit-button")
+        .velocity("stop")
+        .velocity("fadeIn", 100);
+
+    // Fade in ring
+    $("#dial-ring")
+        .velocity("stop")
+        .velocity("fadeIn", 200);
+
+    // Convert display input to seconds
     var time_string = getDisplayTime();
     var hours_to_seconds = time_string.slice(-6,-4)*3600;
     var minutes_to_seconds = time_string.slice(-4,-2)*60;
     var seconds = time_string.slice(-2)*1;
     var total_seconds = hours_to_seconds + minutes_to_seconds + seconds;
+    // Set timer to specified seconds
     setTime(total_seconds);
 }
 
 function editTime() {
-    $("#dial-ring path").velocity("stop");
-    $("#input-display").velocity({
-        height: "20%"
-    }, {
-        duration: 400,
-        easing: "easeOutExpo",
-    });
-    $("#input-keypad td").velocity("fadeIn", {
-        duration: 200,
-        display: ""
-    });
-    $("#edit-button").velocity("fadeOut", 100);
-    $("#dial-ring").velocity("fadeOut", 100);
+    $("#dial-ring path")
+        .velocity("stop");
+    $("#input-display")
+        .velocity("stop")
+        .velocity({
+            height: "20%"
+        }, {
+            duration: 400,
+            easing: "easeOutExpo",
+        });
+    $("#input-keypad td")
+        .velocity("stop")
+        .velocity("fadeIn", {
+            duration: 200,
+            display: ""
+        });
+    $("#edit-button")
+        .velocity("stop")
+        .velocity("fadeOut", 100);
+    $("#dial-ring")
+        .velocity("stop")
+        .velocity("fadeOut", 200);
 }
