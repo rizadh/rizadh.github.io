@@ -6,7 +6,7 @@ $(function() {
     // Clear display and show default message
     setDisplayTime("");
     // Set click events for on-screen keys
-    $("#input-keypad td").on("tap", function() {
+    $("#keypad td").on("tap", function() {
         var key_value = $(this).text();
         if (key_value == "Clear") {
             setDisplayTime("");
@@ -105,7 +105,7 @@ function setDisplayTime(text, actual) {
         var unit_array = ["h","m","s"];
         for (var i = 0; i < 3; i++) {
             var time_value = current_time.slice(2*i,2*i+2);
-            if (time_value > 0 || time_array[i - 1] || unit_array[i] == "s") {
+            if (time_value > 0 || unit_array[i] == "s") {
                 if (time_value < 10 && !time_array[0]) {
                     time_value = time_value.slice(-1);
                 }
@@ -121,7 +121,7 @@ function setDisplayTime(text, actual) {
 
 function startTimer() {
     // Shrink display
-    $("#input-display")
+    $("#display")
         .velocity("stop")
         .velocity({
             height: "90%"
@@ -131,7 +131,7 @@ function startTimer() {
         });
 
     // Fade out keys
-    $("#input-keypad td")
+    $("#keypad td")
         .velocity("stop")
         .velocity("fadeOut", 200);
 
@@ -158,7 +158,7 @@ function startTimer() {
 function editTime() {
     $("#dial-ring path")
         .velocity("stop");
-    $("#input-display")
+    $("#display")
         .velocity("stop")
         .velocity({
             height: "20%"
@@ -166,7 +166,7 @@ function editTime() {
             duration: 400,
             easing: "easeOutExpo",
         });
-    $("#input-keypad td")
+    $("#keypad td")
         .velocity("stop")
         .velocity("fadeIn", {
             duration: 200,

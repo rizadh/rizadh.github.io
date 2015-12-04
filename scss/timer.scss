@@ -10,7 +10,7 @@ body {
     -webkit-user-select: none;
 }
 
-#input-display {
+#display {
     position: absolute;
     left: 0;
     top: 0;
@@ -52,7 +52,7 @@ body {
     transform: translateY(-50%);
 }
 
-#input-keypad {
+#keypad {
     position: absolute;
     left: 0;
     top: 20%;
