@@ -76,7 +76,7 @@ function setTime(sec) {
                 minutes = ("0" + minutes).slice(-2);
                 hours = ("0" + hours).slice(-2);
                 // Send time text to display
-                setDisplayTime([hours, minutes, seconds].join(""));
+                setDisplayTime([hours, minutes, seconds].join(""), false);
             }
         }
     );
@@ -105,7 +105,7 @@ function setDisplayTime(text, actual) {
         var unit_array = ["h","m","s"];
         for (var i = 0; i < 3; i++) {
             var time_value = current_time.slice(2*i,2*i+2);
-            if (time_value > 0 || unit_array[i-1] || unit_array[i] == "s") {
+            if (time_value > 0 || time_array[0] || i == 2) {
                 if (time_value < 10 && !time_array[0]) {
                     time_value = time_value.slice(-1);
                 }

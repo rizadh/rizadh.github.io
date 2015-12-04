@@ -29,10 +29,10 @@ body {
 #dial-ring {
     display: none;
     position: absolute;
-    left: 5%;
-    top: 5%;
-    width: 90%;
-    height: 90%;
+    left: 10%;
+    top: 10%;
+    width: 80%;
+    height: 80%;
 
     path {
         fill: hsla($theme_hue, 80%, 30%, 1);
