@@ -48,10 +48,9 @@ function setDial(dial, radius, progress) {
 }
 
 function setTime(sec) {
-    console.log("starting time");
     // Convert seconds to milliseconds
     dial_time = sec*1000;
-    $("#dial-ring").velocity(
+    $("#dial-ring path").velocity(
         {
             // Can't go to 1 with SVG arc
             tween: WHOLE_CIRCLE
@@ -89,10 +88,14 @@ function setDisplayTime(text, actual) {
     if (actual) {
         display.text(text);
     } else if (text == "") {
-        display.data("current_time", "000000");
-        display.text("Enter a time");
+        display
+            .data("current_time", "000000")
+            .text("Enter a time")
+            .css("font-family","roboto_condensedregular");
     } else {
-        display.data("current_time", ("000000" + text).slice(-6));
+        display
+            .data("current_time", text)
+            .css("font-family","robotoregular");
         var current_time = getDisplayTime();
         var time_array = [];
         var unit_array = ["h","m","s"];
@@ -118,21 +121,16 @@ function startTimer() {
     }, {
         duration: 400,
         easing: "easeOutExpo",
-        begin: function() {
-            $("#input-keypad td").velocity("fadeOut", 200);
-        },
-        complete: function() {
-            $("#edit-button").velocity("fadeIn", 100);
-            $("#dial-ring").velocity({
-                opacity: [1, 0],
-                scale: [1, 0]
-            }, {
-                easing: "easeOutExpo",
-                display: "block",
-                duration: 400,
-                queue: false
-            });
-        }
+    });
+    $("#input-keypad td").velocity("fadeOut", 200);
+    $("#edit-button").velocity("fadeIn", 100);
+    $("#dial-ring").velocity({
+        opacity: [1, 0],
+        scale: [1, 0.5]
+    }, {
+        easing: "easeOutExpo",
+        display: "block",
+        duration: 400
     });
 
     var time_string = getDisplayTime();
@@ -144,27 +142,17 @@ function startTimer() {
 }
 
 function editTime() {
+    $("#dial-ring path").velocity("stop");
     $("#input-display").velocity({
         height: "20%"
     }, {
         duration: 400,
         easing: "easeOutExpo",
-        complete: function() {
-            $("#input-keypad td").velocity("fadeIn", {
-                duration: 200,
-                display: ""
-            });
-        },
-        begin: function() {
-            $("#edit-button").velocity("fadeOut", 100);
-            $("#dial-ring").velocity("stop").velocity({
-                opacity: 0,
-                scale: 0
-            }, {
-                easing: "easeOutExpo",
-                display: "none",
-                duration: 400
-            });
-        }
     });
+    $("#input-keypad td").velocity("fadeIn", {
+        duration: 200,
+        display: ""
+    });
+    $("#edit-button").velocity("fadeOut", 100);
+    $("#dial-ring").velocity("fadeOut", 100);
 }
