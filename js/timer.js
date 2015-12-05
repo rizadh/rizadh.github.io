@@ -26,7 +26,7 @@ $(function() {
 $(window).on('load resize orientationChange', function() {
     // Maximize size of text
     var max_length = Math.min(window.innerHeight, window.innerWidth);
-    $("body").css("font-size", max_length / 8);
+    $("body").css("font-size", max_length / 9);
 });
 
 /** Set dial of given radius to given progress */
