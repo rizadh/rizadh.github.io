@@ -74,12 +74,12 @@ body {
         cursor: pointer;
 
         &:hover {
-            background-color: hsla($theme_hue, 80%, 45%, 1);
+            background-color: hsla($theme_hue, 100%, 40%, 1);
             transition: background 0.1s;
         }
 
         &:active {
-            background-color: hsla($theme_hue, 80%, 35%, 1);
+            background-color: hsla($theme_hue, 60%, 40%, 1);
             transition: background 0.05s;
         }
 
