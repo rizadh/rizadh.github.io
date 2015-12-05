@@ -3,13 +3,15 @@
 var WHOLE_CIRCLE = 0.99999999;
 
 $(function() {
+    // Set input mode (whether keypad is displayed)
+    $("#display").data("input_mode", true);
     // Clear display and show default message
     setDisplayTime("");
     // Set click events for on-screen keys
     $("#keypad td").on("tap", function() {
         var key_value = $(this).text();
         if (key_value == "Clear") {
-            setDisplayTime("");
+            setDisplayTime("000000");
         } else if (key_value == "Start") {
             startTimer();
         } else {
@@ -20,6 +22,27 @@ $(function() {
     // Set click event for edit button
     $("#edit-button").on("tap", function() {
         editTime();
+    });
+    // Enable keyboard input
+    $(document).on("keypress", function(e) {
+        var key = e.keyCode;
+        // Handle a number being pressed
+        if (48 <= key && key <= 57 && $("#display").data("input_mode")) {
+            var key_value = String.fromCharCode(key);
+            var new_text = (getDisplayTime() + key_value).slice(-6);
+            setDisplayTime(new_text);
+        // Handle "Enter" key being pressed
+        } else if (key == 13) {
+            if ($("#display").data("input_mode")) {
+                startTimer();
+            } else {
+                editTime();
+            }
+        // Handle "Backspace" key being pressed
+        } else if (key == 8) {
+            var new_text = ("0" + getDisplayTime()).slice(-7,-1);
+            setDisplayTime(new_text);
+        }
     });
 });
 
@@ -90,7 +113,9 @@ function getDisplayTime(actual) {
 function setDisplayTime(text, actual) {
     var display = $("#display-text");
     if (actual) {
-        display.text(text);
+        display
+            .text(text)
+            .css("font-family","roboto_condensedregular");;
     } else if (text == "") {
         display
             .data("current_time", "000000")
@@ -120,6 +145,7 @@ function setDisplayTime(text, actual) {
 }
 
 function startTimer() {
+    $("#display").data("input_mode", false);
     // Shrink display
     $("#display")
         .velocity("stop")
@@ -156,6 +182,7 @@ function startTimer() {
 }
 
 function editTime() {
+    $("#display").data("input_mode", true);
     $("#dial-ring path")
         .velocity("stop");
     $("#display")
