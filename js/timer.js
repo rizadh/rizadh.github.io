@@ -39,7 +39,7 @@ $(function() {
                 editTime();
             }
         // Handle "Backspace" key being pressed
-        } else if (key == 8) {
+        } else if (key == 8 && $("#display").data("input_mode")) {
             var new_text = ("0" + getDisplayTime()).slice(-7,-1);
             setDisplayTime(new_text);
         }
@@ -169,7 +169,15 @@ function startTimer() {
     // Fade in ring
     $("#dial-ring")
         .velocity("stop")
-        .velocity("fadeIn", 200);
+        .velocity({
+            opacity: [1, 0],
+            scale: [1, 0.9]
+        }, {
+            easing: "easeOutExpo",
+            duration: 400,
+            delay: 200,
+            display: "block"
+        });
 
     // Convert display input to seconds
     var time_string = getDisplayTime();
