@@ -2,29 +2,11 @@
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLE_CIRCLE = 0.99999999;
 
-// Sticky :hover state fix (iOS)
-if ('createTouch' in document)
-{
-    try
-    {
-        var ignore = /:hover/;
-        for (var i=0; i<document.styleSheets.length; i++)
-        {
-            var sheet = document.styleSheets[i];
-            for (var j=sheet.cssRules.length-1; j>=0; j--)
-            {
-                var rule = sheet.cssRules[j];
-                if (rule.type === CSSRule.STYLE_RULE && ignore.test(rule.selectorText))
-                {
-                    sheet.deleteRule(j);
-                }
-            }
-        }
-    }
-    catch(e){}
-}
+
+hoverTouchUnstick();
 
 $(function() {
+    hoverTouchUnstick();
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
     // Clear display and show default message
@@ -69,6 +51,7 @@ $(function() {
 });
 
 $(window).on('load resize orientationChange', function() {
+    hoverTouchUnstick();
     // Maximize size of text
     var max_length = Math.min(window.innerHeight, window.innerWidth);
     $("body").css("font-size", max_length / 9);
@@ -235,4 +218,26 @@ function editTime() {
     $("#dial-ring")
         .velocity("stop")
         .velocity("fadeOut", 200);
+}
+
+function hoverTouchUnstick() {
+  // Check if the device supports touch events
+  if('ontouchstart' in document.documentElement) {
+    // Loop through each stylesheet
+    for(var sheetI = document.styleSheets.length - 1; sheetI >= 0; sheetI--) {
+      var sheet = document.styleSheets[sheetI];
+      // Verify if cssRules exists in sheet
+      if(sheet.cssRules) {
+        // Loop through each rule in sheet
+        for(var ruleI = sheet.cssRules.length - 1; ruleI >= 0; ruleI--) {
+          var rule = sheet.cssRules[ruleI];
+          // Verify rule has selector text
+          if(rule.selectorText) {
+            // Replace hover psuedo-class with active psuedo-class
+            rule.selectorText = rule.selectorText.replace(":hover", ":active");
+          }
+        }
+      }
+    }
+  }
 }
