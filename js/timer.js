@@ -2,6 +2,28 @@
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLE_CIRCLE = 0.99999999;
 
+// Sticky :hover state fix (iOS)
+if ('createTouch' in document)
+{
+    try
+    {
+        var ignore = /:hover/;
+        for (var i=0; i<document.styleSheets.length; i++)
+        {
+            var sheet = document.styleSheets[i];
+            for (var j=sheet.cssRules.length-1; j>=0; j--)
+            {
+                var rule = sheet.cssRules[j];
+                if (rule.type === CSSRule.STYLE_RULE && ignore.test(rule.selectorText))
+                {
+                    sheet.deleteRule(j);
+                }
+            }
+        }
+    }
+    catch(e){}
+}
+
 $(function() {
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
