@@ -2,9 +2,6 @@
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLE_CIRCLE = 0.99999999;
 
-
-hoverTouchUnstick();
-
 $(function() {
     hoverTouchUnstick();
     // Set input mode (whether keypad is displayed)
@@ -51,7 +48,6 @@ $(function() {
 });
 
 $(window).on('load resize orientationChange', function() {
-    hoverTouchUnstick();
     // Maximize size of text
     var max_length = Math.min(window.innerHeight, window.innerWidth);
     $("body").css("font-size", max_length / 9);
