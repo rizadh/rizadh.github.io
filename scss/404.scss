@@ -2,7 +2,7 @@
 @import "partials/_roboto";
 
 body {
-    background-color: hsla(240, 5%, 15%, 1);
+    background-color: hsla(240, 5%, 20%, 1);
 }
 
 #message {
@@ -14,7 +14,7 @@ body {
 
 #message-title {
     text-align: center;
-    color: hsla(0, 50%, 50%, 1);
+    color: hsla(0, 0%, 100%, 1);
 
     font-size: 2em;
     font-family: 'roboto_condensedregular';
@@ -22,15 +22,17 @@ body {
     margin: 0px 20px;
 
     span {
-        color: hsla(0, 0%, 100%, 1);
+        color: hsla(0, 80%, 60%, 1);
     }
 }
 
 #message-desc {
     @extend #message-title;
 
+
     color: hsla(0, 0%, 50%, 1);
 
+    text-transform: none;
     font-size: 1.25em;
     line-height: 1.25em;
 }
