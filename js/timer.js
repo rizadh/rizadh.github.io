@@ -11,15 +11,15 @@ $(function() {
         translateY: 0
     }, {
         easing: "easeOutExpo",
-        duration: 400
+        duration: 600
     });
-    $.Velocity.hook($("#keypad"), "scale", "0");
-    $("#keypad").velocity({
+    $.Velocity.hook($("#keypad td"), "scale", "0");
+    $("#keypad td").velocity({
         scale: 1
     }, {
         easing: "easeOutExpo",
-        duration: 400,
-        delay: 200
+        duration: 200,
+        delay: 400
     });
     // Clear display and show default message
     setDisplayTime("");
