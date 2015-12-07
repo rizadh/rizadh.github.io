@@ -25,7 +25,8 @@ $(function() {
         editTime();
     });
     // Enable keyboard input
-    $(document).on("keypress", function(e) {
+    $(document).on("keydown", function(e) {
+        e.preventDefault();
         var key = e.keyCode;
         // Handle a number being pressed
         if (48 <= key && key <= 57 && $("#display").data("input_mode")) {
