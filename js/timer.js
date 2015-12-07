@@ -6,6 +6,21 @@ $(function() {
     hoverTouchUnstick();
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
+    $.Velocity.hook($("#display"), "translateY", "-100%");
+    $("#display").velocity({
+        translateY: 0
+    }, {
+        easing: "easeOutExpo",
+        duration: 400
+    });
+    $.Velocity.hook($("#keypad"), "scale", "0");
+    $("#keypad").velocity({
+        scale: 1
+    }, {
+        easing: "easeOutExpo",
+        duration: 400,
+        delay: 200
+    });
     // Clear display and show default message
     setDisplayTime("");
     // Set click events for on-screen keys
@@ -159,7 +174,7 @@ function startTimer() {
         });
 
     // Fade out keys
-    $("#keypad td")
+    $("#keypad")
         .velocity("stop")
         .velocity("fadeOut", 200);
 
@@ -202,12 +217,9 @@ function editTime() {
             duration: 400,
             easing: "easeOutExpo",
         });
-    $("#keypad td")
+    $("#keypad")
         .velocity("stop")
-        .velocity("fadeIn", {
-            duration: 200,
-            display: ""
-        });
+        .velocity("fadeIn", 200);
     $("#edit-button")
         .velocity("stop")
         .velocity("fadeOut", 100);
