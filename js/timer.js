@@ -172,11 +172,10 @@ function startTimer() {
         .velocity("stop")
         .velocity({
             opacity: [1, 0],
-            scale: [1, 0.9]
+            scale: [1, 0]
         }, {
             easing: "easeOutExpo",
             duration: 400,
-            delay: 200,
             display: "block"
         });
 
@@ -213,7 +212,7 @@ function editTime() {
         .velocity("fadeOut", 100);
     $("#dial-ring")
         .velocity("stop")
-        .velocity("fadeOut", 200);
+        .velocity("fadeOut", 100);
 }
 
 function hoverTouchUnstick() {
