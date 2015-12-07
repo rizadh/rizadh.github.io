@@ -2,22 +2,24 @@
 @import "partials/_roboto";
 
 body {
-    background-color: hsla(240, 5%, 0%, 1);
+    background-color: hsla(240, 5%, 15%, 1);
+}
+
+#message {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
 }
 
 #message-title {
-    position: absolute;
-    bottom: 50%;
-    left: 50%;
-    width: 100%;
-    transform: translateX(-50%);
     text-align: center;
-
-    color: hsla(0, 0%, 50%, 1);
+    color: hsla(0, 50%, 50%, 1);
 
     font-size: 2em;
     font-family: 'roboto_condensedregular';
     text-transform: uppercase;
+    margin: 0px 20px;
 
     span {
         color: hsla(0, 0%, 100%, 1);
@@ -27,11 +29,8 @@ body {
 #message-desc {
     @extend #message-title;
 
-    top: 50%;
-
-    color: hsla(0, 0%, 25%, 1);
+    color: hsla(0, 0%, 50%, 1);
 
     font-size: 1.25em;
     line-height: 1.25em;
-    text-transform: none;
 }
