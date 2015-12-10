@@ -107,27 +107,20 @@ function startupAnimation() {
         duration: startup_duration * 2
     });
 
-    // Animate keypad
-    $.Velocity.hook($("#keypad td"), "scale", "0");
-    // Remove with fancy transition
-    $.Velocity.hook($("#keypad td"), "opacity", "0");
-    // Experimental startup transition MAY BE REMOVED
-    $.Velocity.RegisterEffect("transition.pop", { calls: [[{
-        scale: [1, 0],
+    var keypad = $("#keypad td");
+    $.Velocity.hook(keypad, "opacity", "0");
+    $.Velocity.RegisterEffect("transition.slideIn", { calls: [[{
+        translateY: [0, "-10%"],
         opacity: [1, 0]
      }]]});
-    // Turn on and off fancy transition
-    var transition = true;
-    $("#keypad td")
-        .velocity(transition ? "transition.pop" : {scale: [1, 0]}, {
-            easing: "easeOutExpo",
-            duration: startup_duration / 2,
-            delay: startup_duration / 2,
-            // Remove with fancy transition
-            stagger: startup_duration / 2 / 9,
-            // Remove with fancy transition
-            drag: true
-        });
+    keypad.velocity("transition.slideIn", {
+        easing: "easeOutExpo",
+        duration: startup_duration,
+        delay: startup_duration / 2,
+        stagger: startup_duration / 2 / (keypad.length - 1),
+        drag: true,
+        display: null
+    });
 }
 
 /** Set dial of given radius to given progress */
