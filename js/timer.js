@@ -3,6 +3,10 @@
 var WHOLE_CIRCLE = 0.99999999;
 
 $(function() {
+    // Change Backspce to Delete if on Mac or iOS devices
+    if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
+        $("#keyboard-help > .shortcut.delete > span").text("Delete");
+    }
     hoverTouchUnstick();
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
@@ -13,6 +17,7 @@ $(function() {
         easing: "easeOutExpo",
         duration: 600
     });
+
     $.Velocity.hook($("#keypad td"), "scale", "0");
     $("#keypad td").velocity({
         scale: 1
@@ -21,8 +26,10 @@ $(function() {
         duration: 200,
         delay: 400
     });
+
     // Clear display and show default message
     setDisplayTime("");
+
     // Set click events for on-screen keys
     $("#keypad td").on("tap", function() {
         var key_value = $(this).text();
@@ -35,13 +42,18 @@ $(function() {
             setDisplayTime(new_text);
         }
     });
+
     // Set click event for edit button
     $("#edit-button").on("tap", function() {
         editTime();
     });
+
+    $(document).on("tap", function() {
+        toggleKeyboardHelp(true);
+    });
+
     // Enable keyboard input
     $(document).on("keydown", function(e) {
-        e.preventDefault();
         var key = e.keyCode;
         // Handle a number being pressed
         if (48 <= key && key <= 57 && $("#display").data("input_mode")) {
@@ -56,9 +68,14 @@ $(function() {
                 editTime();
             }
         // Handle "Backspace" key being pressed
-        } else if (key == 8 && $("#display").data("input_mode")) {
-            var new_text = ("0" + getDisplayTime()).slice(-7,-1);
-            setDisplayTime(new_text);
+        } else if (key == 8) {
+            e.preventDefault();
+            if ($("#display").data("input_mode")) {
+                var new_text = ("0" + getDisplayTime()).slice(-7,-1);
+                setDisplayTime(new_text);
+            }
+        } else if (key == 32) {
+            toggleKeyboardHelp();
         }
     });
 });
@@ -66,7 +83,7 @@ $(function() {
 $(window).on('load resize orientationChange', function() {
     // Maximize size of text
     var max_length = Math.min(window.innerHeight, window.innerWidth);
-    $("body").css("font-size", max_length / 9);
+    $("html").css("font-size", max_length / 9);
 });
 
 /** Set dial of given radius to given progress */
@@ -101,10 +118,10 @@ function setTime(sec) {
         }, {
             duration: dial_time,
             easing: "linear",
-            progress: function(elements, complete, remaining, start, tweenValue) {
-                setDial($("#dial-ring path"), 50, tweenValue);
+            progress: function(e, c, r, s, t) {
+                setDial($("#dial-ring path"), 50, t);
                 // Find seconds rounded up
-                var seconds = Math.ceil(remaining/1000);
+                var seconds = Math.ceil(r/1000);
                 // Find minutes rounded down
                 var minutes = Math.floor(seconds/60) % 60;
                 // Find hours rounded down
@@ -226,6 +243,26 @@ function editTime() {
     $("#dial-ring")
         .velocity("stop")
         .velocity("fadeOut", 100);
+}
+
+function toggleKeyboardHelp(force_hide) {
+    var help_menu = $("#keyboard-help-wrapper");
+    if (force_hide) {
+        if (help_menu.data("shown")) {
+            toggleKeyboardHelp();
+        }
+    } else {
+        if (help_menu.data("shown")) {
+            var show = false;
+        } else {
+            var show = true;
+        }
+        
+        help_menu
+            .data("shown", show)
+            .velocity("stop")
+            .velocity(show ? "fadeIn" : "fadeOut", 200);
+    }
 }
 
 function hoverTouchUnstick() {
