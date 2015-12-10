@@ -5,6 +5,10 @@ var WHOLE_CIRCLE = 0.99999999;
 
 // Perform when document body is loaded
 $(function() {
+    // Hook Velocity to help menu translate properties
+    $.Velocity.hook($("#keyboard-help"), "translateX", "-50%");
+    $.Velocity.hook($("#keyboard-help"), "translateY", "-50%");
+
     // Change Backspce to Delete if on Mac or iOS devices
     if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
         $("#keyboard-help > .shortcut.delete > span").text("Delete");
@@ -47,26 +51,31 @@ $(function() {
 
     // Enable keyboard input
     $(document).on("keydown", function(e) {
+        // Get the keycode
         var key = e.keyCode;
-        // Handle a number being pressed
+
+        // Handle a number
         if (48 <= key && key <= 57 && $("#display").data("input_mode")) {
             var key_value = String.fromCharCode(key);
             var new_time = (getDisplayTime() + key_value).slice(-6);
             setDisplayTime(new_time);
-        // Handle "Enter" key being pressed
+
+        // Handle "Enter"
         } else if (key == 13) {
             if ($("#display").data("input_mode")) {
                 startTimer();
             } else {
                 editTime();
             }
-        // Handle "Backspace" key being pressed
+
+        // Handle "Backspace"
         } else if (key == 8) {
             e.preventDefault();
             if ($("#display").data("input_mode")) {
                 var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
                 setDisplayTime(deleted_time);
             }
+        // Handle "Spacebar"
         } else if (key == 32) {
             toggleKeyboardHelp();
         }
@@ -80,43 +89,46 @@ $(window).on('load resize orientationChange', function() {
 });
 
 function startupAnimation() {
-    var startup_duration = 800;
+    var startup_duration = 400;
 
-    $.Velocity.hook($("#display-text"), "translateY", "-100%");
+    // Animate display text
     $("#display-text").velocity({
-        translateY: "-50%"
+        translateY: ["-50%", "-100%"]
     }, {
         easing: "easeOutExpo",
-        duration: startup_duration
-    });
-    $.Velocity.hook($("#display"), "translateY", "-100%");
-    $("#display").velocity({
-        translateY: 0
-    }, {
-        easing: "easeOutExpo",
-        duration: startup_duration
+        duration: startup_duration * 2
     });
 
+    // Animate dispay
+    $("#display").velocity({
+        translateY: [0, "-100%"]
+    }, {
+        easing: "easeOutExpo",
+        duration: startup_duration * 2
+    });
+
+    // Animate keypad
     $.Velocity.hook($("#keypad td"), "scale", "0");
     // Remove with fancy transition
     $.Velocity.hook($("#keypad td"), "opacity", "0");
     // Experimental startup transition MAY BE REMOVED
-    $.Velocity.RegisterEffect("transition.pop", { calls: [[{scale: 1, opacity: 1}]]});
+    $.Velocity.RegisterEffect("transition.pop", { calls: [[{
+        scale: [1, 0],
+        opacity: [1, 0]
+     }]]});
     // Turn on and off fancy transition
     var transition = true;
     $("#keypad td")
-        .velocity(transition ? "transition.pop" : {scale: 1}, {
+        .velocity(transition ? "transition.pop" : {scale: [1, 0]}, {
             easing: "easeOutExpo",
-            duration: startup_duration / 4,
-            delay: startup_duration / 4,
+            duration: startup_duration / 2,
+            delay: startup_duration / 2,
             // Remove with fancy transition
-            stagger: startup_duration / 4 / 9,
+            stagger: startup_duration / 2 / 9,
             // Remove with fancy transition
             drag: true
         });
 }
-
-// $.Velocity.mock = 10;
 
 /** Set dial of given radius to given progress */
 function setDial(dial, radius, progress) {
@@ -226,12 +238,26 @@ function startTimer() {
     // Fade out keys
     $("#keypad")
         .velocity("stop")
-        .velocity("fadeOut", 200);
+        .velocity({
+            translateY: "10%",
+            opacity: 0
+        }, {
+            easing: "easeOutExpo",
+            duration: 400,
+            display: "none"
+        });
 
     // Fade in edit button
     $("#edit-button")
         .velocity("stop")
-        .velocity("fadeIn", 100);
+        .velocity({
+            translateY: [0, "100%"],
+            opacity: [1, 0]
+        }, {
+            easing: "easeOutExpo",
+            duration: 400,
+            display: "block"
+        });
 
     // Fade in ring
     $("#dial-ring")
@@ -269,17 +295,31 @@ function editTime() {
         });
     $("#keypad")
         .velocity("stop")
-        .velocity("fadeIn", 200);
+        .velocity({
+            translateY: 0,
+            opacity: 1
+        }, {
+            easing: "easeOutExpo",
+            duration: 400,
+            display: "table"
+        });
     $("#edit-button")
         .velocity("stop")
-        .velocity("fadeOut", 100);
+        .velocity({
+            opacity: 0,
+            translateY: "-700%"
+        }, {
+            easing: "easeOutExpo",
+            display: "none",
+            duration: 400
+        });
     $("#dial-ring")
         .velocity("stop")
         .velocity("fadeOut", 100);
 }
 
 function toggleKeyboardHelp(force_hide) {
-    var help_menu = $("#keyboard-help-wrapper");
+    var help_menu = $("#keyboard-help");
     if (force_hide) {
         if (help_menu.data("shown")) {
             toggleKeyboardHelp();
@@ -292,10 +332,20 @@ function toggleKeyboardHelp(force_hide) {
             show = true;
         }
 
+
+
         help_menu
             .data("shown", show)
             .velocity("stop")
-            .velocity(show ? "fadeIn" : "fadeOut", show ? 200 : 100);
+            // .velocity(show ? "fadeIn" : "fadeOut", show ? 200 : 100);
+            .velocity({
+                scale: (show ? [1, 0] : [0, 1]),
+                opacity: (show ? [1, 0] : [0, 1])
+            }, {
+                easing: "easeOutExpo",
+                display: (show ? "block" : "none"),
+                duration: 400
+            });
     }
 }
 

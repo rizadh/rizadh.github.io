@@ -95,41 +95,37 @@ body {
             font-size: 0.4em;
         }
     }
-
-
 }
 
 #edit-button {
     display: none;
     position: absolute;
+    z-index: 1;
+    bottom: 0%;
     left: 0;
-    top: 95%;
     width: 100%;
-    z-index: 2;
-    transform: translateY(-50%);
+    height: 10%;
     cursor: pointer;
 
-    text-align: center;
-    font-family: 'roboto_condensedregular';
-    text-transform: uppercase;
-    font-size: 0.4em;
-
-    color: lighten($secondary_color, 10);
-    transition: color $resting_transition_time;
+    stroke-width: 15;
+    fill: none;
+    stroke: lighten($secondary_color, 10);
+    transition: stroke $resting_transition_time, background-color $resting_transition_time;
 
     &:hover {
-        color: lighten($secondary_color, 20);
-        transition: color $hover_transition_time;
+        stroke: lighten($secondary_color, 20);
+        background-color: lighten($main_color, 5);
+        transition: stroke $hover_transition_time, background-color $hover_transition_time;
     }
 
     &:active {
-        color: $secondary_color;
-        transition: color $active_transition_time;
+        stroke: $secondary_color;
+        background-color: darken($main_color, 5);
+        transition: stroke $active_transition_time, background-color $active_transition_time;
     }
 }
 
 #keyboard-help-wrapper {
-    display: none;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -140,6 +136,7 @@ body {
 }
 
 #keyboard-help {
+    display: none;
     position: absolute;
     cursor: pointer;
     transform: translate(-50%, -50%);
@@ -149,7 +146,6 @@ body {
     -webkit-backdrop-filter: blur(10px);
 
     border-radius: 0.2rem;
-    box-shadow: 0 0 10rem hsla(0, 0%, 100%, 1);
 
     $keyboard_help_padding: 0.2rem;
 
