@@ -229,6 +229,7 @@ function startTimer() {
     $("#display")
         .velocity("stop")
         .velocity({
+            translateY: 0,
             height: "90%"
         }, {
             duration: 400,
