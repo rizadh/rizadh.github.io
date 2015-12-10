@@ -1,31 +1,23 @@
-"use strict"
+"use strict";
+
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLE_CIRCLE = 0.99999999;
 
+// Perform when document body is loaded
 $(function() {
     // Change Backspce to Delete if on Mac or iOS devices
     if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
         $("#keyboard-help > .shortcut.delete > span").text("Delete");
     }
+
+    // Sticky hover fix
     hoverTouchUnstick();
+
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
-    $.Velocity.hook($("#display"), "translateY", "-100%");
-    $("#display").velocity({
-        translateY: 0
-    }, {
-        easing: "easeOutExpo",
-        duration: 600
-    });
 
-    $.Velocity.hook($("#keypad td"), "scale", "0");
-    $("#keypad td").velocity({
-        scale: 1
-    }, {
-        easing: "easeOutExpo",
-        duration: 200,
-        delay: 400
-    });
+    // Startup animation
+    startupAnimation();
 
     // Clear display and show default message
     setDisplayTime("");
@@ -48,7 +40,8 @@ $(function() {
         editTime();
     });
 
-    $(document).on("tap", function() {
+    // Hide keyboard help when anything is tapped
+    $("#keyboard-help").on("tap", function() {
         toggleKeyboardHelp(true);
     });
 
@@ -58,8 +51,8 @@ $(function() {
         // Handle a number being pressed
         if (48 <= key && key <= 57 && $("#display").data("input_mode")) {
             var key_value = String.fromCharCode(key);
-            var new_text = (getDisplayTime() + key_value).slice(-6);
-            setDisplayTime(new_text);
+            var new_time = (getDisplayTime() + key_value).slice(-6);
+            setDisplayTime(new_time);
         // Handle "Enter" key being pressed
         } else if (key == 13) {
             if ($("#display").data("input_mode")) {
@@ -71,8 +64,8 @@ $(function() {
         } else if (key == 8) {
             e.preventDefault();
             if ($("#display").data("input_mode")) {
-                var new_text = ("0" + getDisplayTime()).slice(-7,-1);
-                setDisplayTime(new_text);
+                var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
+                setDisplayTime(deleted_time);
             }
         } else if (key == 32) {
             toggleKeyboardHelp();
@@ -85,6 +78,45 @@ $(window).on('load resize orientationChange', function() {
     var max_length = Math.min(window.innerHeight, window.innerWidth);
     $("html").css("font-size", max_length / 9);
 });
+
+function startupAnimation() {
+    var startup_duration = 800;
+
+    $.Velocity.hook($("#display-text"), "translateY", "-100%");
+    $("#display-text").velocity({
+        translateY: "-50%"
+    }, {
+        easing: "easeOutExpo",
+        duration: startup_duration
+    });
+    $.Velocity.hook($("#display"), "translateY", "-100%");
+    $("#display").velocity({
+        translateY: 0
+    }, {
+        easing: "easeOutExpo",
+        duration: startup_duration
+    });
+
+    $.Velocity.hook($("#keypad td"), "scale", "0");
+    // Remove with fancy transition
+    $.Velocity.hook($("#keypad td"), "opacity", "0");
+    // Experimental startup transition MAY BE REMOVED
+    $.Velocity.RegisterEffect("transition.pop", { calls: [[{scale: 1, opacity: 1}]]});
+    // Turn on and off fancy transition
+    var transition = true;
+    $("#keypad td")
+        .velocity(transition ? "transition.pop" : {scale: 1}, {
+            easing: "easeOutExpo",
+            duration: startup_duration / 4,
+            delay: startup_duration / 4,
+            // Remove with fancy transition
+            stagger: startup_duration / 4 / 9,
+            // Remove with fancy transition
+            drag: true
+        });
+}
+
+// $.Velocity.mock = 10;
 
 /** Set dial of given radius to given progress */
 function setDial(dial, radius, progress) {
@@ -132,8 +164,9 @@ function setTime(sec) {
                 seconds = ("0" + seconds).slice(-2);
                 minutes = ("0" + minutes).slice(-2);
                 hours = ("0" + hours).slice(-2);
+                var times = [hours, minutes, seconds];
                 // Send time text to display
-                setDisplayTime([hours, minutes, seconds].join(""), false);
+                setDisplayTime(times.join(""), false);
             }
         }
     );
@@ -149,8 +182,8 @@ function setDisplayTime(text, actual) {
     if (actual) {
         display
             .text(text)
-            .css("font-family","roboto_condensedregular");;
-    } else if (text == "") {
+            .css("font-family","roboto_condensedregular");
+    } else if (text === "") {
         display
             .data("current_time", "000000")
             .text("Enter a time")
@@ -252,16 +285,17 @@ function toggleKeyboardHelp(force_hide) {
             toggleKeyboardHelp();
         }
     } else {
+      	var show;
         if (help_menu.data("shown")) {
-            var show = false;
+            show = false;
         } else {
-            var show = true;
+            show = true;
         }
-        
+
         help_menu
             .data("shown", show)
             .velocity("stop")
-            .velocity(show ? "fadeIn" : "fadeOut", 200);
+            .velocity(show ? "fadeIn" : "fadeOut", show ? 200 : 100);
     }
 }
 

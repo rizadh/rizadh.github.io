@@ -80,12 +80,12 @@ body {
         color: white;
 
         &:hover {
-            background-color: saturate($main_color, 20);
+            background-color: lighten($main_color, 5);
             transition: background $hover_transition_time;
         }
 
         &:active {
-            background-color: desaturate($main_color, 20);
+            background-color: darken($main_color, 5);
             transition: background $active_transition_time;
         }
 
@@ -114,16 +114,16 @@ body {
     text-transform: uppercase;
     font-size: 0.4em;
 
-    color: $secondary_color;
+    color: lighten($secondary_color, 10);
     transition: color $resting_transition_time;
 
     &:hover {
-        color: lighten($secondary_color, 10);
+        color: lighten($secondary_color, 20);
         transition: color $hover_transition_time;
     }
 
     &:active {
-        color: darken($secondary_color, 10);
+        color: $secondary_color;
         transition: color $active_transition_time;
     }
 }
@@ -146,10 +146,10 @@ body {
     pointer-events: auto;
 
     background-color: hsla($theme_hue, 40%, 20%, 0.75);
-    -webkit-backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(10px);
 
     border-radius: 0.2rem;
-    box-shadow: 0 0 10rem hsla(0, 0%, 100%, 0.75);
+    box-shadow: 0 0 10rem hsla(0, 0%, 100%, 1);
 
     $keyboard_help_padding: 0.2rem;
 
@@ -172,7 +172,7 @@ body {
 
         span {
             text-transform: uppercase;
-            color: lighten($main_color, 10);
+            color: hsla($theme_hue, 60%, 60%, 1);
             font-family: 'roboto_condensedregular';
         }
     }
@@ -180,7 +180,7 @@ body {
     .dismiss {
         @extend .shortcut;
         margin: $keyboard_help_padding $keyboard_help_padding;
-        color: hsla(0, 0%, 75%, 1);
+        color: hsla(0, 0%, 80%, 1);
         font-size: 0.3rem;
         text-transform: uppercase;
         font-family: 'roboto_condensedregular';
