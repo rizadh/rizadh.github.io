@@ -120,13 +120,13 @@ body {
 
     &:hover {
         stroke: lighten($secondary_color, 20);
-        background-color: lighten($main_color, 5);
+        background-color: lighten($main_color, 2.5);
         transition: stroke $hover_transition_time, background-color $hover_transition_time;
     }
 
     &:active {
         stroke: $secondary_color;
-        background-color: darken($main_color, 5);
+        background-color: darken($main_color, 2.5);
         transition: stroke $active_transition_time, background-color $active_transition_time;
     }
 }
