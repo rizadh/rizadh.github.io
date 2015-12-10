@@ -12,7 +12,8 @@ $active_transition_time: 0.1s;
 
 body {
     background-color: $main_color;
-    position: relative;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     -webkit-user-select: none;
 }
