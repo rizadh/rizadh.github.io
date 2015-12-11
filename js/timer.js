@@ -364,7 +364,7 @@ function toggleKeyboardHelp(force_hide) {
             }, {
                 easing: show ? "easeOutExpo" : "easeInExpo",
                 display: show ? "block" : "none",
-                duration: show ? 400 : 200
+                duration: show ? 400 : 100
             });
     }
 }
