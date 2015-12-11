@@ -121,7 +121,7 @@ body {
     stroke: lighten($secondary_color, 10);
     transition: stroke $resting_transition_time, background-color $resting_transition_time;
 
-    $intensity: 2.5;
+    $intensity: 1;
 
     &:hover {
         stroke: lighten($secondary_color, 20);
