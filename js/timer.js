@@ -78,12 +78,16 @@ $(function() {
             }
             var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
             setDisplayTime(deleted_time);
-        // Handle "Spacebar"
-        } else if (key === 32) {
-            toggleKeyboardHelp();
         // Handle "Esc"
         } else if (key === 27 && !$("#display").data("input_mode")) {
             editTime();
+        }
+
+        // Handle "Spacebar"
+        if (key === 32) {
+            toggleKeyboardHelp();
+        } else {
+            toggleKeyboardHelp(true);
         }
     });
 });
