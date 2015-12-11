@@ -89,8 +89,11 @@ $(function() {
 
 $(window).on('load resize orientationChange', function() {
     // Maximize size of text
-    var max_length = Math.min($(window).height, $(window).width);
+    var max_length = Math.min($(window).height(), $(window).width());
     $("html").css("font-size", max_length / 9);
+    console.log("Width:" + ($(window).width() + 0) + " " + window.innerWidth);
+    console.log("Height:" + ($(window).height() + 0) + " " + window.innerHeight);
+    console.log(max_length);
 });
 
 function startupAnimation() {
