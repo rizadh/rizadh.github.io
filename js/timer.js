@@ -87,7 +87,7 @@ $(function() {
     });
 });
 
-$(window).on('load resize orientationChange', function() {
+$(window).on('load ready resize orientationChange', function() {
     // Maximize size of text
     var max_length = Math.min(window.innerHeight, window.innerWidth);
     $("html").css("font-size", max_length / 9);
