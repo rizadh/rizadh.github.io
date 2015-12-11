@@ -247,8 +247,8 @@ function startTimer() {
     var seconds = time_string.slice(-2)*1;
     var total_seconds = hours_to_seconds + minutes_to_seconds + seconds;
 
-    // Limit seconds to one day (86400 seconds)
-    if (total_seconds < 86400) {
+    // Limit seconds to less than 100 hours
+    if (total_seconds < 360000) {
         // Start dial motion and set state to timing mode
         setTime(total_seconds);
         $("#display").data("input_mode", false);
