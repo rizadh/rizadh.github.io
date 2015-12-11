@@ -112,7 +112,7 @@ function startupAnimation() {
         duration: startup_duration * 2
     });
 
-    var keypad = $("#keypad td");
+    var keypad = $("#keypad tr");
     $.Velocity.hook(keypad, "opacity", "0");
     $.Velocity.RegisterEffect("transition.slideIn", { calls: [[{
         translateY: [0, "-10%"],
