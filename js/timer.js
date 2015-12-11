@@ -180,6 +180,9 @@ function setTime(sec) {
                 var times = [hours, minutes, seconds];
                 // Send time text to display
                 setDisplayTime(times.join(""), false);
+            },
+            complete: function() {
+                setDisplayTime("Done");
             }
         }
     );
@@ -206,6 +209,11 @@ function setDisplayTime(text, actual) {
         display
             .data("current_time", "000000")
             .text("0s")
+            .css("font-family","robotoregular");
+    } else if (text === "Done") {
+        display
+            .data("current_time", "000000")
+            .text("Done")
             .css("font-family","robotoregular");
     } else {
         if (display.data("current_time") !== text) {
@@ -296,6 +304,7 @@ function startTimer() {
 }
 
 function editTime() {
+    setDisplayTime(getDisplayTime());
     $("#display").data("input_mode", true);
     $("#dial-ring path")
         .velocity("stop");
