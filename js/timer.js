@@ -61,7 +61,7 @@ $(function() {
             setDisplayTime(new_time);
 
         // Handle "Enter"
-        } else if (key == 13) {
+        } else if (key === 13) {
             if ($("#display").data("input_mode")) {
                 startTimer();
             } else {
@@ -69,15 +69,20 @@ $(function() {
             }
 
         // Handle "Backspace"
-        } else if (key == 8) {
+        } else if (key === 8) {
             e.preventDefault();
             if ($("#display").data("input_mode")) {
                 var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
                 setDisplayTime(deleted_time);
             }
         // Handle "Spacebar"
-        } else if (key == 32) {
+        } else if (key === 32) {
             toggleKeyboardHelp();
+        // Handle "Esc"
+        } else if (key === 27) {
+            if (!$("#display").data("input_mode")) {
+                editTime();
+            }
         }
     });
 });
@@ -126,6 +131,7 @@ function startupAnimation() {
 /** Set dial of given radius to given progress */
 function setDial(dial, arc_radius, progress) {
     var box_radius = 50;
+
     // Calculate path parameters
     var offset = box_radius - arc_radius;
     var sweep = progress >= 0.5 ? 1 : 0;
@@ -160,13 +166,13 @@ function setTime(sec) {
             progress: function(e, c, r, s, t) {
                 setDial($("#dial-ring path"), 40, t);
                 // Find seconds rounded up
-                var seconds = Math.ceil(r/1000);
+                var total_seconds = Math.ceil(r/1000);
                 // Find minutes rounded down
-                var minutes = Math.floor(seconds/60) % 60;
+                var minutes = Math.floor(total_seconds/60) % 60;
                 // Find hours rounded down
-                var hours = Math.floor(seconds/3600);
+                var hours = Math.floor(total_seconds/3600);
                 // Find remaining seconds
-                seconds = seconds % 60;
+                var seconds = total_seconds % 60;
                 // Force 2 digits
                 seconds = ("0" + seconds).slice(-2);
                 minutes = ("0" + minutes).slice(-2);
@@ -188,6 +194,7 @@ function setDisplayTime(text, actual) {
     var display = $("#display-text");
     if (actual) {
         display
+            .data("current_time", "000000")
             .text(text)
             .css("font-family","roboto_condensedregular");
     } else if (text === "") {
@@ -195,86 +202,97 @@ function setDisplayTime(text, actual) {
             .data("current_time", "000000")
             .text("Enter a time")
             .css("font-family","roboto_condensedregular");
-    } else {
+    } else if (text === "000000") {
         display
-            .data("current_time", text)
+            .data("current_time", "000000")
+            .text("0s")
             .css("font-family","robotoregular");
-        var current_time = getDisplayTime();
-        var time_array = [];
-        var unit_array = ["h","m","s"];
-        for (var i = 0; i < 3; i++) {
-            var time_value = current_time.slice(2*i,2*i+2);
-            if (time_value > 0 || time_array[0] || i == 2) {
-                if (time_value < 10 && !time_array[0]) {
-                    time_value = time_value.slice(-1);
+    } else {
+        if (display.data("current_time") !== text) {
+            display
+                .data("current_time", text)
+                .css("font-family","robotoregular");
+            var current_time = getDisplayTime();
+            var time_array = [];
+            var unit_array = ["h","m","s"];
+            for (var i = 0; i < 3; i++) {
+                var time_value = current_time.slice(2*i,2*i+2);
+                if (time_value > 0 || time_array[0] || i === 2) {
+                    if (time_value < 10 && !time_array[0]) {
+                        time_value = time_value.slice(-1);
+                    }
+                    time_array.push(time_value + unit_array[i]);
                 }
-                time_array.push(time_value + unit_array[i]);
             }
-        }
-        var new_time = time_array.join(" ");
-        if (new_time != display.text()) {
+            var new_time = time_array.join(" ");
             display.text(new_time);
         }
     }
 }
 
 function startTimer() {
-    $("#display").data("input_mode", false);
-    // Shrink display
-    $("#display")
-        .velocity("stop")
-        .velocity({
-            translateY: 0,
-            height: "90%"
-        }, {
-            duration: 400,
-            easing: "easeOutExpo",
-        });
-
-    // Fade out keys
-    $("#keypad")
-        .velocity("stop")
-        .velocity({
-            translateY: "10%",
-            opacity: 0
-        }, {
-            easing: "easeOutExpo",
-            duration: 400,
-            display: "none"
-        });
-
-    // Fade in edit button
-    $("#edit-button")
-        .velocity("stop")
-        .velocity({
-            translateY: [0, "100%"],
-            opacity: [1, 0]
-        }, {
-            easing: "easeOutExpo",
-            duration: 400,
-            display: "block"
-        });
-
-    // Fade in ring
-    $("#dial-ring")
-        .velocity("stop")
-        .velocity({
-            opacity: [1, 0],
-            scale: [1, 0]
-        }, {
-            easing: "easeOutExpo",
-            duration: 400,
-            display: "block"
-        });
-
     // Convert display input to seconds
     var time_string = getDisplayTime();
     var hours_to_seconds = time_string.slice(-6,-4)*3600;
     var minutes_to_seconds = time_string.slice(-4,-2)*60;
     var seconds = time_string.slice(-2)*1;
     var total_seconds = hours_to_seconds + minutes_to_seconds + seconds;
-    // Set timer to specified seconds
-    setTime(total_seconds);
+
+    // Limit seconds to one day (86400 seconds)
+    if (total_seconds < 86400) {
+        // Start dial motion and set state to timing mode
+        setTime(total_seconds);
+        $("#display").data("input_mode", false);
+
+        // Shrink display
+        $("#display")
+            .velocity("stop")
+            .velocity({
+                translateY: 0,
+                height: "90%"
+            }, {
+                duration: 400,
+                easing: "easeOutExpo",
+            });
+
+        // Fade out keys
+        $("#keypad")
+            .velocity("stop")
+            .velocity({
+                translateY: "10%",
+                opacity: 0
+            }, {
+                easing: "easeOutExpo",
+                duration: 400,
+                display: "none"
+            });
+
+        // Fade in edit button
+        $("#edit-button")
+            .velocity("stop")
+            .velocity({
+                translateY: [0, "100%"],
+                opacity: [1, 0]
+            }, {
+                easing: "easeOutExpo",
+                duration: 400,
+                display: "block"
+            });
+
+        // Fade in ring
+        $("#dial-ring")
+            .velocity("stop")
+            .velocity({
+                opacity: [1, 0],
+                scale: [1, 0]
+            }, {
+                easing: "easeOutExpo",
+                duration: 400,
+                display: "block"
+            });
+    } else {
+        setDisplayTime("Time too high", true);
+    }
 }
 
 function editTime() {
@@ -328,12 +346,9 @@ function toggleKeyboardHelp(force_hide) {
             show = true;
         }
 
-
-
         help_menu
             .data("shown", show)
             .velocity("stop")
-            // .velocity(show ? "fadeIn" : "fadeOut", show ? 200 : 100);
             .velocity({
                 scale: (show ? [1, 0] : [0, 1]),
                 opacity: (show ? [1, 0] : [0, 1])
