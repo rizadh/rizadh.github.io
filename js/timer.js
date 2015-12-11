@@ -55,11 +55,13 @@ $(function() {
         var key = e.keyCode;
 
         // Handle a number
-        if (48 <= key && key <= 57 && $("#display").data("input_mode")) {
+        if (48 <= key && key <= 57) {
+            if (!$("#display").data("input_mode")) {
+                editTime();
+            }
             var key_value = String.fromCharCode(key);
             var new_time = (getDisplayTime() + key_value).slice(-6);
             setDisplayTime(new_time);
-
         // Handle "Enter"
         } else if (key === 13) {
             if ($("#display").data("input_mode")) {
@@ -71,18 +73,17 @@ $(function() {
         // Handle "Backspace"
         } else if (key === 8) {
             e.preventDefault();
-            if ($("#display").data("input_mode")) {
-                var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
-                setDisplayTime(deleted_time);
+            if (!$("#display").data("input_mode")) {
+                editTime();
             }
+            var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
+            setDisplayTime(deleted_time);
         // Handle "Spacebar"
         } else if (key === 32) {
             toggleKeyboardHelp();
         // Handle "Esc"
-        } else if (key === 27) {
-            if (!$("#display").data("input_mode")) {
-                editTime();
-            }
+        } else if (key === 27 && !$("#display").data("input_mode")) {
+            editTime();
         }
     });
 });
