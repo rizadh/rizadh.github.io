@@ -41,19 +41,22 @@ body {
 #dial-ring {
     display: none;
     position: absolute;
-    left: 10%;
-    top: 10%;
-    width: 80%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
+
+    fill: none;
 
     $path_color: darken($main_color, 10);
+    $stroke_width: 1.125;
 
     path {
-        fill: $path_color;
+        stroke-width: $stroke_width;
+        stroke: $path_color;
     }
 
     g circle {
-        fill: rgba($path_color , 0.2);
+        stroke-width: $stroke_width;
+        stroke: rgba($path_color , 0.2);
     }
 }
 

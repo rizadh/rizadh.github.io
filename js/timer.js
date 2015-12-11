@@ -124,18 +124,20 @@ function startupAnimation() {
 }
 
 /** Set dial of given radius to given progress */
-function setDial(dial, radius, progress) {
+function setDial(dial, arc_radius, progress) {
+    var box_radius = 50;
     // Calculate path parameters
+    var offset = box_radius - arc_radius;
     var sweep = progress >= 0.5 ? 1 : 0;
-    var arc_pos_x = radius*(1 + Math.sin(2*Math.PI*progress));
-    var arc_pos_y = radius*(1 - Math.cos(2*Math.PI*progress));
+    var arc_pos_x = offset + arc_radius*(1 + Math.sin(2*Math.PI*progress));
+    var arc_pos_y = offset + arc_radius*(1 - Math.cos(2*Math.PI*progress));
     var arc_pos = arc_pos_x + " " + arc_pos_y;
-    var arc_dimensions = radius + " " + radius;
+    var arc_dimensions = arc_radius + " " + arc_radius;
     var arc_parameters = " 0 " + sweep + " 1 ";
 
     // Calculate path segments
-    var move_to_center = "M" + radius + " " + radius;
-    var move_to_start = "L" + radius + " 0";
+    var move_to_center = "M" + box_radius + " " + box_radius;
+    var move_to_start = "m0 " + (-arc_radius);
     var make_arc = "A" + arc_dimensions + arc_parameters + arc_pos;
 
     // Creath path from segments
@@ -156,7 +158,7 @@ function setTime(sec) {
             duration: dial_time,
             easing: "linear",
             progress: function(e, c, r, s, t) {
-                setDial($("#dial-ring path"), 50, t);
+                setDial($("#dial-ring path"), 40, t);
                 // Find seconds rounded up
                 var seconds = Math.ceil(r/1000);
                 // Find minutes rounded down
