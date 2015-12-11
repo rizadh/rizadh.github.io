@@ -116,7 +116,7 @@ body {
     height: 10%;
     cursor: pointer;
 
-    stroke-width: 15;
+    stroke-width: 20;
     fill: none;
     stroke: lighten($secondary_color, 10);
     transition: stroke $resting_transition_time, background-color $resting_transition_time;
