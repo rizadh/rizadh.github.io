@@ -353,9 +353,9 @@ function toggleKeyboardHelp(force_hide) {
                 scale: (show ? [1, 0] : [0, 1]),
                 opacity: (show ? [1, 0] : [0, 1])
             }, {
-                easing: "easeOutExpo",
-                display: (show ? "block" : "none"),
-                duration: 400
+                easing: show ? "easeOutExpo" : "easeInExpo",
+                display: show ? "block" : "none",
+                duration: show ? 400 : 200
             });
     }
 }
