@@ -88,13 +88,15 @@ body {
 
         color: white;
 
+        $intensity: 5;
+
         &:hover {
-            background-color: lighten($main_color, 5);
+            background-color: lighten($main_color, $intensity);
             transition: background $hover_transition_time;
         }
 
         &:active {
-            background-color: darken($main_color, 5);
+            background-color: darken($main_color, $intensity);
             transition: background $active_transition_time;
         }
 
@@ -119,15 +121,17 @@ body {
     stroke: lighten($secondary_color, 10);
     transition: stroke $resting_transition_time, background-color $resting_transition_time;
 
+    $intensity: 2.5;
+
     &:hover {
         stroke: lighten($secondary_color, 20);
-        background-color: lighten($main_color, 2.5);
+        background-color: lighten($main_color, $intensity);
         transition: stroke $hover_transition_time, background-color $hover_transition_time;
     }
 
     &:active {
         stroke: $secondary_color;
-        background-color: darken($main_color, 2.5);
+        background-color: darken($main_color, $intensity);
         transition: stroke $active_transition_time, background-color $active_transition_time;
     }
 }
