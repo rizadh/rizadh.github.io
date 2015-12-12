@@ -107,42 +107,66 @@ $(document).on("keydown", function(e) {
     }
 });
 
+// Hide keyboard help when anything is tapped
+$(document).on("click", function() {
+    toggleKeyboardHelp(true);
+});
+
+// Adjust font-sizes when viewport dimensions change
 $(window).on('load resize orientationChange', function() {
     // Maximize size of text
     var max_length = Math.min($(window).height(), $(window).width());
     $("html").css("font-size", max_length / 9);
 });
 
+// Startup animation to be performed once when app is loaded
 function startupAnimation() {
     var startup_duration = 400;
+    var display_text = $("#display-text");
+    var display = $("#display");
+    var keypad = $("#keypad tr");
+    var global_delay = 100;
+    global_delay = 100;
+
+    $.Velocity.hook(display_text, "translateY", "-100%");
+    $.Velocity.hook(display_text, "opacity", "0");
 
     // Animate display text
-    $("#display-text").velocity({
-        translateY: ["-50%", "-100%"]
+    display_text.velocity({
+        translateY: "-50%",
+        opacity: 1
     }, {
         easing: "easeOutExpo",
-        duration: startup_duration * 2
+        duration: startup_duration,
+        delay: global_delay
     });
 
-    // Animate dispay
-    $("#display").velocity({
-        translateY: [0, "-100%"]
+    $.Velocity.hook(display, "translateY", "-100%");
+    $.Velocity.hook(display, "opacity", "0");
+
+    // Animate display
+    display.velocity({
+        translateY: 0,
+        opacity: 1
     }, {
         easing: "easeOutExpo",
-        duration: startup_duration * 2
+        duration: startup_duration,
+        delay: global_delay
     });
 
-    var keypad = $("#keypad tr");
     $.Velocity.hook(keypad, "opacity", "0");
+    $.Velocity.hook(keypad, "translateY", "-10%");
+
+    // Animate keypad
     $.Velocity.RegisterEffect("transition.slideIn", { calls: [[{
-        translateY: [0, "-10%"],
-        opacity: [1, 0]
+        translateY: 0,
+        opacity: 1
      }]]});
     keypad.velocity("transition.slideIn", {
         easing: "easeOutExpo",
-        duration: startup_duration,
-        delay: startup_duration / 2,
-        stagger: startup_duration / 2 / (keypad.length - 1),
+        duration: startup_duration / 2,
+        delay: startup_duration / 4 + global_delay,
+        stagger: startup_duration / 4 / (keypad.length - 1),
         drag: true,
         display: null
     });
