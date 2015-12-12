@@ -310,11 +310,10 @@ function startTimer() {
         $("#display")
             .velocity("stop")
             .velocity({
-                translateY: 0,
                 height: "90%"
             }, {
                 duration: GLOBAL_ANIMATION_DURATION,
-                easing: GLOBAL_EASE_OUT,
+                easing: GLOBAL_EASE_OUT
             });
 
         // Fade out keys
