@@ -12,7 +12,10 @@ $active_transition_time: 0s;
 
 body {
     background-color: $main_color;
+    // Prevent text selection
     -webkit-user-select: none;
+    // Prevent tap highlight on Webkit browsers
+    -webkit-tap-highlight: transparent;
 }
 
 #content {
