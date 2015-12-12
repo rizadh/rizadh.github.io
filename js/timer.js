@@ -135,8 +135,7 @@ function startupAnimation() {
     var display_text = $("#display-text");
     var display = $("#display");
     var keypad = $("#keypad tr");
-    var global_delay = 100;
-    global_delay = 100;
+    var startup_delay = 20;
 
     $.Velocity.hook(display_text, "translateY", "-100%");
     $.Velocity.hook(display_text, "opacity", "0");
@@ -148,7 +147,7 @@ function startupAnimation() {
     }, {
         easing: GLOBAL_EASE_OUT,
         duration: startup_duration,
-        delay: global_delay
+        delay: startup_delay
     });
 
     $.Velocity.hook(display, "translateY", "-100%");
@@ -161,7 +160,7 @@ function startupAnimation() {
     }, {
         easing: GLOBAL_EASE_OUT,
         duration: startup_duration,
-        delay: global_delay
+        delay: startup_delay
     });
 
     $.Velocity.hook(keypad, "opacity", "0");
@@ -175,7 +174,7 @@ function startupAnimation() {
     keypad.velocity("transition.slideIn", {
         easing: GLOBAL_EASE_OUT,
         duration: startup_duration / 2,
-        delay: startup_duration / 4 + global_delay,
+        delay: startup_duration / 4 + startup_delay,
         stagger: startup_duration / 4 / (keypad.length - 1),
         drag: true,
         display: null
@@ -302,6 +301,7 @@ function startTimer() {
 
     // Limit seconds to less than 100 hours
     if (total_seconds < 360000) {
+        var timer_delay = 20;
         // Start dial motion and set state to timing mode
         setTime(total_seconds);
         $("#display").data("input_mode", false);
@@ -313,7 +313,8 @@ function startTimer() {
                 height: "90%"
             }, {
                 duration: GLOBAL_ANIMATION_DURATION,
-                easing: GLOBAL_EASE_OUT
+                easing: GLOBAL_EASE_OUT,
+                delay: timer_delay
             });
 
         // Fade out keys
@@ -325,7 +326,8 @@ function startTimer() {
             }, {
                 easing: GLOBAL_EASE_OUT,
                 duration: GLOBAL_ANIMATION_DURATION,
-                display: "none"
+                display: "none",
+                delay: timer_delay
             });
 
         // Fade in edit button
@@ -337,7 +339,8 @@ function startTimer() {
             }, {
                 easing: GLOBAL_EASE_OUT,
                 duration: GLOBAL_ANIMATION_DURATION,
-                display: "block"
+                display: "block",
+                delay: timer_delay
             });
 
         // Fade in ring
@@ -349,7 +352,8 @@ function startTimer() {
             }, {
                 easing: GLOBAL_EASE_OUT,
                 duration: GLOBAL_ANIMATION_DURATION,
-                display: "block"
+                display: "block",
+                delay: timer_delay
             });
     } else {
         setDisplayTime("Time too high", true);
