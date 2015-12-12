@@ -1,7 +1,11 @@
 "use strict";
 
 // SVG arcs cannot form a complete circle so a value close to 1 is used
-var WHOLE_CIRCLE = 0.99999999;
+var WHOLE_CIRCLE = 0.99999;
+var EASE_FUNC = "Expo";
+var GLOBAL_EASE_OUT = "easeOut" + EASE_FUNC;
+var GLOBAL_EASE_IN = "easeIn" + EASE_FUNC;
+var GLOBAL_ANIMATION_DURATION = 400;
 
 // Perform when document body is loaded
 $(function() {
@@ -127,7 +131,7 @@ $(window).on('load resize orientationChange', function() {
 
 // Startup animation to be performed once when app is loaded
 function startupAnimation() {
-    var startup_duration = 400;
+    var startup_duration = GLOBAL_ANIMATION_DURATION;
     var display_text = $("#display-text");
     var display = $("#display");
     var keypad = $("#keypad tr");
@@ -142,7 +146,7 @@ function startupAnimation() {
         translateY: "-50%",
         opacity: 1
     }, {
-        easing: "easeOutExpo",
+        easing: GLOBAL_EASE_OUT,
         duration: startup_duration,
         delay: global_delay
     });
@@ -155,7 +159,7 @@ function startupAnimation() {
         translateY: 0,
         opacity: 1
     }, {
-        easing: "easeOutExpo",
+        easing: GLOBAL_EASE_OUT,
         duration: startup_duration,
         delay: global_delay
     });
@@ -169,7 +173,7 @@ function startupAnimation() {
         opacity: 1
      }]]});
     keypad.velocity("transition.slideIn", {
-        easing: "easeOutExpo",
+        easing: GLOBAL_EASE_OUT,
         duration: startup_duration / 2,
         delay: startup_duration / 4 + global_delay,
         stagger: startup_duration / 4 / (keypad.length - 1),
@@ -309,8 +313,8 @@ function startTimer() {
                 translateY: 0,
                 height: "90%"
             }, {
-                duration: 400,
-                easing: "easeOutExpo",
+                duration: GLOBAL_ANIMATION_DURATION,
+                easing: GLOBAL_EASE_OUT,
             });
 
         // Fade out keys
@@ -320,8 +324,8 @@ function startTimer() {
                 translateY: "10%",
                 opacity: 0
             }, {
-                easing: "easeOutExpo",
-                duration: 400,
+                easing: GLOBAL_EASE_OUT,
+                duration: GLOBAL_ANIMATION_DURATION,
                 display: "none"
             });
 
@@ -332,8 +336,8 @@ function startTimer() {
                 translateY: [0, "100%"],
                 opacity: [1, 0]
             }, {
-                easing: "easeOutExpo",
-                duration: 400,
+                easing: GLOBAL_EASE_OUT,
+                duration: GLOBAL_ANIMATION_DURATION,
                 display: "block"
             });
 
@@ -344,8 +348,8 @@ function startTimer() {
                 opacity: [1, 0],
                 scale: [1, 0]
             }, {
-                easing: "easeOutExpo",
-                duration: 400,
+                easing: GLOBAL_EASE_OUT,
+                duration: GLOBAL_ANIMATION_DURATION,
                 display: "block"
             });
     } else {
@@ -363,8 +367,8 @@ function editTime() {
         .velocity({
             height: "20%"
         }, {
-            duration: 400,
-            easing: "easeOutExpo",
+            duration: GLOBAL_ANIMATION_DURATION,
+            easing: GLOBAL_EASE_OUT,
         });
     $("#keypad")
         .velocity("stop")
@@ -372,8 +376,8 @@ function editTime() {
             translateY: 0,
             opacity: 1
         }, {
-            easing: "easeOutExpo",
-            duration: 400,
+            easing: GLOBAL_EASE_OUT,
+            duration: GLOBAL_ANIMATION_DURATION,
             display: "table"
         });
     $("#edit-button")
@@ -382,9 +386,9 @@ function editTime() {
             opacity: 0,
             translateY: "-700%"
         }, {
-            easing: "easeOutExpo",
+            easing: GLOBAL_EASE_OUT,
             display: "none",
-            duration: 400
+            duration: GLOBAL_ANIMATION_DURATION
         });
     $("#dial-ring")
         .velocity("stop")
@@ -412,9 +416,10 @@ function toggleKeyboardHelp(force_hide) {
                 scale: (show ? [1, 0] : [0, 1]),
                 opacity: (show ? [1, 0] : [0, 1])
             }, {
-                easing: show ? "easeOutExpo" : "easeInExpo",
+                easing: show ? GLOBAL_EASE_OUT : GLOBAL_EASE_IN,
                 display: show ? "block" : "none",
-                duration: show ? 400 : 100
+                duration: (show ? GLOBAL_ANIMATION_DURATION :
+                    GLOBAL_ANIMATION_DURATION / 4)
             });
     }
 }
