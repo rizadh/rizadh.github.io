@@ -43,53 +43,68 @@ $(function() {
     $("#edit-button").on("tap", function() {
         editTime();
     });
+});
 
-    // Hide keyboard help when anything is tapped
-    $("#keyboard-help").on("tap", function() {
-        toggleKeyboardHelp(true);
-    });
-
-    // Enable keyboard input
-    $(document).on("keydown", function(e) {
-        // Get the keycode
-        var key = e.keyCode;
-
-        // Handle a number
-        if (48 <= key && key <= 57) {
+// Enable keyboard input
+$(document).on("keydown", function(e) {
+    // Get the keycode
+    var key = e.keyCode;
+    // Perform events depending on keycode
+    switch (key) {
+        // Backspace - delete a character from display
+        case 8:
+            e.preventDefault();
+            // Activate editing mode if not activated
+            if (!$("#display").data("input_mode")) {
+                editTime();
+            }
+            var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
+            setDisplayTime(deleted_time);
+            break;
+        // Enter - start or cancel timer
+        case 13:
+            // Activate editing mode if not activated
+            if ($("#display").data("input_mode")) {
+                startTimer();
+            } else {
+                editTime();
+            }
+            break;
+        // Escape - cancel timer
+        case 27:
+            // Activate editing mode if not activated
+            if (!$("#display").data("input_mode")) {
+                editTime();
+            }
+            break;
+        // Space - toggle keyboard help menu
+        case 32:
+            toggleKeyboardHelp();
+            break;
+        case 48:
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+            // Activate editing mode if not activated
             if (!$("#display").data("input_mode")) {
                 editTime();
             }
             var key_value = String.fromCharCode(key);
             var new_time = (getDisplayTime() + key_value).slice(-6);
             setDisplayTime(new_time);
-        // Handle "Enter"
-        } else if (key === 13) {
-            if ($("#display").data("input_mode")) {
-                startTimer();
-            } else {
-                editTime();
-            }
+            break;
+    }
 
-        // Handle "Backspace"
-        } else if (key === 8) {
-            e.preventDefault();
-            if (!$("#display").data("input_mode")) {
-                editTime();
-            }
-            var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
-            setDisplayTime(deleted_time);
-        // Handle "Esc"
-        } else if (key === 27 && !$("#display").data("input_mode")) {
-            editTime();
-        }
-
-        // Handle "Spacebar"
-        if (key === 32) {
-            toggleKeyboardHelp();
-        } else {
-            toggleKeyboardHelp(true);
-        }
-    });
+    // Hide help menu unless spacebar was clicked
+    if (key !== 32) {
+        toggleKeyboardHelp(true);
+    }
 });
 
 $(window).on('load resize orientationChange', function() {
