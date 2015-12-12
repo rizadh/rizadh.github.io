@@ -61,6 +61,7 @@ $(document).on("keydown", function(e) {
             var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
             setDisplayTime(deleted_time);
             break;
+
         // Enter - start or cancel timer
         case 13:
             // Activate editing mode if not activated
@@ -70,6 +71,7 @@ $(document).on("keydown", function(e) {
                 editTime();
             }
             break;
+
         // Escape - cancel timer
         case 27:
             // Activate editing mode if not activated
@@ -77,10 +79,13 @@ $(document).on("keydown", function(e) {
                 editTime();
             }
             break;
+
         // Space - toggle keyboard help menu
         case 32:
             toggleKeyboardHelp();
             break;
+
+        // 0 to 9 - input digits into display
         case 48:
         case 49:
         case 50:
@@ -95,6 +100,7 @@ $(document).on("keydown", function(e) {
             if (!$("#display").data("input_mode")) {
                 editTime();
             }
+            // Obtain entered character
             var key_value = String.fromCharCode(key);
             var new_time = (getDisplayTime() + key_value).slice(-6);
             setDisplayTime(new_time);
