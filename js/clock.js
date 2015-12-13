@@ -30,6 +30,16 @@ function updateClock(startup) {
         $.Velocity.hook($("#second-hand"), "rotateZ", "-6deg");
     }
 
+    if (startup) {
+        $.Velocity.hook($("svg"), "scale", 0);
+        $("svg").velocity({
+            scale: 1
+        }, {
+            easing: "easeOutExpo",
+            duration: 800
+        })
+    }
+
     // Adjust animation parameters for startup
     var duration = startup ? 800 : 400;
     var easing = startup ? "easeOutExpo" : [100, 10];
