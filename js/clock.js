@@ -67,15 +67,15 @@ function updateClock(startup) {
         }
         return value;
     });
+    var highest_progress = progress_array[2][1];
 
-    // Reduce duration of animation according to highest hand progress
-    var duration_array = [1.2, 1.1, 1];
     progress_array.forEach(function(unit, index) {
         unit[0].velocity({
             rotateZ: unit[1]
         }, {
             easing: easing,
-            duration: startup ? duration / duration_array[index] : duration
+            // Duration of rotation depends on how far it has to go
+            duration: startup ? (duration*(unit[1]/highest_progress)) : duration
         });
     });
 
