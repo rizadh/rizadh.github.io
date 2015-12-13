@@ -50,7 +50,7 @@ body {
     fill: none;
 
     $path_color: darken($main_color, 10);
-    $stroke_width: 1.125;
+    $stroke_width: 2;
 
     path {
         stroke-width: $stroke_width;
