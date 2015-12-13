@@ -3,79 +3,19 @@
     <title>
         Stars
     </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="
+        width=device-width,
+        initial-scale=1.0,
+        maximum-scale=1.0,
+        user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/stars.css">
     <style>
-        body {
-            background-image: linear-gradient(to bottom, hsla(240, 50%, 15%, 1), hsla(240, 50%, 25%, 1));
-            overflow: hidden;
-        }
-
-        svg {
-            display: none;
-            position: absolute;
-            fill: hsla(0, 0%, 100%, 1);
-            z-index: 0;
-            transform: translate(-50%, -50%);
-        }
     </style>
     <script src="js/jquery-2.1.4.min.js"></script>
     <script src="js/velocity.min.js"></script>
-    <script>
-    var stars = 100;
-    $(function() {
-        spawnStars(stars);
-        $(document).click(function() {
-            var prompt_text = "There are currently " + stars + " stars. Enter a new number of stars below:";
-            stars = prompt(prompt_text);
-            spawnStars(stars);
-        });
-    });
-
-    function spawnStars(num_stars) {
-        $("svg").not(":nth-child(1)").remove();
-        for (var i = 0; i < num_stars; i++) {
-            var element = $("svg:nth-child(1)").clone().appendTo("body");
-            var size = 5 + Math.random()*5;
-            var x_position = Math.random()*100;
-            var y_position = Math.random()*100;
-            var twinkle_duration = 500 + Math.random()*1500;
-            var rotation_angle = -5 + Math.random()*10;
-            var rotation_intensity = -45 + Math.random()*90;
-            var color = 240 + Math.random()*120;
-            var startup_delay = Math.random()*num_stars*10;
-            var twinkle_intensity = 0.25 + Math.random()*0.25
-            var start_brightness = 75 + Math.random()*25;
-            var hook = $.Velocity.hook;
-
-            element.css({
-                display: "block",
-                width: size,
-                height: size,
-                left: x_position+"%",
-                top: y_position+"%",
-                fill: "hsla(" + color + ", 100%, " + start_brightness + "%, 1)"
-            });
-
-            hook(element, "rotateZ", (rotation_angle + rotation_intensity)+"deg");
-            hook(element, "scale", "0");
-            hook(element, "opacity", "0");
-            element
-                .delay(startup_delay)
-                .velocity({
-                    scale: 1,
-                    opacity: 1,
-                    rotateZ: rotation_angle
-                }, twinkle_duration)
-                .velocity({
-                    scale: twinkle_intensity,
-                    opacity: twinkle_intensity,
-                    rotateZ: rotation_angle + rotation_intensity
-                }, {
-                    duration: twinkle_duration,
-                    loop: true
-                });
-        }
-    }
-    </script>
+    <script src="js/tappy.js"></script>
+    <script src="js/stars.min.js"></script>
 </head>
 <body>
     <svg viewBox="0 0 100 100">

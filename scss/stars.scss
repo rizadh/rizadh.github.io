@@ -1,0 +1,12 @@
+body {
+    background-image: linear-gradient(to bottom, hsla(240, 50%, 15%, 1), hsla(240, 50%, 25%, 1));
+    overflow: hidden;
+}
+
+svg {
+    display: none;
+    position: absolute;
+    fill: hsla(0, 0%, 100%, 1);
+    z-index: 0;
+    transform: translate(-50%, -50%);
+}
