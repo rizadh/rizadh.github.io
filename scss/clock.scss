@@ -20,7 +20,6 @@ svg {
     stroke-width: 2;
     stroke: $secondary_color;
     fill: darken($main_color, 7.5);
-    // fill: url(#frame-fill);
 }
 
 svg line {
@@ -33,7 +32,6 @@ svg line {
 }
 
 #minute-hand {
-    stroke: $secondary_color;
     stroke: darken($secondary_color, 20);
     stroke-width: 2;
 }
