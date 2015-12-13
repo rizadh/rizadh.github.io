@@ -38,8 +38,8 @@
             var x_position = Math.random()*100;
             var y_position = Math.random()*100;
             var twinkle_duration = 500 + Math.random()*1500;
-            var rotation_angle = Math.random() > 0.5 ? 1 : -1;
-            var rotation_direction = -5 + Math.random()*10;
+            var rotation_angle = -5 + Math.random()*10;
+            var rotation_intensity = -45 + Math.random()*90;
             var color = 240 + Math.random()*120;
             var startup_delay = Math.random()*num_stars*10;
             var twinkle_intensity = 0.25 + Math.random()*0.25
@@ -55,7 +55,7 @@
                 fill: "hsla(" + color + ", 100%, " + start_brightness + "%, 1)"
             });
 
-            hook(element, "rotateZ", (rotation_angle + rotation_angle * 90)+"deg");
+            hook(element, "rotateZ", (rotation_angle + rotation_intensity)+"deg");
             hook(element, "scale", "0");
             hook(element, "opacity", "0");
             element
@@ -68,7 +68,7 @@
                 .velocity({
                     scale: twinkle_intensity,
                     opacity: twinkle_intensity,
-                    rotateZ: rotation_angle + rotation_angle * 90
+                    rotateZ: rotation_angle + rotation_intensity
                 }, {
                     duration: twinkle_duration,
                     loop: true
