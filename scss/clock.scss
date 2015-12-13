@@ -1,0 +1,48 @@
+@import "partials/_normalize";
+
+$theme_hue: 210;
+$main_color: hsla($theme_hue, 80%, 40%, 1);
+$secondary_color: hsla($theme_hue, 40%, 80%, 1);
+$accent_color: hsla(0, 80%, 40%, 1);
+$accent_color: hsla(0, 80%, 60%, 1);
+
+body {
+    background-color: $main_color;
+}
+
+svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#frame {
+    stroke-width: 2;
+    stroke: $secondary_color;
+    fill: darken($main_color, 7.5);
+    // fill: url(#frame-fill);
+}
+
+svg line {
+    transform-origin: 50% 100%;
+}
+
+#hour-hand {
+    stroke: $secondary_color;
+    stroke-width: 2;
+}
+
+#minute-hand {
+    stroke: $secondary_color;
+    stroke: darken($secondary_color, 20);
+    stroke-width: 2;
+}
+
+#second-hand {
+    stroke: $accent_color;
+    stroke-width: 1;
+}
+
+#center {
+    fill: $accent_color;
+}
