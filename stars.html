@@ -5,7 +5,6 @@
     </title>
     <style>
         body {
-            /*background-image: linear-gradient(to bottom, #40405c 0%,#6f71aa 80%,#8a76ab 100%);*/
             background-image: linear-gradient(to bottom, hsla(240, 50%, 15%, 1), hsla(240, 50%, 25%, 1));
         }
 
@@ -20,8 +19,18 @@
     <script src="js/jquery-2.1.4.min.js"></script>
     <script src="js/velocity.min.js"></script>
     <script>
+    var stars = 100;
     $(function() {
-        var num_stars = prompt("How many stars?");
+        spawnStars(stars);
+        $(document).click(function() {
+            var prompt_text = "There are currently " + stars + " stars. Enter a new number of stars below:";
+            stars = prompt(prompt_text);
+            spawnStars(stars);
+        });
+    });
+
+    function spawnStars(num_stars) {
+        $("svg").not(":nth-child(1)").remove();
         for (var i = 0; i < num_stars; i++) {
             var element = $("svg:nth-child(1)").clone().appendTo("body");
             var size = 5 + Math.random()*5;
@@ -64,7 +73,7 @@
                     loop: true
                 });
         }
-    });
+    }
     </script>
 </head>
 <body>
