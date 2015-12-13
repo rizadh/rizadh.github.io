@@ -19,21 +19,29 @@ function updateClock(startup) {
     var minute_progress = 6*minutes;
     var second_progress = 6*seconds;
 
+    // Create varibles to acces each hand
+    var hour_hand = $("#hour-hand");
+    var minute_hand = $("#minute-hand");
+    var second_hand = $("#second-hand");
+
     // Prevent clock from spinning back to return to zero
     if (hour_progress == 0) {
-        $.Velocity.hook($("#hour-hand"), "rotateZ", "-30deg");
+        $.Velocity.hook(hour_hand, "rotateZ", "-30deg");
     }
     if (minute_progress == 0) {
-        $.Velocity.hook($("#minute-hand"), "rotateZ", "-6deg");
+        $.Velocity.hook($minute_hand, "rotateZ", "-6deg");
     }
     if (second_progress == 0) {
-        $.Velocity.hook($("#second-hand"), "rotateZ", "-6deg");
+        $.Velocity.hook(second_hand, "rotateZ", "-6deg");
     }
 
     if (startup) {
-        $.Velocity.hook($("svg"), "scale", 0);
-        $("svg").velocity({
-            scale: 1
+        var clock = $("svg");
+        $.Velocity.hook(clock, "scale", 0);
+        $.Velocity.hook(clock, "opacity", 0);
+        clock.velocity({
+            scale: 1,
+            opacity: 1
         }, {
             easing: "easeOutExpo",
             duration: 800
@@ -46,9 +54,9 @@ function updateClock(startup) {
 
     // Sort hands in order of progress
     var progress_array = [
-        ["#hour-hand", hour_progress],
-        ["#minute-hand", minute_progress],
-        ["#second-hand", second_progress]
+        [hour_hand, hour_progress],
+        [minute_hand, minute_progress],
+        [second_hand, second_progress]
     ];
     progress_array.sort(function(a, b) {
         var value = 0;
@@ -63,7 +71,7 @@ function updateClock(startup) {
     // Reduce duration of animation according to highest hand progress
     var duration_array = [1.2, 1.1, 1];
     progress_array.forEach(function(unit, index) {
-        $(unit[0]).velocity({
+        unit[0].velocity({
             rotateZ: unit[1]
         }, {
             easing: easing,
