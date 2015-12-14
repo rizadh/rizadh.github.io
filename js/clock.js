@@ -55,13 +55,15 @@ function updateClock(startup) {
             $.Velocity.hook(unit[0], "rotateZ", (old_progress - 360) + "deg");
         }
 
-        unit[0].velocity({
-            rotateZ: unit[1]
-        }, {
-            easing: easing,
-            // Duration of rotation depends on how far it has to go
-            duration: startup ? duration*unit[1]/highest_progress : duration
-        });
+        if (old_progress !== unit[1]) {
+            unit[0].velocity({
+                rotateZ: unit[1]
+            }, {
+                easing: easing,
+                // Duration of rotation depends on how far it has to go
+                duration: startup ? duration*unit[1]/highest_progress : duration
+            });
+        }
     });
 
     // Refresh clock in 1 second
