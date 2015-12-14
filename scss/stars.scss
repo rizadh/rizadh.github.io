@@ -1,5 +1,6 @@
 body {
-    background-image: linear-gradient(to bottom, hsla(240, 50%, 15%, 1), hsla(240, 50%, 25%, 1));
+    background-image: linear-gradient(to bottom, hsla(240, 50%, 15%, 1) 0%, hsla(240, 50%, 25%, 1) 100%);
+    background-attachment: fixed; // Fix for Firefox repeating gradient
     overflow: hidden;
 }
 
