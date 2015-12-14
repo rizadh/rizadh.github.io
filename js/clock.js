@@ -19,21 +19,17 @@ function updateClock(startup) {
     var minute_progress = 6*minutes;
     var second_progress = 6*seconds;
 
-    // Create varibles to acces each hand
+    // Create varibles to access each hand
     var hour_hand = $("#hour-hand");
     var minute_hand = $("#minute-hand");
     var second_hand = $("#second-hand");
 
-    // Prevent clock from spinning back to return to zero
-    if (hour_progress == 0) {
-        $.Velocity.hook(hour_hand, "rotateZ", "-30deg");
-    }
-    if (minute_progress == 0) {
-        $.Velocity.hook($minute_hand, "rotateZ", "-6deg");
-    }
-    if (second_progress == 0) {
-        $.Velocity.hook(second_hand, "rotateZ", "-6deg");
-    }
+    // Create array to easily iterate over hands and their progress
+    var progress_array = [
+        [hour_hand, hour_progress],
+        [minute_hand, minute_progress],
+        [second_hand, second_progress]
+    ];
 
     if (startup) {
         var clock = $("svg");
@@ -50,32 +46,21 @@ function updateClock(startup) {
 
     // Adjust animation parameters for startup
     var duration = startup ? 800 : 400;
-    var easing = startup ? "easeOutExpo" : [100, 10];
-
-    // Sort hands in order of progress
-    var progress_array = [
-        [hour_hand, hour_progress],
-        [minute_hand, minute_progress],
-        [second_hand, second_progress]
-    ];
-    progress_array.sort(function(a, b) {
-        var value = 0;
-        if (a[1] > a[1]) {
-            value = 1;
-        } else if (a[1] < b[1]) {
-            value = -1;
-        }
-        return value;
-    });
-    var highest_progress = progress_array[2][1];
+    var easing = startup ? "easeOutExpo" : [100, 5];
+    var highest_progress = Math.max(hour_progress, minute_progress, second_progress);
 
     progress_array.forEach(function(unit, index) {
+        var old_progress  = parseInt($.Velocity.hook(unit[0], "rotateZ"));
+        if (old_progress > unit[1]) {
+            $.Velocity.hook(unit[0], "rotateZ", (old_progress - 360) + "deg");
+        }
+
         unit[0].velocity({
             rotateZ: unit[1]
         }, {
             easing: easing,
             // Duration of rotation depends on how far it has to go
-            duration: startup ? (duration*(unit[1]/highest_progress)) : duration
+            duration: startup ? duration*unit[1]/highest_progress : duration
         });
     });
 
