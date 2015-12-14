@@ -1,0 +1,9 @@
+CACHE MANIFEST
+# 14-12-2015
+/clock.html
+css/clock.css
+js/clock.min.js
+# JS Libraries
+js/jquery-2.1.4.min.js
+js/velocity.min.js
+js/tappy.js
