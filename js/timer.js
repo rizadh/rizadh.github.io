@@ -47,6 +47,13 @@ $(function() {
     $("#edit-button").on("tap", function() {
         editTime();
     });
+
+    // Set click event for edit button
+    $("#display").on("tap", function() {
+        if (!$("#display").data("input_mode")) {
+            togglePause();
+        } 
+    });
 });
 
 // Enable keyboard input
@@ -86,7 +93,12 @@ $(document).on("keydown", function(e) {
 
         // Space - toggle keyboard help menu
         case 32:
-            toggleKeyboardHelp();
+            if (!$("#display").data("input_mode")) {
+                togglePause();
+            } else {
+                toggleKeyboardHelp();
+            }
+
             break;
 
         // 0 to 9 - input digits into display
@@ -206,18 +218,24 @@ function setDial(dial, arc_radius, progress) {
     dial.attr("d", dial_path);
 }
 
-function setTime(sec) {
+function setTime(sec, resume) {
     // Convert seconds to milliseconds
-    var dial_time = sec*1000;
-    $("#dial-ring path").velocity(
+    var dial_path = $("#dial-ring path");
+    var dial_time = resume ? dial_path.data("time_left") : sec*1000;
+    var initial_progress = resume ? dial_path.data("progress") : 0;
+
+    dial_path.velocity(
         {
             // Can't go to 1 with SVG arc
-            tween: WHOLE_CIRCLE
+            tween: [WHOLE_CIRCLE, initial_progress]
         }, {
             duration: dial_time,
             easing: "linear",
             progress: function(e, c, r, s, t) {
-                setDial($("#dial-ring path"), 40, t);
+                setDial(dial_path, 40, t);
+                // Store progress in data
+                dial_path.data("progress", t);
+                dial_path.data("time_left", r);
                 // Find seconds rounded up
                 var total_seconds = Math.ceil(r/1000);
                 // Find minutes rounded down
@@ -291,7 +309,7 @@ function setDisplayTime(text, actual) {
     }
 }
 
-function startTimer() {
+function startTimer(resume) {
     // Convert display input to seconds
     var time_string = getDisplayTime();
     var hours_to_seconds = time_string.slice(-6,-4)*3600;
@@ -303,58 +321,61 @@ function startTimer() {
     if (total_seconds < 360000) {
         var timer_delay = 20;
         // Start dial motion and set state to timing mode
-        setTime(total_seconds);
+        setTime(total_seconds, resume);
         $("#display").data("input_mode", false);
+        $("#display").addClass("running");
 
-        // Shrink display
-        $("#display")
-            .velocity("stop")
-            .velocity({
-                height: "90%"
-            }, {
-                duration: GLOBAL_ANIMATION_DURATION,
-                easing: GLOBAL_EASE_OUT,
-                delay: timer_delay
-            });
+        if (!resume) {
+            // Shrink display
+            $("#display")
+                .velocity("stop")
+                .velocity({
+                    height: "90%"
+                }, {
+                    duration: GLOBAL_ANIMATION_DURATION,
+                    easing: GLOBAL_EASE_OUT,
+                    delay: timer_delay
+                });
 
-        // Fade out keys
-        $("#keypad")
-            .velocity("stop")
-            .velocity({
-                translateY: "10%",
-                opacity: 0
-            }, {
-                easing: GLOBAL_EASE_OUT,
-                duration: GLOBAL_ANIMATION_DURATION,
-                display: "none",
-                delay: timer_delay
-            });
+            // Fade out keys
+            $("#keypad")
+                .velocity("stop")
+                .velocity({
+                    translateY: "10%",
+                    opacity: 0
+                }, {
+                    easing: GLOBAL_EASE_OUT,
+                    duration: GLOBAL_ANIMATION_DURATION,
+                    display: "none",
+                    delay: timer_delay
+                });
 
-        // Fade in edit button
-        $("#edit-button")
-            .velocity("stop")
-            .velocity({
-                translateY: [0, "100%"],
-                opacity: [1, 0]
-            }, {
-                easing: GLOBAL_EASE_OUT,
-                duration: GLOBAL_ANIMATION_DURATION,
-                display: "block",
-                delay: timer_delay
-            });
+            // Fade in edit button
+            $("#edit-button")
+                .velocity("stop")
+                .velocity({
+                    translateY: [0, "100%"],
+                    opacity: [1, 0]
+                }, {
+                    easing: GLOBAL_EASE_OUT,
+                    duration: GLOBAL_ANIMATION_DURATION,
+                    display: "block",
+                    delay: timer_delay
+                });
 
-        // Fade in ring
-        $("#dial-ring")
-            .velocity("stop")
-            .velocity({
-                opacity: [1, 0],
-                scale: [1, 0]
-            }, {
-                easing: GLOBAL_EASE_OUT,
-                duration: GLOBAL_ANIMATION_DURATION,
-                display: "block",
-                delay: timer_delay
-            });
+            // Fade in ring
+            $("#dial-ring")
+                .velocity("stop")
+                .velocity({
+                    opacity: [1, 0],
+                    scale: [1, 0]
+                }, {
+                    easing: GLOBAL_EASE_OUT,
+                    duration: GLOBAL_ANIMATION_DURATION,
+                    display: "block",
+                    delay: timer_delay
+                });
+        }
     } else {
         setDisplayTime("Time too high", true);
     }
@@ -363,6 +384,7 @@ function startTimer() {
 function editTime() {
     setDisplayTime(getDisplayTime());
     $("#display").data("input_mode", true);
+    $("#display").removeClass("running");
     $("#dial-ring path")
         .velocity("stop");
     $("#display")
@@ -396,6 +418,27 @@ function editTime() {
     $("#dial-ring")
         .velocity("stop")
         .velocity("fadeOut", 100);
+}
+
+function togglePause() {
+    if ($("#dial-ring path").data("paused")) {
+        resumeTimer();
+    } else {
+        pauseTimer();
+    }
+}
+
+function pauseTimer() {
+    var dial_path = $("#dial-ring path");
+    dial_path.velocity("stop");
+    setDisplayTime("PAUSED", true);
+    dial_path.data("paused", true);
+}
+
+function resumeTimer() {
+    var dial_path = $("#dial-ring path");
+    startTimer(true);
+    dial_path.data("paused", false);
 }
 
 function toggleKeyboardHelp(force_hide) {

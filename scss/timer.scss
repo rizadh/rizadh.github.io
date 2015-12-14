@@ -36,6 +36,35 @@ body {
     background-color: $secondary_color;
     box-shadow: 0 0 0.2rem hsla(0, 0%, 0%, 0.5);
     z-index: 2;
+
+    &.running:hover {
+        cursor: pointer;
+
+        #display-text {
+            color: darken($main_color, 5);
+            transition: color $hover_transition_time;
+        }
+    }
+
+    &.running:active #display-text {
+        color: darken($main_color, 10);
+        transition: color $active_transition_time;
+    }
+}
+
+#display-text {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translateY(-50%);
+    transition: color $resting_transition_time;
+
+    text-align: center;
+    font-family: 'roboto_condensedregular';
+
+    color: darken($main_color, 10);
 }
 
 #dial-ring {
@@ -58,20 +87,6 @@ body {
         stroke-width: $stroke_width;
         stroke: rgba($path_color , 0.2);
     }
-}
-
-#display-text {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 100%;
-    text-align: center;
-    transform: translateY(-50%);
-
-    text-align: center;
-    font-family: 'roboto_condensedregular';
-
-    color: darken($main_color, 10);
 }
 
 #keypad {
