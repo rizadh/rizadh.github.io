@@ -49,10 +49,10 @@ $(function() {
     });
 
     // Set click event for edit button
-    $("#display").on("tap", function() {
+    $("#display-text").on("tap", function() {
         if (!$("#display").data("input_mode")) {
             togglePause();
-        } 
+        }
     });
 });
 
@@ -65,12 +65,10 @@ $(document).on("keydown", function(e) {
         // Backspace - delete a character from display
         case 8:
             e.preventDefault();
-            // Activate editing mode if not activated
-            if (!$("#display").data("input_mode")) {
-                editTime();
+            if ($("#display").data("input_mode")) {
+                var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
+                setDisplayTime(deleted_time);
             }
-            var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
-            setDisplayTime(deleted_time);
             break;
 
         // Enter - start or cancel timer
@@ -98,7 +96,6 @@ $(document).on("keydown", function(e) {
             } else {
                 toggleKeyboardHelp();
             }
-
             break;
 
         // 0 to 9 - input digits into display
@@ -113,14 +110,14 @@ $(document).on("keydown", function(e) {
         case 56:
         case 57:
             // Activate editing mode if not activated
-            if (!$("#display").data("input_mode")) {
-                editTime();
+            if ($("#display").data("input_mode")) {
+                // Obtain entered character
+                var key_value = String.fromCharCode(key);
+                var new_time = (getDisplayTime() + key_value).slice(-6);
+                setDisplayTime(new_time);
+                break;
             }
-            // Obtain entered character
-            var key_value = String.fromCharCode(key);
-            var new_time = (getDisplayTime() + key_value).slice(-6);
-            setDisplayTime(new_time);
-            break;
+
     }
 
     // Hide help menu unless spacebar was clicked
@@ -284,10 +281,14 @@ function setDisplayTime(text, actual) {
     } else if (text === "Done") {
         display
             .data("current_time", "000000")
-            .text("Done")
+            .text(text)
+            .css("font-family","robotoregular");
+    } else if (text === "Paused") {
+        display
+            .text(text)
             .css("font-family","robotoregular");
     } else {
-        if (display.data("current_time") !== text) {
+        if (display.data("current_time") !== text || display.text() === "Paused") {
             display
                 .data("current_time", text)
                 .css("font-family","robotoregular");
@@ -341,7 +342,7 @@ function startTimer(resume) {
             $("#keypad")
                 .velocity("stop")
                 .velocity({
-                    translateY: "10%",
+                    translateY: "20%",
                     opacity: 0
                 }, {
                     easing: GLOBAL_EASE_OUT,
@@ -383,7 +384,7 @@ function startTimer(resume) {
 
 function editTime() {
     setDisplayTime(getDisplayTime());
-    $("#display").data("input_mode", true);
+    $("#display").data("input_mode", true).data("paused", false);
     $("#display").removeClass("running");
     $("#dial-ring path")
         .velocity("stop");
@@ -421,7 +422,7 @@ function editTime() {
 }
 
 function togglePause() {
-    if ($("#dial-ring path").data("paused")) {
+    if ($("#display").data("paused")) {
         resumeTimer();
     } else {
         pauseTimer();
@@ -429,16 +430,14 @@ function togglePause() {
 }
 
 function pauseTimer() {
-    var dial_path = $("#dial-ring path");
-    dial_path.velocity("stop");
-    setDisplayTime("PAUSED", true);
-    dial_path.data("paused", true);
+    $("#dial-ring path").velocity("stop");
+    setDisplayTime("Paused");
+    $("#display").data("paused", true);
 }
 
 function resumeTimer() {
-    var dial_path = $("#dial-ring path");
     startTimer(true);
-    dial_path.data("paused", false);
+    $("#display").data("paused", false);
 }
 
 function toggleKeyboardHelp(force_hide) {

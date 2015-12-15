@@ -37,17 +37,14 @@ body {
     box-shadow: 0 0 0.2rem hsla(0, 0%, 0%, 0.5);
     z-index: 2;
 
-    &.running:hover {
+    &.running #display-text:hover {
         cursor: pointer;
-
-        #display-text {
-            color: darken($main_color, 5);
-            transition: color $hover_transition_time;
-        }
+        color: darken($main_color, 5);
+        transition: color $hover_transition_time;
     }
 
-    &.running:active #display-text {
-        color: darken($main_color, 10);
+    &.running #display-text:active {
+        color: darken($main_color, 15);
         transition: color $active_transition_time;
     }
 }
@@ -106,7 +103,7 @@ body {
         transition: background $resting_transition_time;
         cursor: pointer;
 
-        color: white;
+        color: lighten($secondary_color, 10);
 
         $intensity: 5;
 
