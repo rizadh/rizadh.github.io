@@ -171,8 +171,8 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: auto;
 
-    background-color: hsla($theme_hue, 40%, 20%, 0.75);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: hsla($theme_hue, 40%, 20%, 0.9);
+    -webkit-backdrop-filter: blur(5px);
 
     border-radius: 0.2rem;
 
@@ -208,6 +208,6 @@ body {
         color: hsla(0, 0%, 80%, 1);
         font-size: 0.3rem;
         text-transform: uppercase;
-        font-family: 'roboto_condensedregular';
+        font-family: 'roboto_condensedbold';
     }
 }
