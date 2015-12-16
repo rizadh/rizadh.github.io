@@ -11,7 +11,7 @@ var GLOBAL_ANIMATION_DURATION = 400;
 $(function() {
     // Attach Fastlick
     FastClick.attach(document.body);
-    
+
     // Hook Velocity to help menu translate properties
     $.Velocity.hook($("#keyboard-help"), "translateX", "-50%");
     $.Velocity.hook($("#keyboard-help"), "translateY", "-50%");
@@ -37,7 +37,7 @@ $(function() {
     setDisplayTime("");
 
     // Set click events for on-screen keys
-    $("#keypad td").on("click", function() {
+    $("#keypad td").click(function() {
         var key_value = $(this).text();
         if (key_value == "Clear") {
             setDisplayTime("000000");
@@ -50,26 +50,26 @@ $(function() {
     });
 
     // Set click event for edit button
-    $("#edit-button").on("click", function() {
+    $("#edit-button").click(function() {
         editTime();
     });
 
     // Set click event for edit button
-    $("#display-text").on("click", function() {
+    $("#display-text").click(function() {
         if (!$("#display").data("input_mode")) {
             togglePause();
         }
     });
 
-    $("#sure").on("click", function(e) {
+    $("#sure").click(function(e) {
         toggleKeyboardHelp(true);
     });
 
-    $("#nope").on("click", function(e) {
+    $("#nope").click(function(e) {
         localStorage.setItem("mouse-suggested", "temp");
     });
 
-    $("#keyboard-suggest .button").on("click", function(e) {
+    $("#keyboard-suggest .button").click(function(e) {
         e.stopPropagation();
         toggleKeyboardSuggest(false);
     });
@@ -152,7 +152,7 @@ $(document).on("touchstart", function() {
 });
 
 // Hide keyboard help when anything is tapped
-$(document).on("click", function() {
+$(document).click(function() {
     toggleKeyboardHelp(false);
     var touch_device = localStorage.getItem("touch-device");
     var suggested_mouse = localStorage.getItem("mouse-suggested");
