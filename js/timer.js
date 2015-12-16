@@ -21,6 +21,9 @@ $(function() {
     // Sticky hover fix
     hoverTouchUnstick();
 
+    // Disable scrolling
+    // $(document).bind('touchmove', false);
+
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
 
@@ -54,6 +57,20 @@ $(function() {
             togglePause();
         }
     });
+
+    $("#sure").on("click", function(e) {
+        toggleKeyboardHelp(true);
+    });
+
+    $("#nope").on("click", function(e) {
+        localStorage.setItem("mouse-suggested", "temp");
+    });
+
+    $("#keyboard-suggest .button").on("click", function(e) {
+        e.stopPropagation();
+        toggleKeyboardSuggest(false);
+    });
+
 });
 
 // Enable keyboard input
@@ -122,13 +139,43 @@ $(document).on("keydown", function(e) {
 
     // Hide help menu unless spacebar was clicked
     if (key !== 32) {
-        toggleKeyboardHelp(true);
+        toggleKeyboardHelp(false);
     }
+});
+
+// Disable suggesting a mouse if user has a touch device
+$(document).on("touchstart", function() {
+    localStorage.setItem("touch-device", "true");
 });
 
 // Hide keyboard help when anything is tapped
 $(document).on("click", function() {
-    toggleKeyboardHelp(true);
+    toggleKeyboardHelp(false);
+    var touch_device = localStorage.getItem("touch-device");
+    var suggested_mouse = localStorage.getItem("mouse-suggested");
+    var suggested_mouse_session = sessionStorage.getItem("mouse-suggested");
+    /*
+    if (!(localStorage.getItem("touch-device") || localStorage.getItem("mouse-suggested"))) {
+        sessionStorage.setItem("mouse-suggested", "true");
+        toggleKeyboardSuggest(true);
+    };
+    */
+
+    if (!touch_device) {
+        if (!suggested_mouse) {
+            localStorage.setItem("mouse-suggested", "true");
+            sessionStorage.setItem("mouse-suggested", "true");
+            toggleKeyboardSuggest(true);
+        } else {
+            if (suggested_mouse === "temp") {
+                if (!suggested_mouse_session) {
+                    localStorage.setItem("mouse-suggested", "true");
+                    sessionStorage.setItem("mouse-suggested", "true");
+                    toggleKeyboardSuggest(true);
+                }
+            }
+        }
+    }
 });
 
 // Adjust font-sizes when viewport dimensions change
@@ -440,19 +487,14 @@ function resumeTimer() {
     $("#display").data("paused", false);
 }
 
-function toggleKeyboardHelp(force_hide) {
+function toggleKeyboardHelp(force_state) {
     var help_menu = $("#keyboard-help");
-    if (force_hide) {
-        if (help_menu.data("shown")) {
+    if (arguments.length > 0) {
+        if (!!help_menu.data("shown") === !force_state) {
             toggleKeyboardHelp();
         }
     } else {
-      	var show;
-        if (help_menu.data("shown")) {
-            show = false;
-        } else {
-            show = true;
-        }
+      	var show = !help_menu.data("shown");
 
         help_menu
             .data("shown", show)
@@ -460,6 +502,36 @@ function toggleKeyboardHelp(force_hide) {
             .velocity({
                 scale: (show ? [1, 0] : [0, 1]),
                 opacity: (show ? [1, 0] : [0, 1])
+            }, {
+                easing: show ? GLOBAL_EASE_OUT : GLOBAL_EASE_IN,
+                display: show ? "block" : "none",
+                duration: (show ? GLOBAL_ANIMATION_DURATION :
+                    GLOBAL_ANIMATION_DURATION / 4)
+            });
+    }
+}
+
+function toggleKeyboardSuggest(force_state) {
+    console.log("Called");
+    var suggest_banner = $("#keyboard-suggest");
+    if (arguments.length > 0) {
+        console.log("Args");
+        if (!!suggest_banner.data("shown") === !force_state) {
+            toggleKeyboardSuggest();
+            console.log("Going to state: " + force_state);
+        }
+    } else {
+        console.log("No args");
+        var show = !suggest_banner.data("shown");
+
+        if (show) {
+            $.Velocity.hook(suggest_banner, "translateY", "-100%");
+        }
+        suggest_banner
+            .data("shown", show)
+            .velocity("stop")
+            .velocity({
+                translateY: (show ? [0, "-100%"] : ["-100%", 0])
             }, {
                 easing: show ? GLOBAL_EASE_OUT : GLOBAL_EASE_IN,
                 display: show ? "block" : "none",
