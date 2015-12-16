@@ -9,6 +9,9 @@ var GLOBAL_ANIMATION_DURATION = 400;
 
 // Perform when document body is loaded
 $(function() {
+    // Attach Fastlick
+    FastClick.attach(document.body);
+    
     // Hook Velocity to help menu translate properties
     $.Velocity.hook($("#keyboard-help"), "translateX", "-50%");
     $.Velocity.hook($("#keyboard-help"), "translateY", "-50%");
@@ -34,7 +37,7 @@ $(function() {
     setDisplayTime("");
 
     // Set click events for on-screen keys
-    $("#keypad td").on("tap", function() {
+    $("#keypad td").on("click", function() {
         var key_value = $(this).text();
         if (key_value == "Clear") {
             setDisplayTime("000000");
@@ -47,12 +50,12 @@ $(function() {
     });
 
     // Set click event for edit button
-    $("#edit-button").on("tap", function() {
+    $("#edit-button").on("click", function() {
         editTime();
     });
 
     // Set click event for edit button
-    $("#display-text").on("tap", function() {
+    $("#display-text").on("click", function() {
         if (!$("#display").data("input_mode")) {
             togglePause();
         }
