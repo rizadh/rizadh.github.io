@@ -1,11 +1,13 @@
 var stars = 100;
 $(function() {
     spawnStars(stars);
-    $(document).on("click", function() {
-        var prompt_text = "There are currently " + stars + " stars. Enter a new number of stars below:";
-        spawnStars(stars = prompt(prompt_text));
-    });
+    $(document).click(changeNumberOfStars);
 });
+
+function changeNumberOfStars() {
+    var prompt_text = "There are currently " + stars + " stars. Enter a new number of stars below:";
+    spawnStars(stars = prompt(prompt_text));
+}
 
 function spawnStars(num_stars) {
     $("svg").not(":nth-child(1)").remove();
