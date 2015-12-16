@@ -34,7 +34,7 @@ $(function() {
     setDisplayTime("");
 
     // Set click events for on-screen keys
-    $("#keypad td").on("click", function() {
+    $("#keypad td").on("tap", function() {
         var key_value = $(this).text();
         if (key_value == "Clear") {
             setDisplayTime("000000");
@@ -47,12 +47,12 @@ $(function() {
     });
 
     // Set click event for edit button
-    $("#edit-button").on("click", function() {
+    $("#edit-button").on("tap", function() {
         editTime();
     });
 
     // Set click event for edit button
-    $("#display-text").on("click", function() {
+    $("#display-text").on("tap", function() {
         if (!$("#display").data("input_mode")) {
             togglePause();
         }
