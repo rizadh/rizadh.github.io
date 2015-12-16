@@ -180,7 +180,7 @@ body {
 
     .title {
         margin: $keyboard_help_padding $keyboard_help_padding;
-        font-size: 0.6rem;
+        font-size: 0.625rem;
         text-align: center;
         color: white;
         text-transform: uppercase;
@@ -191,23 +191,21 @@ body {
         margin: 0.1rem $keyboard_help_padding;
         font-size: 0.5rem;
         text-align: center;
-        color: white;
+        color: transparentize($secondary_color, 0.25);
         text-transform: lowercase;
-        font-family: 'roboto_condensedlight';
+        font-family: 'roboto_condensedregular';
 
         span {
             text-transform: uppercase;
-            color: hsla($theme_hue, 60%, 60%, 1);
-            font-family: 'roboto_condensedregular';
+            color: lighten($secondary_color, 10);
         }
     }
 
     .dismiss {
         @extend .shortcut;
         margin: $keyboard_help_padding $keyboard_help_padding;
-        color: hsla(0, 0%, 80%, 1);
+        color: transparentize($secondary_color, 0.5);
         font-size: 0.3rem;
         text-transform: uppercase;
-        font-family: 'roboto_condensedbold';
     }
 }
