@@ -50,9 +50,7 @@ $(function() {
     });
 
     // Set click event for edit button
-    $("#edit-button").click(function() {
-        editTime();
-    });
+    $("#edit-button").click(editTime);
 
     // Set click event for edit button
     $("#display-text").click(function() {
@@ -61,11 +59,11 @@ $(function() {
         }
     });
 
-    $("#sure").click(function(e) {
+    $("#sure").click(function() {
         toggleKeyboardHelp(true);
     });
 
-    $("#nope").click(function(e) {
+    $("#nope").click(function() {
         localStorage.setItem("mouse-suggested", "temp");
     });
 
@@ -157,12 +155,6 @@ $(document).click(function() {
     var touch_device = localStorage.getItem("touch-device");
     var suggested_mouse = localStorage.getItem("mouse-suggested");
     var suggested_mouse_session = sessionStorage.getItem("mouse-suggested");
-    /*
-    if (!(localStorage.getItem("touch-device") || localStorage.getItem("mouse-suggested"))) {
-        sessionStorage.setItem("mouse-suggested", "true");
-        toggleKeyboardSuggest(true);
-    };
-    */
 
     if (!touch_device) {
         if (!suggested_mouse) {
@@ -515,16 +507,12 @@ function toggleKeyboardHelp(force_state) {
 }
 
 function toggleKeyboardSuggest(force_state) {
-    console.log("Called");
     var suggest_banner = $("#keyboard-suggest");
     if (arguments.length > 0) {
-        console.log("Args");
         if (!!suggest_banner.data("shown") === !force_state) {
             toggleKeyboardSuggest();
-            console.log("Going to state: " + force_state);
         }
     } else {
-        console.log("No args");
         var show = !suggest_banner.data("shown");
 
         if (show) {
