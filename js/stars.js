@@ -1,7 +1,7 @@
 var stars = 100;
 $(function() {
     spawnStars(stars);
-    $(document).on("tap", function() {
+    $(document).on("click", function() {
         var prompt_text = "There are currently " + stars + " stars. Enter a new number of stars below:";
         spawnStars(stars = prompt(prompt_text));
     });
