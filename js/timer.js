@@ -485,9 +485,13 @@ function togglePause() {
 }
 
 function pauseTimer() {
-    $("#dial-ring path").velocity("stop");
-    setDisplayTime("Paused");
-    $("#display").data("paused", true);
+    var ring_classes = $("#dial-ring path").attr('class');
+    var is_animating = ~ring_classes.indexOf('velocity-animating');
+    if (is_animating) {
+        $("#dial-ring path").velocity("stop");
+        setDisplayTime("Paused");
+        $("#display").data("paused", true);
+    }
 }
 
 function resumeTimer() {
