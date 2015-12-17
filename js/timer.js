@@ -12,9 +12,11 @@ $(function() {
     // Attach Fastlick
     FastClick.attach(document.body);
 
-    // Hook Velocity to help menu translate properties
+    // Hook Velocity to help menu and display-text translate properties
     $.Velocity.hook($("#keyboard-help"), "translateX", "-50%");
     $.Velocity.hook($("#keyboard-help"), "translateY", "-50%");
+    $.Velocity.hook($("#display-text"), "translateY", "-50%");
+
 
     // Change Backspce to Delete if on Mac or iOS devices
     if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
@@ -30,8 +32,15 @@ $(function() {
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
 
-    // Startup animation
-    startupAnimation();
+    // Check if time was supplied in URL
+    if ($_GET("time").length) {
+        // Immediately start timer
+        setDisplayTime(("000000" + $_GET("time")).slice(-6));
+        startTimer();
+    } else {
+        // Startup animation
+        startupAnimation();
+    }
 
     // Clear display and show default message
     setDisplayTime("");
@@ -210,13 +219,7 @@ function startupAnimation() {
     }, {
         easing: GLOBAL_EASE_OUT,
         duration: startup_duration,
-        delay: startup_delay,
-        complete: function() {
-            if ($_GET("time").length) {
-                setDisplayTime(("000000" + $_GET("time")).slice(-6));
-                startTimer();
-            }
-        }
+        delay: startup_delay
     });
 
     $.Velocity.hook(keypad, "opacity", "0");
@@ -642,5 +645,5 @@ function hoverTouchUnstick() {
 function $_GET(q,s) {
     s = (s) ? s : window.location.search;
     var re = new RegExp('&amp;'+q+'=([^&amp;]*)','i');
-    return (s=s.replace(/^\?/,'&amp;').match(re)) ?s=s[1] :s='';
+    return (s = s.replace(/^\?/,'&amp;').match(re)) ? s = s[1] : s = '';
 }
