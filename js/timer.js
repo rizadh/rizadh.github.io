@@ -71,7 +71,6 @@ $(function() {
         e.stopPropagation();
         toggleKeyboardSuggest(false);
     });
-
 });
 
 // Enable keyboard input
@@ -211,7 +210,13 @@ function startupAnimation() {
     }, {
         easing: GLOBAL_EASE_OUT,
         duration: startup_duration,
-        delay: startup_delay
+        delay: startup_delay,
+        complete: function() {
+            if ($_GET("time").length === 6) {
+                setDisplayTime($_GET("time"));
+                startTimer();
+            }
+        }
     });
 
     $.Velocity.hook(keypad, "opacity", "0");
@@ -630,10 +635,8 @@ function hoverTouchUnstick() {
   }
 }
 
-/*
 function $_GET(q,s) {
     s = (s) ? s : window.location.search;
     var re = new RegExp('&amp;'+q+'=([^&amp;]*)','i');
     return (s=s.replace(/^\?/,'&amp;').match(re)) ?s=s[1] :s='';
 }
-*/
