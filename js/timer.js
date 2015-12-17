@@ -288,8 +288,10 @@ function setTime(sec, resume) {
                 minutes = ("0" + minutes).slice(-2);
                 hours = ("0" + hours).slice(-2);
                 var times = [hours, minutes, seconds];
-                // Send time text to display
-                setDisplayTime(times.join(""), false);
+                if (r !== 0) {
+                    // Send time text to display
+                    setDisplayTime(times.join(""), false, true);
+                }
             },
             complete: function() {
                 setDisplayTime("Done");
@@ -303,42 +305,47 @@ function getDisplayTime(actual) {
     return actual ? display.text() : display.data("current_time");
 }
 
-function setDisplayTime(text, actual) {
+function setDisplayTime(text, actual, fancy) {
     var display = $("#display-text");
+    var new_display_text = display.clone(true);
     if (actual) {
-        display
+        new_display_text
             .data("current_time", "000000")
             .text(text)
             .css("font-family","roboto_condensedregular");
+        changeDisplayText(new_display_text);
     } else if (text === "") {
-        display
+        $("#display-text")
             .data("current_time", "000000")
             .text("Enter a time")
             .css("font-family","roboto_condensedregular");
     } else if (text === "000000") {
-        display
+        new_display_text
             .data("current_time", "000000")
             .text("0s")
             .css("font-family","robotoregular");
+        changeDisplayText(new_display_text);
     } else if (text === "Done") {
-        display
+        new_display_text
             .data("current_time", "000000")
             .text(text)
             .css("font-family","robotoregular");
+        changeDisplayText(new_display_text, "fancy");
     } else if (text === "Paused") {
-        display
+        new_display_text = display
+            .clone(true)
             .text(text)
             .css("font-family","robotoregular");
+        changeDisplayText(new_display_text, "fancy");
     } else {
         if (display.data("current_time") !== text || display.text() === "Paused") {
-            display
+            new_display_text
                 .data("current_time", text)
                 .css("font-family","robotoregular");
-            var current_time = getDisplayTime();
             var time_array = [];
             var unit_array = ["h","m","s"];
             for (var i = 0; i < 3; i++) {
-                var time_value = current_time.slice(2*i,2*i+2);
+                var time_value = text.slice(2*i,2*i+2);
                 if (time_value > 0 || time_array[0] || i === 2) {
                     if (time_value < 10 && !time_array[0]) {
                         time_value = time_value.slice(-1);
@@ -347,7 +354,8 @@ function setDisplayTime(text, actual) {
                 }
             }
             var new_time = time_array.join(" ");
-            display.text(new_time);
+            new_display_text.text(new_time);
+            changeDisplayText(new_display_text, fancy ? "fancy" : "");
         }
     }
 }
@@ -384,7 +392,7 @@ function startTimer(resume) {
             $("#keypad")
                 .velocity("stop")
                 .velocity({
-                    translateY: "20%",
+                    scale: 0.8,
                     opacity: 0
                 }, {
                     easing: GLOBAL_EASE_OUT,
@@ -441,7 +449,7 @@ function editTime() {
     $("#keypad")
         .velocity("stop")
         .velocity({
-            translateY: 0,
+            scale: [1, 0.5],
             opacity: 1
         }, {
             easing: GLOBAL_EASE_OUT,
@@ -532,6 +540,80 @@ function toggleKeyboardSuggest(force_state) {
     }
 }
 
+function changeDisplayText(new_display_text, style) {
+    $("#display-text-old").remove();
+    var display_text = $("#display-text");
+    if (style === "fancy") {
+        var display_html = display_text.text();
+        var new_display_html = new_display_text.text();
+        var display_html_array = [];
+        var new_display_html_array = [];
+        if (display_html.length === new_display_html.length) {
+            for (var i = 0; i < display_html.length; i++) {
+                if (display_html[i] === new_display_html[i]) {
+                    display_html_array.push(display_html[i]);
+                    new_display_html_array.push(new_display_html[i]);
+                } else {
+                    display_html_array.push("<span>");
+                    display_html_array.push(display_html[i]);
+                    display_html_array.push("</span>");
+                    new_display_html_array.push("<span>");
+                    new_display_html_array.push(new_display_html[i]);
+                    new_display_html_array.push("</span>");
+                }
+            }
+        } else {
+            display_html_array.push("<span>");
+            display_html_array.push(display_html);
+            display_html_array.push("</span>");
+            new_display_html_array.push("<span>");
+            new_display_html_array.push(new_display_html);
+            new_display_html_array.push("</span>");
+        }
+
+        display_text
+            .attr("id", "display-text-old")
+            .html(display_html_array.join(""))
+            .children("span")
+            // .css("background-color", "red")
+            .css("transform-origin", "100% 100%")
+            .velocity({
+                opacity: 0,
+                translateY: "-100%",
+                rotateX: 90
+            }, {
+                easing: GLOBAL_EASE_OUT,
+                duration: GLOBAL_ANIMATION_DURATION,
+                queue: false,
+                complete: function() {
+                    $(this).parent().remove();
+                },
+                display: "inline-block"
+            });
+
+        new_display_text
+            .html(new_display_html_array.join(""))
+            .appendTo("#display")
+            .children("span")
+            .css("opacity", 0)
+            // .css("background-color", "blue")
+            .css("transform-origin", "0% 0%")
+            .velocity({
+                opacity: [1, 0],
+                translateY: [0, "100%"],
+                rotateX: [0, -90]
+            }, {
+                easing: GLOBAL_EASE_OUT,
+                duration: GLOBAL_ANIMATION_DURATION,
+                queue: false,
+                display: "inline-block"
+            });
+    } else {
+        display_text.remove();
+        new_display_text.appendTo("#display");
+    }
+}
+
 function hoverTouchUnstick() {
   // Check if the device supports touch events
   if('ontouchstart' in document.documentElement) {
@@ -553,3 +635,11 @@ function hoverTouchUnstick() {
     }
   }
 }
+
+/*
+function $_GET(q,s) {
+    s = (s) ? s : window.location.search;
+    var re = new RegExp('&amp;'+q+'=([^&amp;]*)','i');
+    return (s=s.replace(/^\?/,'&amp;').match(re)) ?s=s[1] :s='';
+}
+*/

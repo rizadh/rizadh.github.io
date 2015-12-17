@@ -23,6 +23,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
+    -webkit-perspective: 1rem;
 }
 
 #display {
@@ -31,7 +32,6 @@ body {
     top: 0;
     width: 100%;
     height: 20%;
-
 
     background-color: $secondary_color;
     box-shadow: 0 0 0.2rem hsla(0, 0%, 0%, 0.5);
@@ -49,14 +49,14 @@ body {
     }
 }
 
-#display-text {
+#display-text, #display-text-old {
     position: absolute;
     left: 0;
     top: 50%;
     width: 100%;
     text-align: center;
-    transform: translateY(-50%);
     transition: color $resting_transition_time;
+    perspective: 4rem;
 
     text-align: center;
     font-family: 'roboto_condensedregular';
@@ -95,6 +95,7 @@ body {
     z-index: 0;
 
     font-family: 'robotoregular';
+    transform-origin: 50% 100%;
 
     td {
         width: 33.33%;
