@@ -313,7 +313,7 @@ function setDisplayTime(text, actual, fancy) {
             .data("current_time", "000000")
             .text(text)
             .css("font-family","roboto_condensedregular");
-        changeDisplayText(new_display_text);
+        changeDisplayText(new_display_text, "fancy");
     } else if (text === "") {
         $("#display-text")
             .data("current_time", "000000")
@@ -324,7 +324,7 @@ function setDisplayTime(text, actual, fancy) {
             .data("current_time", "000000")
             .text("0s")
             .css("font-family","robotoregular");
-        changeDisplayText(new_display_text);
+        changeDisplayText(new_display_text, "fancy");
     } else if (text === "Done") {
         new_display_text
             .data("current_time", "000000")
@@ -575,20 +575,17 @@ function changeDisplayText(new_display_text, style) {
             .attr("id", "display-text-old")
             .html(display_html_array.join(""))
             .children("span")
-            // .css("background-color", "red")
-            .css("transform-origin", "100% 100%")
             .velocity({
                 opacity: 0,
-                translateY: "-100%",
-                rotateX: 90
+                scale: 0.5
             }, {
                 easing: GLOBAL_EASE_OUT,
                 duration: GLOBAL_ANIMATION_DURATION,
                 queue: false,
+                display: "inline-block",
                 complete: function() {
                     $(this).parent().remove();
-                },
-                display: "inline-block"
+                }
             });
 
         new_display_text
@@ -596,12 +593,9 @@ function changeDisplayText(new_display_text, style) {
             .appendTo("#display")
             .children("span")
             .css("opacity", 0)
-            // .css("background-color", "blue")
-            .css("transform-origin", "0% 0%")
             .velocity({
                 opacity: [1, 0],
-                translateY: [0, "100%"],
-                rotateX: [0, -90]
+                scale: [1, 0]
             }, {
                 easing: GLOBAL_EASE_OUT,
                 duration: GLOBAL_ANIMATION_DURATION,
