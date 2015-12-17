@@ -438,7 +438,7 @@ function startTimer(resume) {
 }
 
 function editTime() {
-    setDisplayTime(getDisplayTime());
+    setDisplayTime(getDisplayTime(), false, true);
     $("#display").data("input_mode", true).data("paused", false);
     $("#display").removeClass("running");
     $("#dial-ring path")
@@ -600,7 +600,7 @@ function changeDisplayText(new_display_text, style) {
             .css("opacity", 0)
             .velocity({
                 opacity: [1, 0],
-                scale: [1, 0]
+                scale: [1, 0.5]
             }, {
                 easing: GLOBAL_EASE_OUT,
                 duration: GLOBAL_ANIMATION_DURATION,
