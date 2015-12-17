@@ -578,7 +578,7 @@ function changeDisplayText(new_display_text, style) {
 
         display_text
             .attr("id", "display-text-old")
-            .html(display_html_array.join(""))
+            .html(display_html_array.join("").replace("</span><span>",""))
             .children("span")
             .velocity({
                 opacity: 0,
@@ -594,7 +594,7 @@ function changeDisplayText(new_display_text, style) {
             });
 
         new_display_text
-            .html(new_display_html_array.join(""))
+            .html(new_display_html_array.join("").replace("</span><span>",""))
             .appendTo("#display")
             .children("span")
             .css("opacity", 0)
