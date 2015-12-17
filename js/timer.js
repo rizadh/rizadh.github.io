@@ -212,8 +212,8 @@ function startupAnimation() {
         duration: startup_duration,
         delay: startup_delay,
         complete: function() {
-            if ($_GET("time").length === 6) {
-                setDisplayTime($_GET("time"));
+            if ($_GET("time").length) {
+                setDisplayTime(("000000" + $_GET("time")).slice(-6));
                 startTimer();
             }
         }
