@@ -79,7 +79,7 @@ body {
         stroke: $path_color;
     }
 
-    g circle {
+    circle {
         stroke-width: $stroke_width;
         stroke: rgba($path_color , 0.2);
     }
