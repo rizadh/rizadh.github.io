@@ -56,7 +56,6 @@ body {
     width: 100%;
     text-align: center;
     transition: color $resting_transition_time;
-    perspective: 4rem;
 
     text-align: center;
     font-family: 'roboto_condensedregular';
@@ -106,7 +105,7 @@ body {
 
         color: lighten($secondary_color, 10);
 
-        $intensity: 5;
+        $intensity: 2.5;
 
         &:hover {
             background-color: lighten($main_color, $intensity);
@@ -134,23 +133,30 @@ body {
     height: 10%;
     cursor: pointer;
 
-    stroke-width: 19.5;
-    fill: none;
-    stroke: lighten($secondary_color, 10);
     transition: stroke $resting_transition_time, background-color $resting_transition_time;
 
-    $intensity: 1;
+    $intensity: 2.5;
 
     &:hover {
-        stroke: lighten($secondary_color, 20);
+        // stroke: lighten($secondary_color, 20);
         background-color: lighten($main_color, $intensity);
+        // background-color: mix($main_color, $secondary_color);
         transition: stroke $hover_transition_time, background-color $hover_transition_time;
     }
 
     &:active {
-        stroke: $secondary_color;
+        // stroke: $secondary_color;
         background-color: darken($main_color, $intensity);
         transition: stroke $active_transition_time, background-color $active_transition_time;
+    }
+
+    svg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        stroke-width: 19.5;
+        fill: none;
+        stroke: lighten($secondary_color, 10);
     }
 }
 

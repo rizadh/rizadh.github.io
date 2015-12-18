@@ -32,15 +32,8 @@ $(function() {
     // Set input mode (whether keypad is displayed)
     $("#display").data("input_mode", true);
 
-    // Check if time was supplied in URL
-    if ($_GET("time").length) {
-        // Immediately start timer
-        setDisplayTime(("000000" + $_GET("time")).slice(-6));
-        startTimer();
-    } else {
-        // Startup animation
-        startupAnimation();
-    }
+    // Startup animation
+    startupAnimation();
 
     // Clear display and show default message
     setDisplayTime("");
@@ -53,8 +46,7 @@ $(function() {
         } else if (key_value == "Start") {
             startTimer();
         } else {
-            var new_text = (getDisplayTime() + key_value).slice(-6);
-            setDisplayTime(new_text);
+            addDigit(key_value);
         }
     });
 
@@ -139,8 +131,7 @@ $(document).on("keydown", function(e) {
             if ($("#display").data("input_mode")) {
                 // Obtain entered character
                 var key_value = String.fromCharCode(key);
-                var new_time = (getDisplayTime() + key_value).slice(-6);
-                setDisplayTime(new_time);
+                addDigit(key_value);
                 break;
             }
 
@@ -191,53 +182,62 @@ $(window).on('load resize orientationChange', function() {
 // Startup animation to be performed once when app is loaded
 function startupAnimation() {
     var startup_duration = GLOBAL_ANIMATION_DURATION;
-    var display_text = $("#display-text");
     var display = $("#display");
+    var display_text = $("#display-text");
     var keypad = $("#keypad tr");
     var startup_delay = 20;
 
-    $.Velocity.hook(display_text, "translateY", "-100%");
-    $.Velocity.hook(display_text, "opacity", "0");
+    if ($_GET("time").length) {
+        // Immediately start timer
+        setDisplayTime(("000000" + $_GET("time")).slice(-6), false, true);
+        $.Velocity.hook(display, "height", "0");
+        $.Velocity.hook(display, "opacity", "0");
+        $.Velocity.hook(display, "fontSize", "0");
+        $.Velocity.hook($("#keypad"), "opacity", "0");
+        startTimer();
+    } else {
+        // Hook display and display text
+        $.Velocity.hook(display_text, "translateY", "-100%");
+        $.Velocity.hook(display_text, "opacity", "0");
+        $.Velocity.hook(display, "translateY", "-100%");
+        $.Velocity.hook(display, "opacity", "0");
+        $.Velocity.hook(keypad, "opacity", "0");
+        $.Velocity.hook(keypad, "translateY", "-10%");
+        $.Velocity.RegisterEffect("transition.slideIn", { calls: [[{
+            translateY: 0,
+            opacity: 1
+        }]]});
 
-    // Animate display text
-    display_text.velocity({
-        translateY: "-50%",
-        opacity: 1
-    }, {
-        easing: GLOBAL_EASE_OUT,
-        duration: startup_duration,
-        delay: startup_delay
-    });
+        // Animate display text
+        display_text.velocity({
+            translateY: "-50%",
+            opacity: 1
+        }, {
+            easing: GLOBAL_EASE_OUT,
+            duration: startup_duration,
+            delay: startup_delay
+        });
 
-    $.Velocity.hook(display, "translateY", "-100%");
-    $.Velocity.hook(display, "opacity", "0");
+        // Animate display
+        display.velocity({
+            translateY: 0,
+            opacity: 1
+        }, {
+            easing: GLOBAL_EASE_OUT,
+            duration: startup_duration,
+            delay: startup_delay
+        });
 
-    // Animate display
-    display.velocity({
-        translateY: 0,
-        opacity: 1
-    }, {
-        easing: GLOBAL_EASE_OUT,
-        duration: startup_duration,
-        delay: startup_delay
-    });
-
-    $.Velocity.hook(keypad, "opacity", "0");
-    $.Velocity.hook(keypad, "translateY", "-10%");
-
-    // Animate keypad
-    $.Velocity.RegisterEffect("transition.slideIn", { calls: [[{
-        translateY: 0,
-        opacity: 1
-     }]]});
-    keypad.velocity("transition.slideIn", {
-        easing: GLOBAL_EASE_OUT,
-        duration: startup_duration / 2,
-        delay: startup_duration / 4 + startup_delay,
-        stagger: startup_duration / 4 / (keypad.length - 1),
-        drag: true,
-        display: null
-    });
+        // Animate keypad
+        keypad.velocity("transition.slideIn", {
+            easing: GLOBAL_EASE_OUT,
+            duration: startup_duration / 2,
+            delay: startup_duration / 4 + startup_delay,
+            stagger: startup_duration / 4 / (keypad.length - 1),
+            drag: true,
+            display: null
+        });
+    }
 }
 
 /** Set dial of given radius to given progress */
@@ -302,7 +302,7 @@ function setTime(sec, resume) {
                 }
             },
             complete: function() {
-                setDisplayTime("Done");
+                setDisplayTime("Done", false, true);
             }
         }
     );
@@ -321,7 +321,7 @@ function setDisplayTime(text, actual, fancy) {
             .data("current_time", "000000")
             .text(text)
             .css("font-family","roboto_condensedregular");
-        changeDisplayText(new_display_text, "fancy");
+        changeDisplayText(new_display_text, fancy ? "fancy" : "");
     } else if (text === "") {
         $("#display-text")
             .data("current_time", "000000")
@@ -332,19 +332,19 @@ function setDisplayTime(text, actual, fancy) {
             .data("current_time", "000000")
             .text("0s")
             .css("font-family","robotoregular");
-        changeDisplayText(new_display_text, "fancy");
+        changeDisplayText(new_display_text, fancy ? "fancy" : "");
     } else if (text === "Done") {
         new_display_text
             .data("current_time", "000000")
             .text(text)
             .css("font-family","robotoregular");
-        changeDisplayText(new_display_text, "fancy");
+        changeDisplayText(new_display_text, fancy ? "fancy" : "");
     } else if (text === "Paused") {
         new_display_text = display
             .clone(true)
             .text(text)
             .css("font-family","robotoregular");
-        changeDisplayText(new_display_text, "fancy");
+        changeDisplayText(new_display_text, fancy ? "fancy" : "");
     } else {
         if (display.data("current_time") !== text || display.text() === "Paused") {
             new_display_text
@@ -368,6 +368,11 @@ function setDisplayTime(text, actual, fancy) {
     }
 }
 
+function addDigit(digit) {
+    var new_time = (getDisplayTime() + digit).slice(-6);
+    setDisplayTime(new_time);
+}
+
 function startTimer(resume) {
     // Convert display input to seconds
     var time_string = getDisplayTime();
@@ -389,7 +394,9 @@ function startTimer(resume) {
             $("#display")
                 .velocity("stop")
                 .velocity({
-                    height: "90%"
+                    height: "90%",
+                    opacity: 1,
+                    fontSize: "1em"
                 }, {
                     duration: GLOBAL_ANIMATION_DURATION,
                     easing: GLOBAL_EASE_OUT,
@@ -436,7 +443,7 @@ function startTimer(resume) {
                 });
         }
     } else {
-        setDisplayTime("Time too high", true);
+        setDisplayTime("Time too high", true, true);
     }
 }
 
@@ -492,14 +499,31 @@ function pauseTimer() {
     var is_animating = ~ring_classes.indexOf('velocity-animating');
     if (is_animating) {
         $("#dial-ring path").velocity("stop");
-        setDisplayTime("Paused");
+        setDisplayTime("Paused", false, true);
         $("#display").data("paused", true);
+        $("#dial-ring")
+            .velocity("stop")
+            .velocity({
+                opacity: 0.25
+            }, {
+                easing: GLOBAL_EASE_OUT,
+                duration: GLOBAL_ANIMATION_DURATION
+            });
+
     }
 }
 
 function resumeTimer() {
     startTimer(true);
     $("#display").data("paused", false);
+    $("#dial-ring")
+        .velocity("stop")
+        .velocity({
+            opacity: 1
+        }, {
+            easing: GLOBAL_EASE_OUT,
+            duration: GLOBAL_ANIMATION_DURATION
+        });
 }
 
 function toggleKeyboardHelp(force_state) {
