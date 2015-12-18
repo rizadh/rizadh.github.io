@@ -607,9 +607,10 @@ function changeDisplayText(new_display_text, style) {
             new_display_html_array.push("</span>");
         }
 
+        var replace_span = /<\/span><span>/gi;
         display_text
             .attr("id", "display-text-old")
-            .html(display_html_array.join("").replace("</span><span>",""))
+            .html(display_html_array.join("").replace(replace_span,""))
             .children("span")
             .velocity({
                 opacity: 0,
@@ -625,7 +626,7 @@ function changeDisplayText(new_display_text, style) {
             });
 
         new_display_text
-            .html(new_display_html_array.join("").replace("</span><span>",""))
+            .html(new_display_html_array.join("").replace(replace_span,""))
             .appendTo("#display")
             .children("span")
             .css("opacity", 0)
