@@ -17,7 +17,6 @@ $(function() {
     $.Velocity.hook($("#keyboard-help"), "translateY", "-50%");
     $.Velocity.hook($("#display-text"), "translateY", "-50%");
 
-
     // Change Backspce to Delete if on Mac or iOS devices
     if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
         $("#keyboard-help > .shortcut.delete > span").text("Delete");
@@ -38,7 +37,7 @@ $(function() {
     // Clear display and show default message
     setDisplayTime("");
 
-    // Set click events for on-screen keys
+    // Set click events
     $("#keypad td").click(function() {
         var key_value = $(this).text();
         if (key_value == "Clear") {
@@ -49,134 +48,133 @@ $(function() {
             addDigit(key_value);
         }
     });
-
-    // Set click event for edit button
     $("#edit-button").click(editTime);
+    $("#display-text").click(togglePause);
+    $("#notification-banner").click(function(e) {
+        e.stopPropagation();
+        hide_notification();
+    });
 
-    // Set click event for edit button
-    $("#display-text").click(function() {
-        if (!$("#display").data("input_mode")) {
-            togglePause();
+    // Enable keyboard input
+    $(document).on("keydown", function(e) {
+        // Get the keycode
+        var key = e.keyCode;
+        // Perform events depending on keycode
+        switch (key) {
+            // Backspace - delete a character from display
+            case 8:
+                e.preventDefault();
+                if ($("#display").data("input_mode")) {
+                    var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
+                    setDisplayTime(deleted_time);
+                }
+                break;
+
+            // Enter - start or cancel timer
+            case 13:
+                // Activate editing mode if not activated
+                if ($("#display").data("input_mode")) {
+                    startTimer();
+                } else {
+                    editTime();
+                }
+                break;
+
+            // Escape - cancel timer
+            case 27:
+                // Activate editing mode if not activated
+                if (!$("#display").data("input_mode")) {
+                    editTime();
+                }
+                break;
+
+            // Space - toggle keyboard help menu
+            case 32:
+                if (!$("#display").data("input_mode")) {
+                    togglePause();
+                } else {
+                    toggleKeyboardHelp();
+                }
+                break;
+
+            // 0 to 9 - input digits into display
+            case 48:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+            case 56:
+            case 57:
+                // Activate editing mode if not activated
+                if ($("#display").data("input_mode")) {
+                    // Obtain entered character
+                    var key_value = String.fromCharCode(key);
+                    addDigit(key_value);
+                    break;
+                }
+
+        }
+
+        // Hide help menu unless spacebar was clicked
+        if (key !== 32) {
+            toggleKeyboardHelp(false);
         }
     });
 
-    $("#sure").click(function() {
-        toggleKeyboardHelp(true);
+    // Disable suggesting a mouse if user has a touch device
+    $(document).on("touchstart", function() {
+        localStorage.setItem("touch-device", "true");
     });
 
-    $("#nope").click(function() {
-        localStorage.setItem("mouse-suggested", "temp");
-    });
-
-    $("#keyboard-suggest .button").click(function(e) {
-        e.stopPropagation();
-        toggleKeyboardSuggest(false);
-    });
-});
-
-// Enable keyboard input
-$(document).on("keydown", function(e) {
-    // Get the keycode
-    var key = e.keyCode;
-    // Perform events depending on keycode
-    switch (key) {
-        // Backspace - delete a character from display
-        case 8:
-            e.preventDefault();
-            if ($("#display").data("input_mode")) {
-                var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
-                setDisplayTime(deleted_time);
-            }
-            break;
-
-        // Enter - start or cancel timer
-        case 13:
-            // Activate editing mode if not activated
-            if ($("#display").data("input_mode")) {
-                startTimer();
-            } else {
-                editTime();
-            }
-            break;
-
-        // Escape - cancel timer
-        case 27:
-            // Activate editing mode if not activated
-            if (!$("#display").data("input_mode")) {
-                editTime();
-            }
-            break;
-
-        // Space - toggle keyboard help menu
-        case 32:
-            if (!$("#display").data("input_mode")) {
-                togglePause();
-            } else {
-                toggleKeyboardHelp();
-            }
-            break;
-
-        // 0 to 9 - input digits into display
-        case 48:
-        case 49:
-        case 50:
-        case 51:
-        case 52:
-        case 53:
-        case 54:
-        case 55:
-        case 56:
-        case 57:
-            // Activate editing mode if not activated
-            if ($("#display").data("input_mode")) {
-                // Obtain entered character
-                var key_value = String.fromCharCode(key);
-                addDigit(key_value);
-                break;
-            }
-
-    }
-
-    // Hide help menu unless spacebar was clicked
-    if (key !== 32) {
+    // Hide keyboard help when anything is tapped
+    $(document).click(function() {
         toggleKeyboardHelp(false);
-    }
-});
+        var touch_device = localStorage.getItem("touch-device");
+        var suggested_mouse = localStorage.getItem("mouse-suggested");
+        var suggested_mouse_session = sessionStorage.getItem("mouse-suggested");
+        var temp_suggestion = suggested_mouse === "temp";
+        var show_again = temp_suggestion && !suggested_mouse_session;
 
-// Disable suggesting a mouse if user has a touch device
-$(document).on("touchstart", function() {
-    localStorage.setItem("touch-device", "true");
-});
-
-// Hide keyboard help when anything is tapped
-$(document).click(function() {
-    toggleKeyboardHelp(false);
-    var touch_device = localStorage.getItem("touch-device");
-    var suggested_mouse = localStorage.getItem("mouse-suggested");
-    var suggested_mouse_session = sessionStorage.getItem("mouse-suggested");
-
-    if (!touch_device) {
-        if (!suggested_mouse) {
+        if (!touch_device && (!suggested_mouse || show_again)) {
             localStorage.setItem("mouse-suggested", "true");
             sessionStorage.setItem("mouse-suggested", "true");
-            toggleKeyboardSuggest(true);
-        } else {
-            if (suggested_mouse === "temp") {
-                if (!suggested_mouse_session) {
-                    localStorage.setItem("mouse-suggested", "true");
-                    sessionStorage.setItem("mouse-suggested", "true");
-                    toggleKeyboardSuggest(true);
-                }
-            }
+            show_notification(
+                "Seems like you have a keyboard. " +
+                    "Want to learn a few shortcuts?",
+                [
+                    {
+                        text: "Never",
+                        style: "alert",
+                        click_function: function() {}
+                    },
+                    {
+                        text: "Not right now",
+                        style: "normal",
+                        click_function: function() {
+                            localStorage.setItem("mouse-suggested", "temp");
+                        }
+                    },
+                    {
+                        text: "Yes, show me",
+                        style: "emphasize",
+                        click_function: function() {
+                            toggleKeyboardHelp(true);
+                        }
+                    }
+                ]
+            );
         }
-    }
-});
+    });
 
-// Adjust font-sizes when viewport dimensions change
-$(window).on('load resize orientationChange', function() {
-    // Maximize size of text
-    var max_length = Math.min($(window).height(), $(window).width());
-    $("html").css("font-size", max_length / 9);
+    // Adjust font-sizes when viewport dimensions change
+    $(window).on('load resize orientationChange', function() {
+        // Maximize size of text
+        var max_length = Math.min($(window).height(), $(window).width());
+        $("html").css("font-size", max_length / 9);
+    });
 });
 
 // Startup animation to be performed once when app is loaded
@@ -225,7 +223,8 @@ function startupAnimation() {
         }, {
             easing: GLOBAL_EASE_OUT,
             duration: startup_duration,
-            delay: startup_delay
+            delay: startup_delay,
+            complete: askForRestore
         });
 
         // Animate keypad
@@ -237,6 +236,54 @@ function startupAnimation() {
             drag: true,
             display: null
         });
+    }
+}
+
+function askForRestore() {
+    var time_started = parseInt(localStorage.getItem("time_started"));
+    var duration_set = parseInt(localStorage.getItem("duration_set"));
+    if (time_started && duration_set) {
+        var time_left = (time_started + duration_set) - (new Date()).getTime();
+        var time_threshold_sec = 10;
+        if (time_left > time_threshold_sec*1000) {
+            show_notification(
+                "Seems like the timer was still running when you" +
+                    " last closed this app. Do you want to " +
+                    "restore the timer?",
+                [
+                    {
+                        text: "No",
+                        style: "alert",
+                        click_function: function() {}
+                    },
+                    {
+                        text: "Sure",
+                        style: "emphasize",
+                        click_function: function(e) {
+                            var time = (time_started + duration_set) - (new Date()).getTime();
+                            var progress = 1 - time/duration_set;
+                            if (time > 0) {
+                                $("#dial-ring path").data("time_left", time);
+                                $("#dial-ring path").data("progress", progress);
+                                startTimer(false, true);
+                            } else {
+                                e.stopPropagation();
+                                show_notification(
+                                    "Too late, that timer has already ended",
+                                    [
+                                        {
+                                            text: "Dismiss",
+                                            style: "normal",
+                                            click_function: function() {}
+                                        }
+                                    ]
+                                );
+                            }
+                        }
+                    }
+                ]
+            );
+        }
     }
 }
 
@@ -271,13 +318,17 @@ function setTime(sec, resume) {
     var dial_time = resume ? dial_path.data("time_left") : sec*1000;
     var initial_progress = resume ? dial_path.data("progress") : 0;
 
-    dial_path.velocity(
+    dial_path.velocity("stop").velocity(
         {
             // Can't go to 1 with SVG arc
             tween: [WHOLE_CIRCLE, initial_progress]
         }, {
             duration: dial_time,
             easing: "linear",
+            begin: function() {
+                localStorage.setItem("time_started", (new Date()).getTime());
+                localStorage.setItem("duration_set", dial_time);
+            },
             progress: function(e, c, r, s, t) {
                 setDial(dial_path, 40, t);
                 // Store progress in data
@@ -303,6 +354,9 @@ function setTime(sec, resume) {
             },
             complete: function() {
                 setDisplayTime("Done", false, true);
+                $("#display").removeClass("running");
+                localStorage.setItem("time_started", 0);
+                localStorage.setItem("duration_set", 0);
             }
         }
     );
@@ -373,7 +427,7 @@ function addDigit(digit) {
     setDisplayTime(new_time);
 }
 
-function startTimer(resume) {
+function startTimer(resume, session_resume) {
     // Convert display input to seconds
     var time_string = getDisplayTime();
     var hours_to_seconds = time_string.slice(-6,-4)*3600;
@@ -382,10 +436,12 @@ function startTimer(resume) {
     var total_seconds = hours_to_seconds + minutes_to_seconds + seconds;
 
     // Limit seconds to less than 100 hours
-    if (total_seconds < 360000) {
+    if (total_seconds === 0 && !resume && !session_resume) {
+        setDisplayTime("No time entered", true, true);
+    } else if (total_seconds < 360000 || session_resume || resume) {
         var timer_delay = 20;
         // Start dial motion and set state to timing mode
-        setTime(total_seconds, resume);
+        setTime(total_seconds, resume || session_resume);
         $("#display").data("input_mode", false);
         $("#display").addClass("running");
 
@@ -407,7 +463,8 @@ function startTimer(resume) {
             $("#keypad")
                 .velocity("stop")
                 .velocity({
-                    scale: 0.8,
+                    scale: 0.9,
+                    translateY: "20%",
                     opacity: 0
                 }, {
                     easing: GLOBAL_EASE_OUT,
@@ -451,6 +508,8 @@ function editTime() {
     setDisplayTime(getDisplayTime(), false, true);
     $("#display").data("input_mode", true).data("paused", false);
     $("#display").removeClass("running");
+    localStorage.setItem("time_started", 0);
+    localStorage.setItem("duration_set", 0);
     $("#dial-ring path")
         .velocity("stop");
     $("#display")
@@ -464,7 +523,8 @@ function editTime() {
     $("#keypad")
         .velocity("stop")
         .velocity({
-            scale: [1, 0.5],
+            scale: 1,
+            translateY: 0,
             opacity: 1
         }, {
             easing: GLOBAL_EASE_OUT,
@@ -487,10 +547,12 @@ function editTime() {
 }
 
 function togglePause() {
-    if ($("#display").data("paused")) {
-        resumeTimer();
-    } else {
-        pauseTimer();
+    if (!$("#display").data("input_mode")) {
+        if ($("#display").data("paused")) {
+            resumeTimer();
+        } else {
+            pauseTimer();
+        }
     }
 }
 
@@ -550,30 +612,42 @@ function toggleKeyboardHelp(force_state) {
     }
 }
 
-function toggleKeyboardSuggest(force_state) {
-    var suggest_banner = $("#keyboard-suggest");
-    if (arguments.length > 0) {
-        if (!!suggest_banner.data("shown") === !force_state) {
-            toggleKeyboardSuggest();
-        }
-    } else {
-        var show = !suggest_banner.data("shown");
+function show_notification(message, buttons) {
+    var banner_text = $("#notification-banner span").text(message);
+    var button_wrapper = banner_text.siblings("div").empty();
 
-        if (show) {
-            $.Velocity.hook(suggest_banner, "translateY", "-100%");
-        }
-        suggest_banner
-            .data("shown", show)
-            .velocity("stop")
-            .velocity({
-                translateY: (show ? [0, "-100%"] : ["-100%", 0])
-            }, {
-                easing: show ? GLOBAL_EASE_OUT : GLOBAL_EASE_IN,
-                display: show ? "block" : "none",
-                duration: (show ? GLOBAL_ANIMATION_DURATION :
-                    GLOBAL_ANIMATION_DURATION / 4)
-            });
+    for (var i = buttons.length - 1; i >= 0; i--) {
+        var button = buttons[i];
+        $("<div></div>")
+            .text(button.text)
+            .addClass(button.style + " button")
+            .click(button.click_function)
+            .prependTo(button_wrapper);
     }
+
+    banner_text.parent()
+        .velocity("stop")
+        .velocity({
+            translateY: banner_text.parent().data("shown") ? 0 : [0, "-100%"]
+        }, {
+            easing: GLOBAL_EASE_OUT,
+            display: "block",
+            duration: GLOBAL_ANIMATION_DURATION
+        })
+        .data("shown", true);
+}
+
+function hide_notification() {
+    $("#notification-banner")
+        .data("shown", false)
+        .velocity("stop")
+        .velocity({
+            translateY: "-100%"
+        }, {
+            easing: GLOBAL_EASE_IN,
+            display: "none",
+            duration: GLOBAL_ANIMATION_DURATION / 4
+        });
 }
 
 function changeDisplayText(new_display_text, style) {
@@ -647,14 +721,14 @@ function changeDisplayText(new_display_text, style) {
 
 function hoverTouchUnstick() {
   // Check if the device supports touch events
-  if('ontouchstart' in document.documentElement) {
+  if ('ontouchstart' in document.documentElement) {
     // Loop through each stylesheet
-    for(var sheetI = document.styleSheets.length - 1; sheetI >= 0; sheetI--) {
+    for (var sheetI = document.styleSheets.length - 1; sheetI >= 0; sheetI--) {
       var sheet = document.styleSheets[sheetI];
       // Verify if cssRules exists in sheet
       if(sheet.cssRules) {
         // Loop through each rule in sheet
-        for(var ruleI = sheet.cssRules.length - 1; ruleI >= 0; ruleI--) {
+        for (var ruleI = sheet.cssRules.length - 1; ruleI >= 0; ruleI--) {
           var rule = sheet.cssRules[ruleI];
           // Verify rule has selector text
           if(rule.selectorText) {

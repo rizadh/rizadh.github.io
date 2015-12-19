@@ -138,14 +138,11 @@ body {
     $intensity: 2.5;
 
     &:hover {
-        // stroke: lighten($secondary_color, 20);
         background-color: lighten($main_color, $intensity);
-        // background-color: mix($main_color, $secondary_color);
         transition: stroke $hover_transition_time, background-color $hover_transition_time;
     }
 
     &:active {
-        // stroke: $secondary_color;
         background-color: darken($main_color, $intensity);
         transition: stroke $active_transition_time, background-color $active_transition_time;
     }
@@ -217,7 +214,7 @@ body {
     }
 }
 
-#keyboard-suggest {
+#notification-banner {
     display: none;
     position: absolute;
     z-index: 3;
@@ -243,15 +240,15 @@ body {
         cursor: pointer;
     }
 
-    #never {
+    .alert {
         color: hsla(0, 100%, 80%, 1)
     }
 
-    #nope {
+    .normal {
         color: transparentize($secondary_color, 0.25);
     }
 
-    #sure {
+    .emphasize {
         color: lighten($main_color, 10);
     }
 }
