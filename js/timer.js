@@ -467,7 +467,6 @@ function startTimer(resume, sessionResume) {
             $('#keypad')
                 .velocity('stop')
                 .velocity({
-                    scale: 0.9,
                     translateY: '20%',
                     opacity: 0
                 }, {
@@ -527,7 +526,6 @@ function editTime() {
     $('#keypad')
         .velocity('stop')
         .velocity({
-            scale: 1,
             translateY: 0,
             opacity: 1
         }, {
