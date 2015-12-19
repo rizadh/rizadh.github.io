@@ -377,7 +377,7 @@ function setDisplayTime(text, actual, fancy) {
             .css('font-family','roboto_condensedregular');
         changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
     } else if (text === '') {
-        $('#display-text')
+        display
             .data('currentTime', '000000')
             .text('Enter a time')
             .css('font-family','roboto_condensedregular');
@@ -394,8 +394,7 @@ function setDisplayTime(text, actual, fancy) {
             .css('font-family','robotoregular');
         changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
     } else if (text === 'Paused') {
-        newDisplayText = display
-            .clone(true)
+        newDisplayText
             .text(text)
             .css('font-family','robotoregular');
         changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
