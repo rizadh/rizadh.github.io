@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 // SVG arcs cannot form a complete circle so a value close to 1 is used
-var WHOLE_CIRCLE = 0.99999;
-var EASE_FUNC = "Expo";
-var GLOBAL_EASE_OUT = "easeOut" + EASE_FUNC;
-var GLOBAL_EASE_IN = "easeIn" + EASE_FUNC;
-var GLOBAL_ANIMATION_DURATION = 400;
+var WHOLECIRCLE = 0.99999;
+var EASEFUNC = 'Expo';
+var GLOBAL_EASE_OUT = 'easeOut' + EASEFUNC;
+var GLOBAL_EASE_IN = 'easeIn' + EASEFUNC;
+var GLOBALANIMATIONDURATION = 400;
 
 // Perform when document body is loaded
 $(function() {
@@ -13,13 +13,13 @@ $(function() {
     FastClick.attach(document.body);
 
     // Hook Velocity to help menu and display-text translate properties
-    $.Velocity.hook($("#keyboard-help"), "translateX", "-50%");
-    $.Velocity.hook($("#keyboard-help"), "translateY", "-50%");
-    $.Velocity.hook($("#display-text"), "translateY", "-50%");
+    $.Velocity.hook($('#keyboard-help'), 'translateX', '-50%');
+    $.Velocity.hook($('#keyboard-help'), 'translateY', '-50%');
+    $.Velocity.hook($('#display-text'), 'translateY', '-50%');
 
     // Change Backspce to Delete if on Mac or iOS devices
     if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
-        $("#keyboard-help > .shortcut.delete > span").text("Delete");
+        $('#keyboard-help > .shortcut.delete > span').text('Delete');
     }
 
     // Sticky hover fix
@@ -29,34 +29,34 @@ $(function() {
     // $(document).bind('touchmove', false);
 
     // Set input mode (whether keypad is displayed)
-    $("#display").data("input_mode", true);
+    $('#display').data('inputMode', true);
 
     // Startup animation
     startupAnimation();
 
     // Clear display and show default message
-    setDisplayTime("");
+    setDisplayTime('');
 
     // Set click events
-    $("#keypad td").click(function() {
-        var key_value = $(this).text();
-        if (key_value == "Clear") {
-            setDisplayTime("000000");
-        } else if (key_value == "Start") {
+    $('#keypad td').click(function() {
+        var keyValue = $(this).text();
+        if (keyValue == 'Clear') {
+            setDisplayTime('000000');
+        } else if (keyValue == 'Start') {
             startTimer();
         } else {
-            addDigit(key_value);
+            addDigit(keyValue);
         }
     });
-    $("#edit-button").click(editTime);
-    $("#display-text").click(togglePause);
-    $("#notification-banner").click(function(e) {
+    $('#edit-button').click(editTime);
+    $('#display-text').click(togglePause);
+    $('#notification-banner').click(function(e) {
         e.stopPropagation();
-        hide_notification();
+        hideNotification();
     });
 
     // Enable keyboard input
-    $(document).on("keydown", function(e) {
+    $(document).on('keydown', function(e) {
         // Get the keycode
         var key = e.keyCode;
         // Perform events depending on keycode
@@ -64,16 +64,16 @@ $(function() {
             // Backspace - delete a character from display
             case 8:
                 e.preventDefault();
-                if ($("#display").data("input_mode")) {
-                    var deleted_time = ("0" + getDisplayTime()).slice(-7,-1);
-                    setDisplayTime(deleted_time);
+                if ($('#display').data('inputMode')) {
+                    var deletedTime = ('0' + getDisplayTime()).slice(-7,-1);
+                    setDisplayTime(deletedTime);
                 }
                 break;
 
             // Enter - start or cancel timer
             case 13:
                 // Activate editing mode if not activated
-                if ($("#display").data("input_mode")) {
+                if ($('#display').data('inputMode')) {
                     startTimer();
                 } else {
                     editTime();
@@ -83,14 +83,14 @@ $(function() {
             // Escape - cancel timer
             case 27:
                 // Activate editing mode if not activated
-                if (!$("#display").data("input_mode")) {
+                if (!$('#display').data('inputMode')) {
                     editTime();
                 }
                 break;
 
             // Space - toggle keyboard help menu
             case 32:
-                if (!$("#display").data("input_mode")) {
+                if (!$('#display').data('inputMode')) {
                     togglePause();
                 } else {
                     toggleKeyboardHelp();
@@ -109,10 +109,10 @@ $(function() {
             case 56:
             case 57:
                 // Activate editing mode if not activated
-                if ($("#display").data("input_mode")) {
+                if ($('#display').data('inputMode')) {
                     // Obtain entered character
-                    var key_value = String.fromCharCode(key);
-                    addDigit(key_value);
+                    var keyValue = String.fromCharCode(key);
+                    addDigit(keyValue);
                     break;
                 }
 
@@ -125,42 +125,42 @@ $(function() {
     });
 
     // Disable suggesting a mouse if user has a touch device
-    $(document).on("touchstart", function() {
-        localStorage.setItem("touch-device", "true");
+    $(document).on('touchstart', function() {
+        localStorage.setItem('touch-device', 'true');
     });
 
     // Hide keyboard help when anything is tapped
     $(document).click(function() {
         toggleKeyboardHelp(false);
-        var touch_device = localStorage.getItem("touch-device");
-        var suggested_mouse = localStorage.getItem("mouse-suggested");
-        var suggested_mouse_session = sessionStorage.getItem("mouse-suggested");
-        var temp_suggestion = suggested_mouse === "temp";
-        var show_again = temp_suggestion && !suggested_mouse_session;
+        var touchDevice = localStorage.getItem('touch-device');
+        var suggestedMouse = localStorage.getItem('mouse-suggested');
+        var suggestedMouseSession = sessionStorage.getItem('mouse-suggested');
+        var tempSuggestion = suggestedMouse === 'temp';
+        var showAgain = tempSuggestion && !suggestedMouseSession;
 
-        if (!touch_device && (!suggested_mouse || show_again)) {
-            localStorage.setItem("mouse-suggested", "true");
-            sessionStorage.setItem("mouse-suggested", "true");
-            show_notification(
-                "Seems like you have a keyboard. " +
-                    "Want to learn a few shortcuts?",
+        if (!touchDevice && (!suggestedMouse || showAgain)) {
+            localStorage.setItem('mouse-suggested', 'true');
+            sessionStorage.setItem('mouse-suggested', 'true');
+            showNotification(
+                'Seems like you have a keyboard. ' +
+                    'Want to learn a few shortcuts?',
                 [
                     {
-                        text: "Never",
-                        style: "alert",
-                        click_function: function() {}
+                        text: 'Never',
+                        style: 'alert',
+                        clickFunction: function() {}
                     },
                     {
-                        text: "Not right now",
-                        style: "normal",
-                        click_function: function() {
-                            localStorage.setItem("mouse-suggested", "temp");
+                        text: 'Not right now',
+                        style: 'normal',
+                        clickFunction: function() {
+                            localStorage.setItem('mouse-suggested', 'temp');
                         }
                     },
                     {
-                        text: "Yes, show me",
-                        style: "emphasize",
-                        click_function: function() {
+                        text: 'Yes, show me',
+                        style: 'emphasize',
+                        clickFunction: function() {
                             toggleKeyboardHelp(true);
                         }
                     }
@@ -172,48 +172,48 @@ $(function() {
     // Adjust font-sizes when viewport dimensions change
     $(window).on('load resize orientationChange', function() {
         // Maximize size of text
-        var max_length = Math.min($(window).height(), $(window).width());
-        $("html").css("font-size", max_length / 9);
+        var maxLength = Math.min($(window).height(), $(window).width());
+        $('html').css('font-size', maxLength / 9);
     });
 });
 
 // Startup animation to be performed once when app is loaded
 function startupAnimation() {
-    var startup_duration = GLOBAL_ANIMATION_DURATION;
-    var display = $("#display");
-    var display_text = $("#display-text");
-    var keypad = $("#keypad tr");
-    var startup_delay = 20;
+    var startupDuration = GLOBALANIMATIONDURATION;
+    var display = $('#display');
+    var displayText = $('#display-text');
+    var keypad = $('#keypad tr');
+    var startupDelay = 20;
 
-    if ($_GET("time").length) {
+    if (GET('time').length) {
         // Immediately start timer
-        setDisplayTime(("000000" + $_GET("time")).slice(-6), false, true);
-        $.Velocity.hook(display, "height", "0");
-        $.Velocity.hook(display, "opacity", "0");
-        $.Velocity.hook(display, "fontSize", "0");
-        $.Velocity.hook($("#keypad"), "opacity", "0");
+        setDisplayTime(('000000' + GET('time')).slice(-6), false, true);
+        $.Velocity.hook(display, 'height', '0');
+        $.Velocity.hook(display, 'opacity', '0');
+        $.Velocity.hook(display, 'fontSize', '0');
+        $.Velocity.hook($('#keypad'), 'opacity', '0');
         startTimer();
     } else {
         // Hook display and display text
-        $.Velocity.hook(display_text, "translateY", "-100%");
-        $.Velocity.hook(display_text, "opacity", "0");
-        $.Velocity.hook(display, "translateY", "-100%");
-        $.Velocity.hook(display, "opacity", "0");
-        $.Velocity.hook(keypad, "opacity", "0");
-        $.Velocity.hook(keypad, "translateY", "-10%");
-        $.Velocity.RegisterEffect("transition.slideIn", { calls: [[{
+        $.Velocity.hook(displayText, 'translateY', '-100%');
+        $.Velocity.hook(displayText, 'opacity', '0');
+        $.Velocity.hook(display, 'translateY', '-100%');
+        $.Velocity.hook(display, 'opacity', '0');
+        $.Velocity.hook(keypad, 'opacity', '0');
+        $.Velocity.hook(keypad, 'translateY', '-10%');
+        $.Velocity.RegisterEffect('transition.slideIn', { calls: [[{
             translateY: 0,
             opacity: 1
         }]]});
 
         // Animate display text
-        display_text.velocity({
-            translateY: "-50%",
+        displayText.velocity({
+            translateY: '-50%',
             opacity: 1
         }, {
             easing: GLOBAL_EASE_OUT,
-            duration: startup_duration,
-            delay: startup_delay
+            duration: startupDuration,
+            delay: startupDelay
         });
 
         // Animate display
@@ -222,17 +222,17 @@ function startupAnimation() {
             opacity: 1
         }, {
             easing: GLOBAL_EASE_OUT,
-            duration: startup_duration,
-            delay: startup_delay,
+            duration: startupDuration,
+            delay: startupDelay,
             complete: askForRestore
         });
 
         // Animate keypad
-        keypad.velocity("transition.slideIn", {
+        keypad.velocity('transition.slideIn', {
             easing: GLOBAL_EASE_OUT,
-            duration: startup_duration / 2,
-            delay: startup_duration / 4 + startup_delay,
-            stagger: startup_duration / 4 / (keypad.length - 1),
+            duration: startupDuration / 2,
+            delay: startupDuration / 4 + startupDelay,
+            stagger: startupDuration / 4 / (keypad.length - 1),
             drag: true,
             display: null
         });
@@ -240,41 +240,41 @@ function startupAnimation() {
 }
 
 function askForRestore() {
-    var time_started = parseInt(localStorage.getItem("time_started"));
-    var duration_set = parseInt(localStorage.getItem("duration_set"));
-    if (time_started && duration_set) {
-        var time_left = (time_started + duration_set) - (new Date()).getTime();
-        var time_threshold_sec = 10;
-        if (time_left > time_threshold_sec*1000) {
-            show_notification(
-                "Seems like the timer was still running when you" +
-                    " last closed this app. Do you want to " +
-                    "restore the timer?",
+    var timeStarted = parseInt(localStorage.getItem('timeStarted'));
+    var durationSet = parseInt(localStorage.getItem('durationSet'));
+    if (timeStarted && durationSet) {
+        var timeLeft = (timeStarted + durationSet) - (new Date()).getTime();
+        var timeThresholdSec = 10;
+        if (timeLeft > timeThresholdSec*1000) {
+            showNotification(
+                'Seems like the timer was still running when you' +
+                    ' last closed this app. Do you want to ' +
+                    'restore the timer?',
                 [
                     {
-                        text: "No",
-                        style: "alert",
-                        click_function: function() {}
+                        text: 'No',
+                        style: 'alert',
+                        clickFunction: function() {}
                     },
                     {
-                        text: "Sure",
-                        style: "emphasize",
-                        click_function: function(e) {
-                            var time = (time_started + duration_set) - (new Date()).getTime();
-                            var progress = 1 - time/duration_set;
+                        text: 'Sure',
+                        style: 'emphasize',
+                        clickFunction: function(e) {
+                            var time = (timeStarted + durationSet) - (new Date()).getTime();
+                            var progress = 1 - time/durationSet;
                             if (time > 0) {
-                                $("#dial-ring path").data("time_left", time);
-                                $("#dial-ring path").data("progress", progress);
+                                $('#dial-ring path').data('timeLeft', time);
+                                $('#dial-ring path').data('progress', progress);
                                 startTimer(false, true);
                             } else {
                                 e.stopPropagation();
-                                show_notification(
-                                    "Too late, that timer has already ended",
+                                showNotification(
+                                    'Too late, that timer has already ended',
                                     [
                                         {
-                                            text: "Dismiss",
-                                            style: "normal",
-                                            click_function: function() {}
+                                            text: 'Dismiss',
+                                            style: 'normal',
+                                            clickFunction: function() {}
                                         }
                                     ]
                                 );
@@ -288,267 +288,267 @@ function askForRestore() {
 }
 
 /** Set dial of given radius to given progress */
-function setDial(dial, arc_radius, progress) {
-    var box_radius = 50;
+function setDial(dial, arcRadius, progress) {
+    var boxRadius = 50;
 
     // Calculate path parameters
-    var offset = box_radius - arc_radius;
+    var offset = boxRadius - arcRadius;
     var sweep = progress >= 0.5 ? 1 : 0;
-    var arc_pos_x = offset + arc_radius*(1 + Math.sin(2*Math.PI*progress));
-    var arc_pos_y = offset + arc_radius*(1 - Math.cos(2*Math.PI*progress));
-    var arc_pos = arc_pos_x + " " + arc_pos_y;
-    var arc_dimensions = arc_radius + " " + arc_radius;
-    var arc_parameters = " 0 " + sweep + " 1 ";
+    var arcPosX = offset + arcRadius*(1 + Math.sin(2*Math.PI*progress));
+    var arcPosY = offset + arcRadius*(1 - Math.cos(2*Math.PI*progress));
+    var arcPos = arcPosX + ' ' + arcPosY;
+    var arcDimensions = arcRadius + ' ' + arcRadius;
+    var arcParameters = ' 0 ' + sweep + ' 1 ';
 
     // Calculate path segments
-    var move_to_center = "M" + box_radius + " " + box_radius;
-    var move_to_start = "m0 " + (-arc_radius);
-    var make_arc = "A" + arc_dimensions + arc_parameters + arc_pos;
+    var moveToCenter = 'M' + boxRadius + ' ' + boxRadius;
+    var moveToStart = 'm0 ' + (-arcRadius);
+    var makeArc = 'A' + arcDimensions + arcParameters + arcPos;
 
     // Creath path from segments
-    var dial_path = move_to_center + move_to_start + make_arc;
+    var dialPath = moveToCenter + moveToStart + makeArc;
 
     // Set path
-    dial.attr("d", dial_path);
+    dial.attr('d', dialPath);
 }
 
 function setTime(sec, resume) {
     // Convert seconds to milliseconds
-    var dial_path = $("#dial-ring path");
-    var dial_time = resume ? dial_path.data("time_left") : sec*1000;
-    var initial_progress = resume ? dial_path.data("progress") : 0;
+    var dialPath = $('#dial-ring path');
+    var dialTime = resume ? dialPath.data('timeLeft') : sec*1000;
+    var initialProgress = resume ? dialPath.data('progress') : 0;
 
-    dial_path.velocity("stop").velocity(
+    dialPath.velocity('stop').velocity(
         {
             // Can't go to 1 with SVG arc
-            tween: [WHOLE_CIRCLE, initial_progress]
+            tween: [WHOLECIRCLE, initialProgress]
         }, {
-            duration: dial_time,
-            easing: "linear",
+            duration: dialTime,
+            easing: 'linear',
             begin: function() {
-                localStorage.setItem("time_started", (new Date()).getTime());
-                localStorage.setItem("duration_set", dial_time);
+                localStorage.setItem('timeStarted', (new Date()).getTime());
+                localStorage.setItem('durationSet', dialTime);
             },
             progress: function(e, c, r, s, t) {
-                setDial(dial_path, 40, t);
+                setDial(dialPath, 40, t);
                 // Store progress in data
-                dial_path.data("progress", t);
-                dial_path.data("time_left", r);
+                dialPath.data('progress', t);
+                dialPath.data('timeLeft', r);
                 // Find seconds rounded up
-                var total_seconds = Math.ceil(r/1000);
+                var totalSeconds = Math.ceil(r/1000);
                 // Find minutes rounded down
-                var minutes = Math.floor(total_seconds/60) % 60;
+                var minutes = Math.floor(totalSeconds/60) % 60;
                 // Find hours rounded down
-                var hours = Math.floor(total_seconds/3600);
+                var hours = Math.floor(totalSeconds/3600);
                 // Find remaining seconds
-                var seconds = total_seconds % 60;
+                var seconds = totalSeconds % 60;
                 // Force 2 digits
-                seconds = ("0" + seconds).slice(-2);
-                minutes = ("0" + minutes).slice(-2);
-                hours = ("0" + hours).slice(-2);
+                seconds = ('0' + seconds).slice(-2);
+                minutes = ('0' + minutes).slice(-2);
+                hours = ('0' + hours).slice(-2);
                 var times = [hours, minutes, seconds];
                 if (r !== 0) {
                     // Send time text to display
-                    setDisplayTime(times.join(""), false, true);
+                    setDisplayTime(times.join(''), false, true);
                 }
             },
             complete: function() {
-                setDisplayTime("Done", false, true);
-                $("#display").removeClass("running");
-                localStorage.setItem("time_started", 0);
-                localStorage.setItem("duration_set", 0);
+                setDisplayTime('Done', false, true);
+                $('#display').removeClass('running');
+                localStorage.setItem('timeStarted', 0);
+                localStorage.setItem('durationSet', 0);
             }
         }
     );
 }
 
 function getDisplayTime(actual) {
-    var display = $("#display-text");
-    return actual ? display.text() : display.data("current_time");
+    var display = $('#display-text');
+    return actual ? display.text() : display.data('currentTime');
 }
 
 function setDisplayTime(text, actual, fancy) {
-    var display = $("#display-text");
-    var new_display_text = display.clone(true);
+    var display = $('#display-text');
+    var newDisplayText = display.clone(true);
     if (actual) {
-        new_display_text
-            .data("current_time", "000000")
+        newDisplayText
+            .data('currentTime', '000000')
             .text(text)
-            .css("font-family","roboto_condensedregular");
-        changeDisplayText(new_display_text, fancy ? "fancy" : "");
-    } else if (text === "") {
-        $("#display-text")
-            .data("current_time", "000000")
-            .text("Enter a time")
-            .css("font-family","roboto_condensedregular");
-    } else if (text === "000000") {
-        new_display_text
-            .data("current_time", "000000")
-            .text("0s")
-            .css("font-family","robotoregular");
-        changeDisplayText(new_display_text, fancy ? "fancy" : "");
-    } else if (text === "Done") {
-        new_display_text
-            .data("current_time", "000000")
+            .css('font-family','roboto_condensedregular');
+        changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
+    } else if (text === '') {
+        $('#display-text')
+            .data('currentTime', '000000')
+            .text('Enter a time')
+            .css('font-family','roboto_condensedregular');
+    } else if (text === '000000') {
+        newDisplayText
+            .data('currentTime', '000000')
+            .text('0s')
+            .css('font-family','robotoregular');
+        changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
+    } else if (text === 'Done') {
+        newDisplayText
+            .data('currentTime', '000000')
             .text(text)
-            .css("font-family","robotoregular");
-        changeDisplayText(new_display_text, fancy ? "fancy" : "");
-    } else if (text === "Paused") {
-        new_display_text = display
+            .css('font-family','robotoregular');
+        changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
+    } else if (text === 'Paused') {
+        newDisplayText = display
             .clone(true)
             .text(text)
-            .css("font-family","robotoregular");
-        changeDisplayText(new_display_text, fancy ? "fancy" : "");
+            .css('font-family','robotoregular');
+        changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
     } else {
-        if (display.data("current_time") !== text || display.text() === "Paused") {
-            new_display_text
-                .data("current_time", text)
-                .css("font-family","robotoregular");
-            var time_array = [];
-            var unit_array = ["h","m","s"];
+        if (display.data('currentTime') !== text || display.text() === 'Paused') {
+            newDisplayText
+                .data('currentTime', text)
+                .css('font-family','robotoregular');
+            var timeArray = [];
+            var unitArray = ['h','m','s'];
             for (var i = 0; i < 3; i++) {
-                var time_value = text.slice(2*i,2*i+2);
-                if (time_value > 0 || time_array[0] || i === 2) {
-                    if (time_value < 10 && !time_array[0]) {
-                        time_value = time_value.slice(-1);
+                var timeValue = text.slice(2*i,2*i+2);
+                if (timeValue > 0 || timeArray[0] || i === 2) {
+                    if (timeValue < 10 && !timeArray[0]) {
+                        timeValue = timeValue.slice(-1);
                     }
-                    time_array.push(time_value + unit_array[i]);
+                    timeArray.push(timeValue + unitArray[i]);
                 }
             }
-            var new_time = time_array.join(" ");
-            new_display_text.text(new_time);
-            changeDisplayText(new_display_text, fancy ? "fancy" : "");
+            var newTime = timeArray.join(' ');
+            newDisplayText.text(newTime);
+            changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
         }
     }
 }
 
 function addDigit(digit) {
-    var new_time = (getDisplayTime() + digit).slice(-6);
-    setDisplayTime(new_time);
+    var newTime = (getDisplayTime() + digit).slice(-6);
+    setDisplayTime(newTime);
 }
 
-function startTimer(resume, session_resume) {
+function startTimer(resume, sessionResume) {
     // Convert display input to seconds
-    var time_string = getDisplayTime();
-    var hours_to_seconds = time_string.slice(-6,-4)*3600;
-    var minutes_to_seconds = time_string.slice(-4,-2)*60;
-    var seconds = time_string.slice(-2)*1;
-    var total_seconds = hours_to_seconds + minutes_to_seconds + seconds;
+    var timeString = getDisplayTime();
+    var hoursToSeconds = timeString.slice(-6,-4)*3600;
+    var minutesToSeconds = timeString.slice(-4,-2)*60;
+    var seconds = timeString.slice(-2)*1;
+    var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
 
     // Limit seconds to less than 100 hours
-    if (total_seconds === 0 && !resume && !session_resume) {
-        setDisplayTime("No time entered", true, true);
-    } else if (total_seconds < 360000 || session_resume || resume) {
-        var timer_delay = 20;
+    if (totalSeconds === 0 && !resume && !sessionResume) {
+        setDisplayTime('No time entered', true, true);
+    } else if (totalSeconds < 360000 || sessionResume || resume) {
+        var timerDelay = 20;
         // Start dial motion and set state to timing mode
-        setTime(total_seconds, resume || session_resume);
-        $("#display").data("input_mode", false);
-        $("#display").addClass("running");
+        setTime(totalSeconds, resume || sessionResume);
+        $('#display').data('inputMode', false);
+        $('#display').addClass('running');
 
         if (!resume) {
             // Shrink display
-            $("#display")
-                .velocity("stop")
+            $('#display')
+                .velocity('stop')
                 .velocity({
-                    height: "90%",
+                    height: '90%',
                     opacity: 1,
-                    fontSize: "1em"
+                    fontSize: '1em'
                 }, {
-                    duration: GLOBAL_ANIMATION_DURATION,
+                    duration: GLOBALANIMATIONDURATION,
                     easing: GLOBAL_EASE_OUT,
-                    delay: timer_delay
+                    delay: timerDelay
                 });
 
             // Fade out keys
-            $("#keypad")
-                .velocity("stop")
+            $('#keypad')
+                .velocity('stop')
                 .velocity({
                     scale: 0.9,
-                    translateY: "20%",
+                    translateY: '20%',
                     opacity: 0
                 }, {
                     easing: GLOBAL_EASE_OUT,
-                    duration: GLOBAL_ANIMATION_DURATION,
-                    display: "none",
-                    delay: timer_delay
+                    duration: GLOBALANIMATIONDURATION,
+                    display: 'none',
+                    delay: timerDelay
                 });
 
             // Fade in edit button
-            $("#edit-button")
-                .velocity("stop")
+            $('#edit-button')
+                .velocity('stop')
                 .velocity({
-                    translateY: [0, "100%"],
+                    translateY: [0, '100%'],
                     opacity: [1, 0]
                 }, {
                     easing: GLOBAL_EASE_OUT,
-                    duration: GLOBAL_ANIMATION_DURATION,
-                    display: "block",
-                    delay: timer_delay
+                    duration: GLOBALANIMATIONDURATION,
+                    display: 'block',
+                    delay: timerDelay
                 });
 
             // Fade in ring
-            $("#dial-ring")
-                .velocity("stop")
+            $('#dial-ring')
+                .velocity('stop')
                 .velocity({
                     opacity: [1, 0],
                     scale: [1, 0]
                 }, {
                     easing: GLOBAL_EASE_OUT,
-                    duration: GLOBAL_ANIMATION_DURATION,
-                    display: "block",
-                    delay: timer_delay
+                    duration: GLOBALANIMATIONDURATION,
+                    display: 'block',
+                    delay: timerDelay
                 });
         }
     } else {
-        setDisplayTime("Time too high", true, true);
+        setDisplayTime('Time too high', true, true);
     }
 }
 
 function editTime() {
     setDisplayTime(getDisplayTime(), false, true);
-    $("#display").data("input_mode", true).data("paused", false);
-    $("#display").removeClass("running");
-    localStorage.setItem("time_started", 0);
-    localStorage.setItem("duration_set", 0);
-    $("#dial-ring path")
-        .velocity("stop");
-    $("#display")
-        .velocity("stop")
+    $('#display').data('inputMode', true).data('paused', false);
+    $('#display').removeClass('running');
+    localStorage.setItem('timeStarted', 0);
+    localStorage.setItem('durationSet', 0);
+    $('#dial-ring path')
+        .velocity('stop');
+    $('#display')
+        .velocity('stop')
         .velocity({
-            height: "20%"
+            height: '20%'
         }, {
-            duration: GLOBAL_ANIMATION_DURATION,
+            duration: GLOBALANIMATIONDURATION,
             easing: GLOBAL_EASE_OUT,
         });
-    $("#keypad")
-        .velocity("stop")
+    $('#keypad')
+        .velocity('stop')
         .velocity({
             scale: 1,
             translateY: 0,
             opacity: 1
         }, {
             easing: GLOBAL_EASE_OUT,
-            duration: GLOBAL_ANIMATION_DURATION,
-            display: "table"
+            duration: GLOBALANIMATIONDURATION,
+            display: 'table'
         });
-    $("#edit-button")
-        .velocity("stop")
+    $('#edit-button')
+        .velocity('stop')
         .velocity({
             opacity: 0,
-            translateY: "-700%"
+            translateY: '-700%'
         }, {
             easing: GLOBAL_EASE_OUT,
-            display: "none",
-            duration: GLOBAL_ANIMATION_DURATION
+            display: 'none',
+            duration: GLOBALANIMATIONDURATION
         });
-    $("#dial-ring")
-        .velocity("stop")
-        .velocity("fadeOut", 100);
+    $('#dial-ring')
+        .velocity('stop')
+        .velocity('fadeOut', 100);
 }
 
 function togglePause() {
-    if (!$("#display").data("input_mode")) {
-        if ($("#display").data("paused")) {
+    if (!$('#display').data('inputMode')) {
+        if ($('#display').data('paused')) {
             resumeTimer();
         } else {
             pauseTimer();
@@ -557,19 +557,19 @@ function togglePause() {
 }
 
 function pauseTimer() {
-    var ring_classes = $("#dial-ring path").attr('class');
-    var is_animating = ~ring_classes.indexOf('velocity-animating');
-    if (is_animating) {
-        $("#dial-ring path").velocity("stop");
-        setDisplayTime("Paused", false, true);
-        $("#display").data("paused", true);
-        $("#dial-ring")
-            .velocity("stop")
+    var ringClasses = $('#dial-ring path').attr('class');
+    var isAnimating = ~ringClasses.indexOf('velocity-animating');
+    if (isAnimating) {
+        $('#dial-ring path').velocity('stop');
+        setDisplayTime('Paused', false, true);
+        $('#display').data('paused', true);
+        $('#dial-ring')
+            .velocity('stop')
             .velocity({
                 opacity: 0.25
             }, {
                 easing: GLOBAL_EASE_OUT,
-                duration: GLOBAL_ANIMATION_DURATION
+                duration: GLOBALANIMATIONDURATION
             });
 
     }
@@ -577,145 +577,145 @@ function pauseTimer() {
 
 function resumeTimer() {
     startTimer(true);
-    $("#display").data("paused", false);
-    $("#dial-ring")
-        .velocity("stop")
+    $('#display').data('paused', false);
+    $('#dial-ring')
+        .velocity('stop')
         .velocity({
             opacity: 1
         }, {
             easing: GLOBAL_EASE_OUT,
-            duration: GLOBAL_ANIMATION_DURATION
+            duration: GLOBALANIMATIONDURATION
         });
 }
 
-function toggleKeyboardHelp(force_state) {
-    var help_menu = $("#keyboard-help");
+function toggleKeyboardHelp(forceState) {
+    var helpMenu = $('#keyboard-help');
     if (arguments.length > 0) {
-        if (!!help_menu.data("shown") === !force_state) {
+        if (!!helpMenu.data('shown') === !forceState) {
             toggleKeyboardHelp();
         }
     } else {
-      	var show = !help_menu.data("shown");
+      	var show = !helpMenu.data('shown');
 
-        help_menu
-            .data("shown", show)
-            .velocity("stop")
+        helpMenu
+            .data('shown', show)
+            .velocity('stop')
             .velocity({
                 scale: (show ? [1, 0] : [0, 1]),
                 opacity: (show ? [1, 0] : [0, 1])
             }, {
                 easing: show ? GLOBAL_EASE_OUT : GLOBAL_EASE_IN,
-                display: show ? "block" : "none",
-                duration: (show ? GLOBAL_ANIMATION_DURATION :
-                    GLOBAL_ANIMATION_DURATION / 4)
+                display: show ? 'block' : 'none',
+                duration: (show ? GLOBALANIMATIONDURATION :
+                    GLOBALANIMATIONDURATION / 4)
             });
     }
 }
 
-function show_notification(message, buttons) {
-    var banner_text = $("#notification-banner span").text(message);
-    var button_wrapper = banner_text.siblings("div").empty();
+function showNotification(message, buttons) {
+    var bannerText = $('#notification-banner span').text(message);
+    var button_wrapper = bannerText.siblings('div').empty();
 
     for (var i = buttons.length - 1; i >= 0; i--) {
         var button = buttons[i];
-        $("<div></div>")
+        $('<div></div>')
             .text(button.text)
-            .addClass(button.style + " button")
-            .click(button.click_function)
+            .addClass(button.style + ' button')
+            .click(button.clickFunction)
             .prependTo(button_wrapper);
     }
 
-    banner_text.parent()
-        .velocity("stop")
+    bannerText.parent()
+        .velocity('stop')
         .velocity({
-            translateY: banner_text.parent().data("shown") ? 0 : [0, "-100%"]
+            translateY: bannerText.parent().data('shown') ? 0 : [0, '-100%']
         }, {
             easing: GLOBAL_EASE_OUT,
-            display: "block",
-            duration: GLOBAL_ANIMATION_DURATION
+            display: 'block',
+            duration: GLOBALANIMATIONDURATION
         })
-        .data("shown", true);
+        .data('shown', true);
 }
 
-function hide_notification() {
-    $("#notification-banner")
-        .data("shown", false)
-        .velocity("stop")
+function hideNotification() {
+    $('#notification-banner')
+        .data('shown', false)
+        .velocity('stop')
         .velocity({
-            translateY: "-100%"
+            translateY: '-100%'
         }, {
             easing: GLOBAL_EASE_IN,
-            display: "none",
-            duration: GLOBAL_ANIMATION_DURATION / 4
+            display: 'none',
+            duration: GLOBALANIMATIONDURATION / 4
         });
 }
 
-function changeDisplayText(new_display_text, style) {
-    $("#display-text-old").remove();
-    var display_text = $("#display-text");
-    if (style === "fancy") {
-        var display_html = display_text.text();
-        var new_display_html = new_display_text.text();
-        var display_html_array = [];
-        var new_display_html_array = [];
-        if (display_html.length === new_display_html.length) {
+function changeDisplayText(newDisplayText, style) {
+    $('#display-text-old').remove();
+    var displayText = $('#display-text');
+    if (style === 'fancy') {
+        var display_html = displayText.text();
+        var newDisplay_html = newDisplayText.text();
+        var display_htmlArray = [];
+        var newDisplay_htmlArray = [];
+        if (display_html.length === newDisplay_html.length) {
             for (var i = 0; i < display_html.length; i++) {
-                if (display_html[i] === new_display_html[i]) {
-                    display_html_array.push(display_html[i]);
-                    new_display_html_array.push(new_display_html[i]);
+                if (display_html[i] === newDisplay_html[i]) {
+                    display_htmlArray.push(display_html[i]);
+                    newDisplay_htmlArray.push(newDisplay_html[i]);
                 } else {
-                    display_html_array.push("<span>");
-                    display_html_array.push(display_html[i]);
-                    display_html_array.push("</span>");
-                    new_display_html_array.push("<span>");
-                    new_display_html_array.push(new_display_html[i]);
-                    new_display_html_array.push("</span>");
+                    display_htmlArray.push('<span>');
+                    display_htmlArray.push(display_html[i]);
+                    display_htmlArray.push('</span>');
+                    newDisplay_htmlArray.push('<span>');
+                    newDisplay_htmlArray.push(newDisplay_html[i]);
+                    newDisplay_htmlArray.push('</span>');
                 }
             }
         } else {
-            display_html_array.push("<span>");
-            display_html_array.push(display_html);
-            display_html_array.push("</span>");
-            new_display_html_array.push("<span>");
-            new_display_html_array.push(new_display_html);
-            new_display_html_array.push("</span>");
+            display_htmlArray.push('<span>');
+            display_htmlArray.push(display_html);
+            display_htmlArray.push('</span>');
+            newDisplay_htmlArray.push('<span>');
+            newDisplay_htmlArray.push(newDisplay_html);
+            newDisplay_htmlArray.push('</span>');
         }
 
-        var replace_span = /<\/span><span>/gi;
-        display_text
-            .attr("id", "display-text-old")
-            .html(display_html_array.join("").replace(replace_span,""))
-            .children("span")
+        var replaceSpan = /<\/span><span>/gi;
+        displayText
+            .attr('id', 'display-text-old')
+            .html(display_htmlArray.join('').replace(replaceSpan,''))
+            .children('span')
             .velocity({
                 opacity: 0,
                 scale: 0.5
             }, {
                 easing: GLOBAL_EASE_OUT,
-                duration: GLOBAL_ANIMATION_DURATION,
+                duration: GLOBALANIMATIONDURATION,
                 queue: false,
-                display: "inline-block",
+                display: 'inline-block',
                 complete: function() {
                     $(this).parent().remove();
                 }
             });
 
-        new_display_text
-            .html(new_display_html_array.join("").replace(replace_span,""))
-            .appendTo("#display")
-            .children("span")
-            .css("opacity", 0)
+        newDisplayText
+            .html(newDisplay_htmlArray.join('').replace(replaceSpan,''))
+            .appendTo('#display')
+            .children('span')
+            .css('opacity', 0)
             .velocity({
                 opacity: [1, 0],
                 scale: [1, 0.5]
             }, {
                 easing: GLOBAL_EASE_OUT,
-                duration: GLOBAL_ANIMATION_DURATION,
+                duration: GLOBALANIMATIONDURATION,
                 queue: false,
-                display: "inline-block"
+                display: 'inline-block'
             });
     } else {
-        display_text.remove();
-        new_display_text.appendTo("#display");
+        displayText.remove();
+        newDisplayText.appendTo('#display');
     }
 }
 
@@ -733,7 +733,7 @@ function hoverTouchUnstick() {
           // Verify rule has selector text
           if(rule.selectorText) {
             // Replace hover psuedo-class with active psuedo-class
-            rule.selectorText = rule.selectorText.replace(":hover", ":active");
+            rule.selectorText = rule.selectorText.replace(':hover', ':active');
           }
         }
       }
@@ -741,7 +741,7 @@ function hoverTouchUnstick() {
   }
 }
 
-function $_GET(q,s) {
+function GET(q,s) {
     s = (s) ? s : window.location.search;
     var re = new RegExp('&amp;'+q+'=([^&amp;]*)','i');
     return (s = s.replace(/^\?/,'&amp;').match(re)) ? s = s[1] : s = '';
