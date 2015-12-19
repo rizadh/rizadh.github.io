@@ -45,8 +45,8 @@ function updateClock(startup) {
     }
 
     // Adjust animation parameters for startup
-    var duration = startup ? 800 : 400;
-    var easing = startup ? "easeOutExpo" : [100, 5];
+    var duration = startup ? 800 : 200;
+    var easing = startup ? "easeOutExpo" : [100, 10];
     var highest_progress = Math.max(hour_progress, minute_progress, second_progress);
 
     progress_array.forEach(function(unit, index) {
