@@ -22,13 +22,16 @@ $(function() {
         $('#keyboard-help > .shortcut.delete > span').text('Delete');
     }
 
+    // Disable scrolling if running as full-screen iOS web app
+    if (window.navigator.standalone) {
+        $(document).on('touchmove', false);
+    }
+
     // Sticky hover fix
     hoverTouchUnstick();
 
-    // Disable scrolling
-    // $(document).bind('touchmove', false);
-
-    // Set input mode (whether keypad is displayed)
+    // Initialize input mode variable
+    // represents whether keypad is displayed or not
     $('#display').data('inputMode', true);
 
     // Startup animation
@@ -201,6 +204,8 @@ function startupAnimation() {
         $.Velocity.hook(display, 'opacity', '0');
         $.Velocity.hook(keypad, 'opacity', '0');
         $.Velocity.hook(keypad, 'translateY', '-10%');
+
+        // Create slideIn effect for keypad
         $.Velocity.RegisterEffect('transition.slideIn', { calls: [[{
             translateY: 0,
             opacity: 1
@@ -269,7 +274,7 @@ function askForRestore() {
                             } else {
                                 e.stopPropagation();
                                 showNotification(
-                                    'Too late, that timer has already ended',
+                                    'Too late, the timer has already ended',
                                     [
                                         {
                                             text: 'Dismiss',
