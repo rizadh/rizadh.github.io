@@ -1,11 +1,12 @@
+(function() {
 'use strict';
 
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLECIRCLE = 0.99999;
 var EASEFUNC = 'Expo';
-var GLOBAL_EASE_OUT = 'easeOut' + EASEFUNC;
-var GLOBAL_EASE_IN = 'easeIn' + EASEFUNC;
-var GLOBALANIMATIONDURATION = 400;
+var EASE_OUT = 'easeOut' + EASEFUNC;
+var EASE_IN = 'easeIn' + EASEFUNC;
+var ANIMATION_DURATION = 400;
 
 // Perform when document body is loaded
 $(function() {
@@ -182,7 +183,7 @@ $(function() {
 
 // Startup animation to be performed once when app is loaded
 function startupAnimation() {
-    var startupDuration = GLOBALANIMATIONDURATION;
+    var startupDuration = ANIMATION_DURATION;
     var display = $('#display');
     var displayText = $('#display-text');
     var keypad = $('#keypad tr');
@@ -216,7 +217,7 @@ function startupAnimation() {
             translateY: '-50%',
             opacity: 1
         }, {
-            easing: GLOBAL_EASE_OUT,
+            easing: EASE_OUT,
             duration: startupDuration,
             delay: startupDelay
         });
@@ -226,7 +227,7 @@ function startupAnimation() {
             translateY: 0,
             opacity: 1
         }, {
-            easing: GLOBAL_EASE_OUT,
+            easing: EASE_OUT,
             duration: startupDuration,
             delay: startupDelay,
             complete: askForRestore
@@ -234,7 +235,7 @@ function startupAnimation() {
 
         // Animate keypad
         keypad.velocity('transition.slideIn', {
-            easing: GLOBAL_EASE_OUT,
+            easing: EASE_OUT,
             duration: startupDuration / 2,
             delay: startupDuration / 4 + startupDelay,
             stagger: startupDuration / 4 / (keypad.length - 1),
@@ -458,8 +459,8 @@ function startTimer(resume, sessionResume) {
                     opacity: 1,
                     fontSize: '1em'
                 }, {
-                    duration: GLOBALANIMATIONDURATION,
-                    easing: GLOBAL_EASE_OUT,
+                    duration: ANIMATION_DURATION,
+                    easing: EASE_OUT,
                     delay: timerDelay
                 });
 
@@ -470,8 +471,8 @@ function startTimer(resume, sessionResume) {
                     translateY: '20%',
                     opacity: 0
                 }, {
-                    easing: GLOBAL_EASE_OUT,
-                    duration: GLOBALANIMATIONDURATION,
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION,
                     display: 'none',
                     delay: timerDelay
                 });
@@ -483,8 +484,8 @@ function startTimer(resume, sessionResume) {
                     translateY: [0, '100%'],
                     opacity: [1, 0]
                 }, {
-                    easing: GLOBAL_EASE_OUT,
-                    duration: GLOBALANIMATIONDURATION,
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION,
                     display: 'block',
                     delay: timerDelay
                 });
@@ -496,8 +497,8 @@ function startTimer(resume, sessionResume) {
                     opacity: [1, 0],
                     scale: [1, 0]
                 }, {
-                    easing: GLOBAL_EASE_OUT,
-                    duration: GLOBALANIMATIONDURATION,
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION,
                     display: 'block',
                     delay: timerDelay
                 });
@@ -520,8 +521,8 @@ function editTime() {
         .velocity({
             height: '20%'
         }, {
-            duration: GLOBALANIMATIONDURATION,
-            easing: GLOBAL_EASE_OUT,
+            duration: ANIMATION_DURATION,
+            easing: EASE_OUT,
         });
     $('#keypad')
         .velocity('stop')
@@ -529,8 +530,8 @@ function editTime() {
             translateY: 0,
             opacity: 1
         }, {
-            easing: GLOBAL_EASE_OUT,
-            duration: GLOBALANIMATIONDURATION,
+            easing: EASE_OUT,
+            duration: ANIMATION_DURATION,
             display: 'table'
         });
     $('#edit-button')
@@ -539,9 +540,9 @@ function editTime() {
             opacity: 0,
             translateY: '-700%'
         }, {
-            easing: GLOBAL_EASE_OUT,
+            easing: EASE_OUT,
             display: 'none',
-            duration: GLOBALANIMATIONDURATION
+            duration: ANIMATION_DURATION
         });
     $('#dial-ring')
         .velocity('stop')
@@ -570,8 +571,8 @@ function pauseTimer() {
             .velocity({
                 opacity: 0.25
             }, {
-                easing: GLOBAL_EASE_OUT,
-                duration: GLOBALANIMATIONDURATION
+                easing: EASE_OUT,
+                duration: ANIMATION_DURATION
             });
 
     }
@@ -585,8 +586,8 @@ function resumeTimer() {
         .velocity({
             opacity: 1
         }, {
-            easing: GLOBAL_EASE_OUT,
-            duration: GLOBALANIMATIONDURATION
+            easing: EASE_OUT,
+            duration: ANIMATION_DURATION
         });
 }
 
@@ -606,10 +607,10 @@ function toggleKeyboardHelp(forceState) {
                 scale: (show ? [1, 0] : [0, 1]),
                 opacity: (show ? [1, 0] : [0, 1])
             }, {
-                easing: show ? GLOBAL_EASE_OUT : GLOBAL_EASE_IN,
+                easing: show ? EASE_OUT : EASE_IN,
                 display: show ? 'block' : 'none',
-                duration: (show ? GLOBALANIMATIONDURATION :
-                    GLOBALANIMATIONDURATION / 4)
+                duration: (show ? ANIMATION_DURATION :
+                    ANIMATION_DURATION / 4)
             });
     }
 }
@@ -632,9 +633,9 @@ function showNotification(message, buttons) {
         .velocity({
             translateY: bannerText.parent().data('shown') ? 0 : [0, '-100%']
         }, {
-            easing: GLOBAL_EASE_OUT,
+            easing: EASE_OUT,
             display: 'block',
-            duration: GLOBALANIMATIONDURATION
+            duration: ANIMATION_DURATION
         })
         .data('shown', true);
 }
@@ -646,9 +647,9 @@ function hideNotification() {
         .velocity({
             translateY: '-100%'
         }, {
-            easing: GLOBAL_EASE_IN,
+            easing: EASE_IN,
             display: 'none',
-            duration: GLOBALANIMATIONDURATION / 4
+            duration: ANIMATION_DURATION / 4
         });
 }
 
@@ -692,8 +693,8 @@ function changeDisplayText(newDisplayText, style) {
                 opacity: 0,
                 scale: 0.5
             }, {
-                easing: GLOBAL_EASE_OUT,
-                duration: GLOBALANIMATIONDURATION,
+                easing: EASE_OUT,
+                duration: ANIMATION_DURATION,
                 queue: false,
                 display: 'inline-block',
                 complete: function() {
@@ -710,8 +711,8 @@ function changeDisplayText(newDisplayText, style) {
                 opacity: [1, 0],
                 scale: [1, 0.5]
             }, {
-                easing: GLOBAL_EASE_OUT,
-                duration: GLOBALANIMATIONDURATION,
+                easing: EASE_OUT,
+                duration: ANIMATION_DURATION,
                 queue: false,
                 display: 'inline-block'
             });
@@ -748,3 +749,4 @@ function GET(q,s) {
     var re = new RegExp('&amp;'+q+'=([^&amp;]*)','i');
     return (s = s.replace(/^\?/,'&amp;').match(re)) ? s = s[1] : s = '';
 }
+})();
