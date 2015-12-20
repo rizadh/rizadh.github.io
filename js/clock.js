@@ -56,7 +56,7 @@ function updateClock(startup) {
         }
 
         if (old_progress !== unit[1]) {
-            unit[0].velocity({
+            unit[0].velocity("stop").velocity({
                 rotateZ: unit[1]
             }, {
                 easing: easing,
