@@ -16,7 +16,7 @@ body {
     -webkit-user-select: none;
     // Prevent tap highlight on Webkit browsers
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-    -webkit-tap-highlight: transparent;
+    -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
 }
 
@@ -36,7 +36,7 @@ body {
     height: 20%;
 
     background-color: $secondary_color;
-    box-shadow: 0 0 0.2rem hsla(0, 0%, 0%, 0.5);
+    box-shadow: 0 0 0.1rem hsla(0, 0%, 0%, 0.5);
     z-index: 2;
 
     &.running #display-text:hover {
@@ -105,7 +105,7 @@ body {
         transition: background $resting_transition_time;
         cursor: pointer;
 
-        color: lighten($secondary_color, 10);
+        color: white;
 
         $intensity: 2.5;
 
@@ -141,12 +141,12 @@ body {
 
     &:hover {
         background-color: lighten($main_color, $intensity);
-        transition: stroke $hover_transition_time, background-color $hover_transition_time;
+        transition: background-color $hover_transition_time;
     }
 
     &:active {
         background-color: darken($main_color, $intensity);
-        transition: stroke $active_transition_time, background-color $active_transition_time;
+        transition: background-color $active_transition_time;
     }
 
     svg {

@@ -216,7 +216,7 @@ function startupAnimation() {
             opacity: 1
         }, {
             easing: EASE_OUT,
-            duration: startupDuration,
+            duration: startupDuration
         });
 
         // Animate display
