@@ -47,7 +47,6 @@ function updateClock(startup) {
     // Adjust animation parameters for startup
     var duration = startup ? 800 : 400;
     var easing = startup ? "easeOutExpo" : [100, 5];
-    var highest_progress = Math.max(hour_progress, minute_progress, second_progress);
 
     progress_array.forEach(function(unit, index) {
         var old_progress  = parseInt($.Velocity.hook(unit[0], "rotateZ"));
@@ -60,8 +59,7 @@ function updateClock(startup) {
                 rotateZ: unit[1]
             }, {
                 easing: easing,
-                // Duration of rotation depends on how far it has to go
-                duration: startup ? duration*unit[1]/highest_progress : duration
+                duration: duration
             });
         }
     });
