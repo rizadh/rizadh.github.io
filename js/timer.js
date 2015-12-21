@@ -491,7 +491,7 @@ function startTimer(resume, restore) {
             $('#keypad')
                 .velocity('stop')
                 .velocity({
-                    translateY: '20%',
+                    translateY: '10%',
                     opacity: 0
                 }, {
                     easing: EASE_OUT,
