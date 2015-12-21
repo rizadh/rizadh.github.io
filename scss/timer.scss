@@ -15,7 +15,9 @@ body {
     // Prevent text selection
     -webkit-user-select: none;
     // Prevent tap highlight on Webkit browsers
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
     -webkit-tap-highlight: transparent;
+    -webkit-touch-callout: none;
 }
 
 #content {
