@@ -141,7 +141,7 @@ body {
     height: 10%;
     cursor: pointer;
 
-    transition: stroke $resting_transition_time, background-color $resting_transition_time;
+    transition: background-color $resting_transition_time;
 
     $intensity: 2.5;
 
