@@ -64,7 +64,7 @@ $(function () {
 		var key = e.keyCode;
 		// Perform events depending on keycode
 		switch (key) {
-			// Backspace - delete a character from display
+		// Backspace - delete a character from display
 		case 8:
 			e.preventDefault();
 			if ($('#display').data('inputMode')) {
@@ -73,7 +73,7 @@ $(function () {
 			}
 			break;
 
-			// Enter - start or cancel timer
+		// Enter - start or cancel timer
 		case 13:
 			// Activate editing mode if not activated
 			if ($('#display').data('inputMode')) {
@@ -83,7 +83,7 @@ $(function () {
 			}
 			break;
 
-			// Escape - cancel timer
+		// Escape - cancel timer
 		case 27:
 			// Activate editing mode if not activated
 			if (!$('#display').data('inputMode')) {
@@ -91,7 +91,7 @@ $(function () {
 			}
 			break;
 
-			// Space - toggle keyboard help menu
+		// Space - toggle keyboard help menu
 		case 32:
 			if (!$('#display').data('inputMode')) {
 				togglePause();
@@ -100,7 +100,7 @@ $(function () {
 			}
 			break;
 
-			// 0 to 9 - input digits into display
+		// 0 to 9 - input digits into display
 		case 48:
 		case 49:
 		case 50:
