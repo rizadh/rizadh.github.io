@@ -53,15 +53,24 @@ $(function () {
 	});
 	$('#edit-button').click(editTime);
 	$('#display-text').click(togglePause);
-	$('#notification-banner').click(function (e) {
-		e.stopPropagation();
-		hideNotification();
-	});
+	$('#notification-banner').on('click', '.button', hideNotification);
 
 	// Enable keyboard input
 	$(document).on('keydown', function (e) {
 		// Get the keycode
 		var key = e.keyCode;
+		// Do not allow keyboard input if a notification is show
+		if ($('#notification-banner').data('shown')) {
+			switch (key) {
+			case 13:
+				$('#notification-banner .emphasize').click();
+				break;
+			case 27:
+				$('#notification-banner .alert').click();
+				break;
+			}
+			return false;
+		}
 		// Perform events depending on keycode
 		switch (key) {
 		// Backspace - delete a character from display
@@ -133,8 +142,10 @@ $(function () {
 	});
 
 	// Hide keyboard help when anything is tapped
-	$(document).click(function () {
-		toggleKeyboardHelp(false);
+	$(document).click(function (e) {
+		if (!$(e.target).hasClass('button')) {
+			toggleKeyboardHelp(false);
+		}
 		var touchDevice = localStorage.getItem('touch-device');
 		var suggestedMouse = localStorage.getItem('mouse-suggested');
 		var suggestedMouseSession = sessionStorage.getItem('mouse-suggested');
@@ -255,7 +266,7 @@ function askForRestore() {
 	var sureButton = {
 		text: 'Sure',
 		style: 'emphasize',
-		clickFunction: function (e) {
+		clickFunction: function () {
 			var progress = 1 - timeLeft() / durationSet;
 			if (timeLeft() > 0) {
 				$('#dial-ring path')
@@ -264,7 +275,6 @@ function askForRestore() {
 					.data('progress', progress);
 				startTimer(false, true);
 			} else {
-				e.stopPropagation();
 				showNotification(
 					'Too late, the timer has already ended', [{
 						text: 'Dismiss',
@@ -679,11 +689,7 @@ function togglePause() {
 /** Toggles keyboard */
 function toggleKeyboardHelp(forceState) {
 	var helpMenu = $('#keyboard-help');
-	if (arguments.length > 0) {
-		if (!!helpMenu.data('shown') === !forceState) {
-			toggleKeyboardHelp();
-		}
-	} else {
+	if (arguments.length === 0) {
 		var show = !helpMenu.data('shown');
 
 		helpMenu
@@ -698,11 +704,15 @@ function toggleKeyboardHelp(forceState) {
 				duration: (show ? ANIMATION_DURATION :
 					ANIMATION_DURATION / 4)
 			});
+
+	} else if (!!helpMenu.data('shown') === !forceState){
+		toggleKeyboardHelp();
 	}
 }
 
 /** Show a notification with given message and buttons */
 function showNotification(message, buttons) {
+	$("#content").css("pointer-events", "none");
 	var bannerText = $('#notification-banner span').text(message);
 	var button_wrapper = bannerText.siblings('div').empty();
 
@@ -729,6 +739,7 @@ function showNotification(message, buttons) {
 
 /** Hide any notifications that are present */
 function hideNotification() {
+	$("#content").css("pointer-events", "");
 	var banner = $('#notification-banner');
 	if (banner.data('shown')) {
 		$('#notification-banner')
