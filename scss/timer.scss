@@ -190,35 +190,50 @@ body {
 
     $keyboard_help_padding: 0.2rem;
 
-    .title {
-        margin: $keyboard_help_padding $keyboard_help_padding;
-        font-size: 0.625rem;
+    tr {
+        vertical-align: top;
+    }
+
+    .title td{
+        font-size: 0.5rem;
         text-align: center;
         color: white;
         text-transform: uppercase;
         font-family: 'roboto_condensedregular';
+        padding: $keyboard_help_padding;
     }
 
-    .shortcut {
-        margin: 0.1rem $keyboard_help_padding;
-        font-size: 0.5rem;
-        text-align: center;
+    .shortcut td {
+        font-size: 0.4rem;
+        text-align: left;
         color: transparentize($secondary_color, 0.25);
         text-transform: lowercase;
         font-family: 'roboto_condensedregular';
+        padding: 0.05rem $keyboard_help_padding;
+        padding-left: 0.1rem;
 
-        span {
+        &:last-child > span {
+            font-size: 0.75em;
+            opacity: 0.5;
+            vertical-align: top;
+        }
+
+        &:first-child {
+            padding: 0.05rem $keyboard_help_padding;
+            padding-right: 0.1rem;
             text-transform: uppercase;
             color: lighten($secondary_color, 10);
+            text-align: right;
         }
     }
 
-    .dismiss {
-        @extend .shortcut;
-        margin: $keyboard_help_padding $keyboard_help_padding;
+    .dismiss td {
         color: transparentize($secondary_color, 0.5);
         font-size: 0.3rem;
         text-transform: uppercase;
+        text-align: center;
+        font-family: 'roboto_condensedregular';
+        padding: $keyboard_help_padding;
     }
 }
 

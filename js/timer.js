@@ -19,7 +19,7 @@ $(function () {
 
 	// Change Backspce to Delete if on Mac or iOS devices
 	if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
-		$('#keyboard-help > .shortcut.delete > span').text('Delete');
+		$('#keyboard-help td.delete').text('Delete');
 	}
 
 	// Disable scrolling if running as full-screen iOS web app
