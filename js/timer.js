@@ -43,9 +43,9 @@ $(function () {
 	// Set click events
 	$('#keypad td').click(function () {
 		var keyValue = $(this).text();
-		if (keyValue == 'Clear') {
+		if (keyValue === 'Clear') {
 			setDisplayTime('000000');
-		} else if (keyValue == 'Start') {
+		} else if (keyValue === 'Start') {
 			startTimer();
 		} else {
 			addDigit(keyValue);
@@ -53,8 +53,7 @@ $(function () {
 	});
 	$('#edit-button').click(editTime);
 	$('#display-text').click(togglePause);
-	$('#notification-banner')
-		.on('click', '.button, .justmessage', hideNotification);
+	$('#notification-banner').on('click', '.button', hideNotification);
 
 	// Enable keyboard input
 	$(document).on('keydown', function (e) {
@@ -62,13 +61,17 @@ $(function () {
 		var key = e.keyCode;
 		// Do not allow keyboard input if a notification is show
 		if ($('#notification-banner').data('shown')) {
-			switch (key) {
-			case 13:
-				$('#notification-banner .emphasize').click();
-				break;
-			case 27:
-				$('#notification-banner .alert').click();
-				break;
+			if ($('#notification-banner div').text() !== '') {
+				switch (key) {
+					case 13:
+						$('#notification-banner .emphasize').click();
+						break;
+					case 27:
+						$('#notification-banner .alert').click();
+						break;
+				}
+			} else {
+				hideNotification();
 			}
 			return false;
 		}
@@ -469,7 +472,7 @@ function startTimer(resume, restore) {
 
 	// Limit seconds to less than 100 hours
 	if (totalSeconds === 0 && !resume && !restore) {
-		showNotification("Please enter a time first");
+		showNotification('Please enter a time first');
 	} else if (totalSeconds < 360000 || restore || resume) {
 		// Start dial motion and set state to timing mode
 		setTime(totalSeconds, resume || restore);
@@ -713,11 +716,11 @@ function toggleKeyboardHelp(forceState) {
 
 /** Show a notification with given message and buttons */
 function showNotification(message, buttons) {
-	$("#content").css("pointer-events", "none");
 	var bannerText = $('#notification-banner span').text(message);
 	var button_wrapper = bannerText.siblings('div').empty();
 
 	if (buttons) {
+		$('#content').css('pointer-events', 'none');
 		for (var i = buttons.length - 1; i >= 0; i--) {
 			var button = buttons[i];
 			$('<div></div>')
@@ -726,8 +729,6 @@ function showNotification(message, buttons) {
 				.click(button.clickFunction)
 				.prependTo(button_wrapper);
 		}
-	} else {
-		bannerText.addClass("justmessage");
 	}
 
 	bannerText.parent()
@@ -737,14 +738,23 @@ function showNotification(message, buttons) {
 		}, {
 			easing: EASE_OUT,
 			display: 'block',
-			duration: ANIMATION_DURATION
+			duration: ANIMATION_DURATION,
+			complete: function() {
+				if (buttons) {
+					$('#content').on('click.bannerhide', hideNotification);
+				} else {
+					$(document).on('click.bannerhide', hideNotification);
+				}
+			}
 		})
 		.data('shown', true);
 }
 
 /** Hide any notifications that are present */
 function hideNotification() {
-	$("#content").css("pointer-events", "");
+	$(document).off('click.bannerhide', hideNotification);
+	$('#content').off('click.bannerhide', hideNotification);
+	$('#content').css('pointer-events', '');
 	var banner = $('#notification-banner');
 	if (banner.data('shown')) {
 		$('#notification-banner')

@@ -258,10 +258,6 @@ body {
 
     @include translucent-dark(border-bottom);
 
-    .justmessage {
-        cursor: pointer;
-    }
-
     .button {
         display: inline-block;
         text-transform: uppercase;
