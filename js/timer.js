@@ -185,7 +185,7 @@ $(function () {
 	// Adjust font-sizes when viewport dimensions change
 	$(window).on('load resize orientationChange', function () {
 		// Maximize size of text
-		var maxLength = Math.min($(window).height(), $(window).width()*1.15);
+		var maxLength = Math.min($(window).height(), $(window).width()*1.5);
 		$('html').css('font-size', maxLength / 9);
 	});
 });
@@ -331,7 +331,7 @@ function validTimeString(timeString) {
  */
 function setDisplayTime(text, actual, fancy) {
 	var display = $('#display-text');
-	var newDisplayText = display.clone(true);
+	var newDisplayText = display.clone(true).css('font-size', '1em');
 	if (actual) {
 		newDisplayText
 			.data('currentTime', '000000')
@@ -377,8 +377,16 @@ function setDisplayTime(text, actual, fancy) {
 				}
 			}
 			var newTime = timeArray.join(' ');
+			if ($(window).height()*0.9 > $(window).width()) {
+				var newFontSize = Math.min(8/newTime.length, 1) + 'em';
+				newDisplayText.css('font-size', newFontSize);
+				newDisplayText.data('font_size', newFontSize);
+			} else {
+				newDisplayText.data('font_size', '1em');
+			}
+			var full_refresh = display.data('font_size') !== newDisplayText.data('font_size');
 			newDisplayText.text(newTime);
-			changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
+			changeDisplayText(newDisplayText, fancy ? 'fancy' : '', full_refresh);
 		}
 	}
 }
@@ -388,7 +396,7 @@ function setDisplayTime(text, actual, fancy) {
  * @param (jQuery) newDisplayText - The new #display element
  * @param {string} style - The style of animation to use when changing text
  */
-function changeDisplayText(newDisplayText, style) {
+function changeDisplayText(newDisplayText, style, full_refresh) {
 	$('#display-text-old').remove();
 	var displayText = $('#display-text');
 	if (style === 'fancy') {
@@ -396,7 +404,7 @@ function changeDisplayText(newDisplayText, style) {
 		var newDisplay_html = newDisplayText.text();
 		var display_htmlArray = [];
 		var newDisplay_htmlArray = [];
-		if (display_html.length === newDisplay_html.length) {
+		if (display_html.length === newDisplay_html.length && !full_refresh) {
 			for (var i = 0; i < display_html.length; i++) {
 				if (display_html[i] === newDisplay_html[i]) {
 					display_htmlArray.push(display_html[i]);
