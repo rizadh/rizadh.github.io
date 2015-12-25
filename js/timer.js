@@ -74,60 +74,60 @@ $(function () {
 		}
 		// Perform events depending on keycode
 		switch (key) {
-		// Backspace - delete a character from display
-		case 8:
-			e.preventDefault();
-			if ($('#display').data('inputMode')) {
-				var deletedTime = ('0' + getDisplayTime()).slice(-7, -1);
-				setDisplayTime(deletedTime);
-			}
-			break;
-
-		// Enter - start or cancel timer
-		case 13:
-			// Activate editing mode if not activated
-			if ($('#display').data('inputMode')) {
-				startTimer();
-			} else {
-				editTime();
-			}
-			break;
-
-		// Escape - cancel timer
-		case 27:
-			// Activate editing mode if not activated
-			if (!$('#display').data('inputMode')) {
-				editTime();
-			}
-			break;
-
-		// Space - toggle keyboard help menu
-		case 32:
-			if (!$('#display').data('inputMode')) {
-				togglePause();
-			} else {
-				toggleKeyboardHelp();
-			}
-			break;
-
-		// 0 to 9 - input digits into display
-		case 48:
-		case 49:
-		case 50:
-		case 51:
-		case 52:
-		case 53:
-		case 54:
-		case 55:
-		case 56:
-		case 57:
-			// Activate editing mode if not activated
-			if ($('#display').data('inputMode')) {
-				// Obtain entered character
-				var keyValue = String.fromCharCode(key);
-				addDigit(keyValue);
+			// Backspace - delete a character from display
+			case 8:
+				e.preventDefault();
+				if ($('#display').data('inputMode')) {
+					var deletedTime = ('0' + getDisplayTime()).slice(-7, -1);
+					setDisplayTime(deletedTime);
+				}
 				break;
-			}
+
+			// Enter - start or cancel timer
+			case 13:
+				// Activate editing mode if not activated
+				if ($('#display').data('inputMode')) {
+					startTimer();
+				} else {
+					editTime();
+				}
+				break;
+
+			// Escape - cancel timer
+			case 27:
+				// Activate editing mode if not activated
+				if (!$('#display').data('inputMode')) {
+					editTime();
+				}
+				break;
+
+			// Space - toggle keyboard help menu
+			case 32:
+				if (!$('#display').data('inputMode')) {
+					togglePause();
+				} else {
+					toggleKeyboardHelp();
+				}
+				break;
+
+			// 0 to 9 - input digits into display
+			case 48:
+			case 49:
+			case 50:
+			case 51:
+			case 52:
+			case 53:
+			case 54:
+			case 55:
+			case 56:
+			case 57:
+				// Activate editing mode if not activated
+				if ($('#display').data('inputMode')) {
+					// Obtain entered character
+					var keyValue = String.fromCharCode(key);
+					addDigit(keyValue);
+					break;
+				}
 
 		}
 
