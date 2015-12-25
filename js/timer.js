@@ -696,7 +696,7 @@ function toggleKeyboardHelp(forceState) {
 			.data('shown', show)
 			.velocity('stop')
 			.velocity({
-				scale: (show ? [1, 0] : [0, 1]),
+				scale: (show ? [1, 0] : [0.5, 1]),
 				opacity: (show ? [1, 0] : [0, 1])
 			}, {
 				easing: show ? EASE_OUT : EASE_IN,

@@ -1,17 +1,27 @@
 @import "partials/_normalize";
 @import "partials/_roboto";
 
-$theme_hue: 180;
+$theme-hue: 180;
 
-$main_color: hsla($theme_hue, 80%, 40%, 1);
-$secondary_color: hsla($theme_hue, 40%, 80%, 1);
+$main-color: hsla($theme-hue, 80%, 40%, 1);
+$secondary-color: hsla($theme-hue, 40%, 80%, 1);
 
-$resting_transition_time: 0.2s;
-$hover_transition_time: 0.1s;
-$active_transition_time: 0;
+$resting-transition-time: 0.2s;
+$hover-transition-time: 0.1s;
+$active-transition-time: 0;
+
+$translucent-dark-background: hsla($theme-hue, 40%, 20%, 0.9);
+$translucence-blur: blur(5px);
+$translucent-dark-border: 0.02rem solid hsla(0, 0%, 0%, 0.2);
+
+@mixin translucent-dark($border-location) {
+    background-color: $translucent-dark-background;
+    -webkit-backdrop-filter: $translucence-blur;
+    #{$border-location}: 0.02rem solid hsla(0, 0%, 0%, 0.2);
+}
 
 body {
-    background-color: $main_color;
+    background-color: $main-color;
 }
 
 *, *:hover, *:active, *:focus {
@@ -41,19 +51,19 @@ body {
     width: 100%;
     height: 20%;
 
-    background-color: $secondary_color;
+    background-color: $secondary-color;
     box-shadow: 0 0 0.1rem hsla(0, 0%, 0%, 0.5);
     z-index: 2;
 
     &.running #display-text:hover {
         cursor: pointer;
-        color: darken($main_color, 5);
-        transition: color $hover_transition_time;
+        color: darken($main-color, 5);
+        transition: color $hover-transition-time;
     }
 
     &.running #display-text:active {
-        color: darken($main_color, 15);
-        transition: color $active_transition_time;
+        color: darken($main-color, 15);
+        transition: color $active-transition-time;
     }
 }
 
@@ -63,12 +73,12 @@ body {
     top: 50%;
     width: 100%;
     text-align: center;
-    transition: color $resting_transition_time;
+    transition: color $resting-transition-time;
 
     text-align: center;
     font-family: 'roboto_condensedregular';
 
-    color: darken($main_color, 10);
+    color: darken($main-color, 10);
 }
 
 #dial-ring {
@@ -79,17 +89,17 @@ body {
 
     fill: none;
 
-    $path_color: darken($main_color, 10);
-    $stroke_width: 2;
+    $path-color: darken($main-color, 10);
+    $stroke-width: 2;
 
     path {
-        stroke-width: $stroke_width;
-        stroke: $path_color;
+        stroke-width: $stroke-width;
+        stroke: $path-color;
     }
 
     circle {
-        stroke-width: $stroke_width;
-        stroke: rgba($path_color , 0.2);
+        stroke-width: $stroke-width;
+        stroke: rgba($path-color , 0.2);
     }
 }
 
@@ -108,7 +118,7 @@ body {
         width: 33.33%;
         text-align: center;
         vertical-align: middle;
-        transition: background $resting_transition_time;
+        transition: background $resting-transition-time;
         cursor: pointer;
 
         color: white;
@@ -116,13 +126,13 @@ body {
         $intensity: 2.5;
 
         &:hover {
-            background-color: lighten($main_color, $intensity);
-            transition: background $hover_transition_time;
+            background-color: lighten($main-color, $intensity);
+            transition: background $hover-transition-time;
         }
 
         &:active {
-            background-color: darken($main_color, $intensity);
-            transition: background $active_transition_time;
+            background-color: darken($main-color, $intensity);
+            transition: background $active-transition-time;
         }
 
         &.text-cell {
@@ -141,18 +151,18 @@ body {
     height: 10%;
     cursor: pointer;
 
-    transition: background-color $resting_transition_time;
+    transition: background-color $resting-transition-time;
 
     $intensity: 2.5;
 
     &:hover {
-        background-color: lighten($main_color, $intensity);
-        transition: background-color $hover_transition_time;
+        background-color: lighten($main-color, $intensity);
+        transition: background-color $hover-transition-time;
     }
 
     &:active {
-        background-color: darken($main_color, $intensity);
-        transition: background-color $active_transition_time;
+        background-color: darken($main-color, $intensity);
+        transition: background-color $active-transition-time;
     }
 
     svg {
@@ -161,7 +171,7 @@ body {
         height: 100%;
         stroke-width: 19.5;
         fill: none;
-        stroke: lighten($secondary_color, 10);
+        stroke: lighten($secondary-color, 10);
     }
 }
 
@@ -182,17 +192,10 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: auto;
 
-    background-color: hsla($theme_hue, 40%, 20%, 0.9);
-    -webkit-backdrop-filter: blur(5px);
-    border: 0.025rem solid hsla(0, 0%, 0%, 0.2);
+    @include translucent-dark(border);
+    border-radius: 0.2rem;
 
-    border-radius: 0.1rem;
-
-    $keyboard_help_padding: 0.2rem;
-
-    tr {
-        vertical-align: top;
-    }
+    $keyboard-help-padding: 0.2rem;
 
     .title td{
         font-size: 0.5rem;
@@ -200,16 +203,17 @@ body {
         color: white;
         text-transform: uppercase;
         font-family: 'roboto_condensedregular';
-        padding: $keyboard_help_padding;
+        padding: $keyboard-help-padding;
     }
 
     .shortcut td {
+        vertical-align: top;
         font-size: 0.4rem;
         text-align: left;
-        color: transparentize($secondary_color, 0.25);
+        color: $secondary-color;
         text-transform: lowercase;
         font-family: 'roboto_condensedregular';
-        padding: 0.05rem $keyboard_help_padding;
+        padding: 0.05rem $keyboard-help-padding;
         padding-left: 0.1rem;
 
         &:last-child > span {
@@ -219,21 +223,21 @@ body {
         }
 
         &:first-child {
-            padding: 0.05rem $keyboard_help_padding;
+            padding: 0.05rem $keyboard-help-padding;
             padding-right: 0.1rem;
             text-transform: uppercase;
-            color: lighten($secondary_color, 10);
+            color: $secondary-color;
             text-align: right;
         }
     }
 
     .dismiss td {
-        color: transparentize($secondary_color, 0.5);
+        color: transparentize($secondary-color, 0.5);
         font-size: 0.3rem;
         text-transform: uppercase;
         text-align: center;
         font-family: 'roboto_condensedregular';
-        padding: $keyboard_help_padding;
+        padding: $keyboard-help-padding;
     }
 }
 
@@ -245,14 +249,12 @@ body {
     padding: 0.2rem;
     box-sizing: border-box;
 
-    border-bottom: 0.025rem solid hsla(0, 0%, 0%, 0.2);
     font-size: 0.4rem;
     text-align: center;
     color: white;
     font-family: 'roboto_condensedregular';
 
-    background-color: hsla($theme_hue, 40%, 20%, 0.8);
-    -webkit-backdrop-filter: blur(0.1rem);
+    @include translucent-dark(border-bottom);
 
     .button {
         display: inline-block;
@@ -268,10 +270,10 @@ body {
     }
 
     .normal {
-        color: transparentize($secondary_color, 0.25);
+        color: transparentize($secondary-color, 0.25);
     }
 
     .emphasize {
-        color: lighten($main_color, 10);
+        color: lighten($main-color, 10);
     }
 }
