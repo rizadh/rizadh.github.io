@@ -480,13 +480,14 @@ function startTimer(resume, restore) {
 		$('#display').addClass('running');
 
 		if (!resume) {
-			// Shrink display
+			// Expand display
 			$('#display')
 				.velocity('stop')
 				.velocity({
 					height: '90%',
 					opacity: 1,
-					fontSize: '1em'
+					fontSize: '1em',
+					boxShadowBlur: '0.2rem'
 				}, {
 					duration: ANIMATION_DURATION,
 					easing: EASE_OUT
@@ -625,7 +626,8 @@ function editTime() {
 	$('#display')
 		.velocity('stop')
 		.velocity({
-			height: '20%'
+			height: '20%',
+			boxShadowBlur: '0.1rem'
 		}, {
 			duration: ANIMATION_DURATION,
 			easing: EASE_OUT,
