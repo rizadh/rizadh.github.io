@@ -53,7 +53,7 @@ $(function () {
 	});
 	$('#edit-button').click(editTime);
 	$('#display-text').click(togglePause);
-	$('#notification-banner').on('click', '.button', hideNotification);
+	$('#notification-banner').on('click', '.button, .justmessage', hideNotification);
 
 	// Enable keyboard input
 	$(document).on('keydown', function (e) {
@@ -181,7 +181,7 @@ $(function () {
 	// Adjust font-sizes when viewport dimensions change
 	$(window).on('load resize orientationChange', function () {
 		// Maximize size of text
-		var maxLength = Math.min($(window).height(), $(window).width());
+		var maxLength = Math.min($(window).height(), $(window).width()*1.15);
 		$('html').css('font-size', maxLength / 9);
 	});
 });
@@ -468,7 +468,7 @@ function startTimer(resume, restore) {
 
 	// Limit seconds to less than 100 hours
 	if (totalSeconds === 0 && !resume && !restore) {
-		setDisplayTime('No time entered', true, true);
+		showNotification("Please enter a time first");
 	} else if (totalSeconds < 360000 || restore || resume) {
 		// Start dial motion and set state to timing mode
 		setTime(totalSeconds, resume || restore);
@@ -716,13 +716,17 @@ function showNotification(message, buttons) {
 	var bannerText = $('#notification-banner span').text(message);
 	var button_wrapper = bannerText.siblings('div').empty();
 
-	for (var i = buttons.length - 1; i >= 0; i--) {
-		var button = buttons[i];
-		$('<div></div>')
-			.text(button.text)
-			.addClass(button.style + ' button')
-			.click(button.clickFunction)
-			.prependTo(button_wrapper);
+	if (buttons) {
+		for (var i = buttons.length - 1; i >= 0; i--) {
+			var button = buttons[i];
+			$('<div></div>')
+				.text(button.text)
+				.addClass(button.style + ' button')
+				.click(button.clickFunction)
+				.prependTo(button_wrapper);
+		}
+	} else {
+		bannerText.addClass("justmessage");
 	}
 
 	bannerText.parent()

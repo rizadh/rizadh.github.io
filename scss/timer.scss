@@ -17,7 +17,6 @@ $translucent-dark-border: 0.02rem solid hsla(0, 0%, 0%, 0.2);
 @mixin translucent-dark($border-location) {
     background-color: $translucent-dark-background;
     -webkit-backdrop-filter: $translucence-blur;
-    #{$border-location}: 0.02rem solid hsla(0, 0%, 0%, 0.2);
 }
 
 body {
@@ -179,7 +178,7 @@ body {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 90%;
+    width: 95%;
     height: 90%;
     z-index: 4;
     pointer-events: none;
@@ -187,10 +186,13 @@ body {
 
 #keyboard-help {
     display: none;
+    max-width: 100%;
+    max-height: 100%;
     position: absolute;
     cursor: pointer;
     transform: translate(-50%, -50%);
     pointer-events: auto;
+    overflow: auto;
 
     @include translucent-dark(border);
     border-radius: 0.2rem;
@@ -255,6 +257,10 @@ body {
     font-family: 'roboto_condensedregular';
 
     @include translucent-dark(border-bottom);
+
+    .justmessage {
+        cursor: pointer;
+    }
 
     .button {
         display: inline-block;
