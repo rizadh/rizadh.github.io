@@ -681,7 +681,7 @@ function togglePause() {
 		} else {
 			alert('Timer is not paused');
 			var ringClasses = $('#dial-ring path').attr('class');
-			var isAnimating = ~ringClasses.indexOf('velocity-animating');
+			var isAnimating = ~(ringClasses.indexOf('velocity-animating'));
 			alert('Fancy bitwise: ' + isAnimating);
 			if (isAnimating) {
 				alert('Timer is animating');
