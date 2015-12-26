@@ -404,37 +404,29 @@ function changeDisplayText(newDisplayText, style) {
 	$('#display-text-old').remove();
 	var displayText = $('#display-text');
 	if (style === 'fancy') {
-		var display_html = displayText.text();
-		var newDisplay_html = newDisplayText.text();
-		var display_htmlArray = [];
-		var newDisplay_htmlArray = [];
-		if (display_html.length === newDisplay_html.length) {
-			for (var i = 0; i < display_html.length; i++) {
-				if (display_html[i] === newDisplay_html[i]) {
-					display_htmlArray.push(display_html[i]);
-					newDisplay_htmlArray.push(newDisplay_html[i]);
+		var displayHTML = displayText.text();
+		var newDisplayHTML = newDisplayText.text();
+		var displayNewHTML = '';
+		var newDisplayNewHTML = '';
+		if (displayHTML.length === newDisplayHTML.length) {
+			for (var i = 0; i < displayHTML.length; i++) {
+				if (displayHTML[i] === newDisplayHTML[i]) {
+					displayNewHTML += displayHTML[i];
+					newDisplayNewHTML += newDisplayHTML[i];
 				} else {
-					display_htmlArray.push('<span>');
-					display_htmlArray.push(display_html[i]);
-					display_htmlArray.push('</span>');
-					newDisplay_htmlArray.push('<span>');
-					newDisplay_htmlArray.push(newDisplay_html[i]);
-					newDisplay_htmlArray.push('</span>');
+					displayNewHTML += '<span>' + displayHTML[i] + '</span>';
+					newDisplayNewHTML += '<span>' + newDisplayHTML[i] + '</span>';
 				}
 			}
 		} else {
-			display_htmlArray.push('<span>');
-			display_htmlArray.push(display_html);
-			display_htmlArray.push('</span>');
-			newDisplay_htmlArray.push('<span>');
-			newDisplay_htmlArray.push(newDisplay_html);
-			newDisplay_htmlArray.push('</span>');
+			displayNewHTML += '<span>' + displayHTML + '</span>';
+			newDisplayNewHTML += '<span>' + newDisplayHTML + '</span>';
 		}
 
 		var replaceSpan = /<\/span><span>/gi;
 		displayText
 			.attr('id', 'display-text-old')
-			.html(display_htmlArray.join('').replace(replaceSpan, ''))
+			.html(displayNewHTML.replace(replaceSpan, ''))
 			.children('span')
 			.velocity({
 				opacity: 0,
@@ -450,7 +442,7 @@ function changeDisplayText(newDisplayText, style) {
 			});
 
 		newDisplayText
-			.html(newDisplay_htmlArray.join('').replace(replaceSpan, ''))
+			.html(newDisplayNewHTML.replace(replaceSpan, ''))
 			.appendTo('#display')
 			.children('span')
 			.css('opacity', 0)
