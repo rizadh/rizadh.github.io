@@ -678,26 +678,19 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
-		} else {
-			alert('Timer is not paused');
-			var ringClasses = $('#dial-ring path').attr('class');
-			var isAnimating = ~(ringClasses.indexOf('velocity-animating'));
-			alert('Fancy bitwise: ' + isAnimating);
-			if (isAnimating) {
-				alert('Timer is animating');
-				$('#dial-ring path').velocity('stop');
-				setDisplayTime('Paused', false, true);
-				$('#display').data('paused', true);
-				$('#dial-ring')
-					.velocity('stop')
-					.velocity({
-						opacity: 0.25
-					}, {
-						easing: EASE_OUT,
-						duration: ANIMATION_DURATION
-					});
-
-			}
+		} else if ($('#dial-ring path').attr('class').indexOf('velocity-animating') >= 0){
+			alert('Timer is animating');
+			$('#dial-ring path').velocity('stop');
+			setDisplayTime('Paused', false, true);
+			$('#display').data('paused', true);
+			$('#dial-ring')
+				.velocity('stop')
+				.velocity({
+					opacity: 0.25
+				}, {
+					easing: EASE_OUT,
+					duration: ANIMATION_DURATION
+				});
 		}
 	}
 }
