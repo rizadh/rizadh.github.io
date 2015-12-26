@@ -663,6 +663,8 @@ function editTime() {
 
 /** Toggles pause state of timer */
 function togglePause() {
+	alert("Toggle called");
+	alert(!$('#display').data('inputMode'));
 	if (!$('#display').data('inputMode')) {
 		if ($('#display').data('paused')) {
 			startTimer(true);
