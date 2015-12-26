@@ -663,7 +663,12 @@ function editTime() {
 
 /** Toggles pause state of timer */
 function togglePause() {
-	alert($('#dial-ring path').attr('class').indexOf('velocity-animating') >= 0);
+	try {
+		alert($('#dial-ring path').attr('class').indexOf('velocity-animating') >= 0);
+	} catch (err) {
+		alert(err.message);
+	}
+
 	alert('Toggle called');
 	if (!$('#display').data('inputMode')) {
 		alert('Timer is expanded');
