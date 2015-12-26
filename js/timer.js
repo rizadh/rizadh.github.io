@@ -360,34 +360,38 @@ function setDisplayTime(text, actual, fancy) {
 			.text(text)
 			.css('font-family', 'robotoregular');
 		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
-	} else {
-		if (display.data('currentTime') !== text || display.text() === 'Paused') {
-			newDisplayText
-				.data('currentTime', text)
-				.css('font-family', 'robotoregular');
-			var timeArray = [];
-			var unitArray = ['h', 'm', 's'];
-			for (var i = 0; i < 3; i++) {
-				var timeValue = text.slice(2 * i, 2 * i + 2);
-				if (timeValue > 0 || timeArray[0] || i === 2) {
-					if (timeValue < 10 && !timeArray[0]) {
-						timeValue = timeValue.slice(-1);
-					}
-					timeArray.push(timeValue + unitArray[i]);
+	} else if (display.data('currentTime') !== text ||
+		display.text() === 'Paused') {
+		newDisplayText
+			.data('currentTime', text)
+			.css('font-family', 'robotoregular');
+		var timeArray = [];
+		var unitArray = ['h', 'm', 's'];
+		for (var i = 0; i < 3; i++) {
+			var timeValue = text.slice(2 * i, 2 * i + 2);
+			if (timeValue > 0 || timeArray[0] || i === 2) {
+				if (timeValue < 10 && !timeArray[0]) {
+					timeValue = timeValue.slice(-1);
 				}
+				timeArray.push(timeValue + unitArray[i]);
 			}
-			var newTime = timeArray.join(' ');
-			if ($(window).height()*0.9 > $(window).width()) {
-				var newFontSize = Math.min(8/newTime.length, 1) + 'em';
-				newDisplayText.css('font-size', newFontSize);
-				newDisplayText.data('font_size', newFontSize);
-			} else {
-				newDisplayText.data('font_size', '1em');
-			}
-			var full_refresh = display.data('font_size') !== newDisplayText.data('font_size');
-			newDisplayText.text(newTime);
-			changeDisplayText(newDisplayText, fancy ? 'fancy' : '', full_refresh);
 		}
+		var newTime = timeArray.join(' ');
+		if ($(window).height()*0.9 > $(window).width()) {
+			var newFontSize;
+			if ($(window).height() < $(window).width()*1.5) {
+				var lowerBound = 1/0.9; // Max size
+				var upperBound = 1.5; // Min size
+				var ratio = $(window).height() / $(window).width();
+				var weight = (upperBound - ratio) / (upperBound - lowerBound);
+				newFontSize = Math.min(8/newTime.length*(1-weight)+1*(weight), 1);
+			} else {
+				newFontSize = Math.min(8/newTime.length, 1);
+			}
+			newDisplayText.css('font-size', newFontSize + 'em');
+		}
+		newDisplayText.text(newTime);
+		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
 	}
 }
 
@@ -396,7 +400,7 @@ function setDisplayTime(text, actual, fancy) {
  * @param (jQuery) newDisplayText - The new #display element
  * @param {string} style - The style of animation to use when changing text
  */
-function changeDisplayText(newDisplayText, style, full_refresh) {
+function changeDisplayText(newDisplayText, style) {
 	$('#display-text-old').remove();
 	var displayText = $('#display-text');
 	if (style === 'fancy') {
@@ -404,7 +408,7 @@ function changeDisplayText(newDisplayText, style, full_refresh) {
 		var newDisplay_html = newDisplayText.text();
 		var display_htmlArray = [];
 		var newDisplay_htmlArray = [];
-		if (display_html.length === newDisplay_html.length && !full_refresh) {
+		if (display_html.length === newDisplay_html.length) {
 			for (var i = 0; i < display_html.length; i++) {
 				if (display_html[i] === newDisplay_html[i]) {
 					display_htmlArray.push(display_html[i]);
