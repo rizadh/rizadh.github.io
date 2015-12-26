@@ -664,7 +664,7 @@ function editTime() {
 /** Toggles pause state of timer */
 function togglePause() {
 	try {
-		alert($('#dial-ring path').attr('class').indexOf('velocity-animating') >= 0);
+		//alert($('#dial-ring path').attr('class').indexOf('velocity-animating') >= 0);
 	} catch (err) {
 		alert(err.message);
 	}
