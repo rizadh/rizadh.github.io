@@ -663,17 +663,8 @@ function editTime() {
 
 /** Toggles pause state of timer */
 function togglePause() {
-	try {
-		//alert($('#dial-ring path').attr('class').indexOf('velocity-animating') >= 0);
-	} catch (err) {
-		alert(err.message);
-	}
-
-	alert('Toggle called');
 	if (!$('#display').data('inputMode')) {
-		alert('Timer is expanded');
 		if ($('#display').data('paused')) {
-			alert('Timer is paused');
 			startTimer(true);
 			$('#display').data('paused', false);
 			$('#dial-ring')
@@ -684,8 +675,7 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
-		} else if ($('#dial-ring path').attr('class').indexOf('velocity-animating') >= 0){
-			alert('Timer is animating');
+		} else if ($('#display').hasClass('running')){
 			$('#dial-ring path').velocity('stop');
 			setDisplayTime('Paused', false, true);
 			$('#display').data('paused', true);
