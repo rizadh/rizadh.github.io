@@ -660,6 +660,7 @@ function editTime() {
 		.velocity('stop')
 		.velocity('fadeOut', 100);
 }
+
 /** Toggles pause state of timer */
 function togglePause() {
 	if (!$('#display').data('inputMode')) {
