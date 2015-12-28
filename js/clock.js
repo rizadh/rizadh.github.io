@@ -12,7 +12,7 @@ function updateClock(startup) {
     var seconds = date.getSeconds();
 
     // Convert 24-hour to 12-hour time
-    hours = hours > 12 ? hours - 12 : hours;
+    if (hours > 12) hours -= 12;
 
     // Get progress of each hand around clock
     var hour_progress = 30*hours;
@@ -41,7 +41,7 @@ function updateClock(startup) {
         }, {
             easing: 'easeOutExpo',
             duration: 800
-        })
+        });
     }
 
     // Adjust animation parameters for startup
