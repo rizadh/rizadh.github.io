@@ -41,7 +41,7 @@ $(function () {
 	setDisplayTime('');
 
 	// Set click events
-	$('#keypad td').click(function () {
+	$('#keypad').on('click', 'td', function () {
 		var keyValue = $(this).text();
 		if (keyValue === 'Clear') {
 			setDisplayTime('000000');
@@ -52,7 +52,7 @@ $(function () {
 		}
 	});
 	$('#edit-button').click(editTime);
-	$('#display-text').click(togglePause);
+	$('#display').on('click', '#display-text', togglePause);
 	$('#notification-banner').on('click', '.button', hideNotification);
 
 	// Enable keyboard input
@@ -443,7 +443,6 @@ function changeDisplayText(newDisplayText, style) {
 
 		newDisplayText
 			.html(newDisplayNewHTML.replace(replaceSpan, ''))
-			.appendTo('#display')
 			.children('span')
 			.css('opacity', 0)
 			.velocity({
@@ -455,6 +454,7 @@ function changeDisplayText(newDisplayText, style) {
 				queue: false,
 				display: 'inline-block'
 			});
+		newDisplayText.appendTo('#display')
 	} else {
 		displayText.remove();
 		newDisplayText.appendTo('#display');
