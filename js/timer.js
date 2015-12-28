@@ -660,7 +660,6 @@ function editTime() {
 		.velocity('stop')
 		.velocity('fadeOut', 100);
 }
-
 /** Toggles pause state of timer */
 function togglePause() {
 	if (!$('#display').data('inputMode')) {
@@ -675,23 +674,18 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
-		} else {
-			var ringClasses = $('#dial-ring path').attr('class');
-			var isAnimating = ~ringClasses.indexOf('velocity-animating');
-			if (isAnimating) {
-				$('#dial-ring path').velocity('stop');
-				setDisplayTime('Paused', false, true);
-				$('#display').data('paused', true);
-				$('#dial-ring')
-					.velocity('stop')
-					.velocity({
-						opacity: 0.25
-					}, {
-						easing: EASE_OUT,
-						duration: ANIMATION_DURATION
-					});
-
-			}
+		} else if ($('#display').hasClass('running')) {
+			$('#dial-ring path').velocity('stop');
+			setDisplayTime('Paused', false, true);
+			$('#display').data('paused', true);
+			$('#dial-ring')
+				.velocity('stop')
+				.velocity({
+					opacity: 0.25
+				}, {
+					easing: EASE_OUT,
+					duration: ANIMATION_DURATION
+				});
 		}
 	}
 }
