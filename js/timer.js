@@ -140,13 +140,13 @@ $(function () {
 	}
 
 	// Clear display and show default message
-	setDisplayTime('');
+	$('#display-text').data('currentTime', '000000')
 
 	// Set click events
 	$('#keypad').on('click', 'td', function () {
 		var keyValue = $(this).text();
 		if (keyValue === 'Clear') {
-			setDisplayTime('000000');
+			setDisplayTime('');
 		} else if (keyValue === 'Start') {
 			startTimer();
 		} else {
@@ -298,9 +298,8 @@ $(function () {
  * Returns the value of the display.
  * @param {boolean} actual - True if the actual text of the display is wanted.
  */
-function getDisplayTime(actual) {
-	var display = $('#display-text');
-	return actual ? display.text() : display.data('currentTime');
+function getDisplayTime() {
+	return $('#display-text').data('currentTime');
 }
 
 /** Check if the supplied number represents a displayable amount of time */
@@ -319,21 +318,10 @@ function validTimeString(timeString) {
  *                           specified value or if parsing is applied first
  * @param {boolean} fancy - Determines whether fancy animation is used
  */
-function setDisplayTime(text, actual, fancy) {
+function setDisplayTime(text, fancy) {
 	var display = $('#display-text');
 	var newDisplayText = display.clone(true).css('font-size', '1em');
-	if (actual) {
-		newDisplayText
-			.data('currentTime', '000000')
-			.text(text)
-			.css('font-family', 'roboto_condensedregular');
-		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
-	} else if (text === '') {
-		display
-			.data('currentTime', '000000')
-			.text('Enter a time')
-			.css('font-family', 'roboto_condensedregular');
-	} else if (text === '000000') {
+	if (text === '000000' || text === '') {
 		newDisplayText
 			.data('currentTime', '000000')
 			.text('0s')
@@ -524,7 +512,9 @@ function startTimer(resume, restore) {
 				});
 		}
 	} else {
-		setDisplayTime('Time too high', true, true);
+		showNotification('The time entered was too high. Enter a time \
+		less than 100 hours');
+		setDisplayTime('');
 	}
 
 
@@ -571,11 +561,11 @@ function setTime(sec, resume) {
 			var times = [hours, minutes, seconds];
 			if (r !== 0) {
 				// Send time text to display
-				setDisplayTime(times.join(''), false, true);
+				setDisplayTime(times.join(''), true);
 			}
 		},
 		complete: function () {
-			setDisplayTime('Done', false, true);
+			setDisplayTime('Done', true);
 			$('#display').removeClass('running');
 			localStorage.setItem('timeStarted', 0);
 			localStorage.setItem('durationSet', 0);
@@ -610,7 +600,7 @@ function setDial(dial, arcRadius, progress) {
 
 /** Activates input mode */
 function editTime() {
-	setDisplayTime(getDisplayTime(), false, true);
+	setDisplayTime(getDisplayTime(), true);
 	$('#display').data('inputMode', true).data('paused', false);
 	$('#display').removeClass('running');
 	localStorage.setItem('timeStarted', 0);
@@ -667,7 +657,7 @@ function togglePause() {
 				});
 		} else if ($('#display').hasClass('running')) {
 			$('#dial-ring path').velocity('stop');
-			setDisplayTime('Paused', false, true);
+			setDisplayTime('Paused', true);
 			$('#display').data('paused', true);
 			$('#dial-ring')
 				.velocity('stop')
