@@ -53,10 +53,13 @@ $(function () {
 		$.Velocity.hook(keypad, 'opacity', '0');
 		$.Velocity.hook(display, 'height', '90%');
 		$.Velocity.hook(display, 'boxShadowblur', '0.2rem');
+		$.Velocity.mock = 2;
 		startTimer();
+		$.Velocity.mock = 1;
 	} else {
 		$.Velocity.hook(keypadRows, 'opacity', '0');
 		$.Velocity.hook(keypadRows, 'translateY', '-10%');
+		$.Velocity.hook(displayText, 'translateY', '-100%');
 
 		// Create slideIn effect for keypad
 		$.Velocity.RegisterEffect('transition.slideIn', {
@@ -69,12 +72,21 @@ $(function () {
 		});
 
 		// Animate display
+		displayText.velocity({
+			translateY: '-50%',
+			opacity: 1
+		}, {
+			easing: EASE_OUT,
+			duration: ANIMATION_DURATION * 2,
+		});
+
+		// Animate display
 		display.velocity({
 			translateY: 0,
 			opacity: 1
 		}, {
 			easing: EASE_OUT,
-			duration: ANIMATION_DURATION,
+			duration: ANIMATION_DURATION * 2,
 			complete: function() {
 				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
 				var durationSet = parseInt(localStorage.getItem('durationSet'));
@@ -123,9 +135,9 @@ $(function () {
 		// Animate keypad
 		keypadRows.velocity('transition.slideIn', {
 			easing: EASE_OUT,
-			duration: ANIMATION_DURATION / 2,
-			delay: ANIMATION_DURATION / 4,
-			stagger: ANIMATION_DURATION / 4 / (keypadRows.length - 1),
+			duration: ANIMATION_DURATION,
+			delay: ANIMATION_DURATION / 2,
+			stagger: ANIMATION_DURATION / 2 / (keypadRows.length - 1),
 			drag: true,
 			display: null
 		});
