@@ -58,7 +58,7 @@ $(function () {
 		$.Velocity.mock = 1;
 	} else {
 		$.Velocity.hook(keypadRows, 'opacity', '0');
-		$.Velocity.hook(keypadRows, 'rotateX', '10deg');
+		$.Velocity.hook(keypadRows, 'rotateX', '5deg');
 		$.Velocity.hook(displayText, 'translateY', '-100%');
 
 		// Create slideIn effect for keypad
@@ -138,7 +138,7 @@ $(function () {
 		keypadRows.velocity('swingIn', {
 			duration: ANIMATION_DURATION,
 			delay: ANIMATION_DURATION / 2,
-			stagger: ANIMATION_DURATION / 2 / (keypadRows.length - 1),
+			stagger: ANIMATION_DURATION / 6,
 			drag: true,
 			display: null
 		});
