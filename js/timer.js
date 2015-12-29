@@ -58,16 +58,14 @@ $(function () {
 		$.Velocity.mock = 1;
 	} else {
 		$.Velocity.hook(keypadRows, 'opacity', '0');
-		$.Velocity.hook(keypadRows, 'translateY', '-20%');
 		$.Velocity.hook(keypadRows, 'rotateX', '10deg');
 		$.Velocity.hook(displayText, 'translateY', '-100%');
 
 		// Create slideIn effect for keypad
-		$.Velocity.RegisterEffect('transition.slideIn', {
+		$.Velocity.RegisterEffect('swingIn', {
 			calls: [
 				[{
 					rotateX: 0,
-					translateY: 0,
 					opacity: 1
 				}, 1, {
 					easing: EASE_OUT
@@ -137,7 +135,7 @@ $(function () {
 		});
 
 		// Animate keypad
-		keypadRows.velocity('transition.slideIn', {
+		keypadRows.velocity('swingIn', {
 			duration: ANIMATION_DURATION,
 			delay: ANIMATION_DURATION / 2,
 			stagger: ANIMATION_DURATION / 2 / (keypadRows.length - 1),
