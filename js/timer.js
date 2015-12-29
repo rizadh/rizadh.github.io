@@ -51,6 +51,8 @@ $(function () {
 		// Immediately start timer
 		setDisplayTime(('000000' + GETtime).slice(-6));
 		$.Velocity.hook(keypad, 'opacity', '0');
+		$.Velocity.hook(display, 'height', '90%');
+		$.Velocity.hook(display, 'boxShadowblur', '0.2rem');
 		startTimer();
 	} else {
 		$.Velocity.hook(keypadRows, 'opacity', '0');
