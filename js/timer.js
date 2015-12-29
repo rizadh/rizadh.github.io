@@ -9,17 +9,24 @@ var ANIMATION_DURATION = 400;
 
 // Perform when document body is loaded
 $(function () {
+	// Create variables to access DOM elements
+	var display = $('#display');
+	var displayText = $('#display-text');
+	var keypad = $('#keypad');
+	var keypadRows = keypad.find('tr');
+	var keyboardHelp = $('#keyboard-help');
+
 	// Attach Fastlick
 	FastClick.attach(document.body);
 
 	// Hook Velocity to help menu and display-text translate properties
-	$.Velocity.hook($('#keyboard-help'), 'translateX', '-50%');
-	$.Velocity.hook($('#keyboard-help'), 'translateY', '-50%');
-	$.Velocity.hook($('#display-text'), 'translateY', '-50%');
+	$.Velocity.hook(keyboardHelp, 'translateX', '-50%');
+	$.Velocity.hook(keyboardHelp, 'translateY', '-50%');
+	$.Velocity.hook(displayText, 'translateY', '-50%');
 
 	// Change Backspce to Delete if on Mac or iOS devices
 	if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
-		$('#keyboard-help td.delete').text('Delete');
+		keyboardHelp.find('.delete').text('Delete');
 	}
 
 	// Disable scrolling if running as full-screen iOS web app
@@ -32,30 +39,19 @@ $(function () {
 
 	// Initialize input mode variable represents whether keypad is displayed or
 	// not
-	$('#display').data('inputMode', true);
+	display.data('inputMode', true);
 
 	// Startup animation
-	var startupDuration = ANIMATION_DURATION;
-	var display = $('#display');
-	var displayText = $('#display-text');
-	var keypad = $('#keypad tr');
-
+	$.Velocity.hook(display, 'translateY', '-100%');
+	$.Velocity.hook(display, 'opacity', '0');
 	if (validTimeString(GET('time'))) {
 		// Immediately start timer
 		setDisplayTime(('000000' + GET('time')).slice(-6));
-		$.Velocity.hook(display, 'height', '0');
-		$.Velocity.hook(display, 'opacity', '0');
-		$.Velocity.hook(display, 'fontSize', '0');
 		$.Velocity.hook($('#keypad'), 'opacity', '0');
 		startTimer();
 	} else {
-		// Hook display and display text
-		$.Velocity.hook(displayText, 'translateY', '-100%');
-		$.Velocity.hook(displayText, 'opacity', '0');
-		$.Velocity.hook(display, 'translateY', '-100%');
-		$.Velocity.hook(display, 'opacity', '0');
-		$.Velocity.hook(keypad, 'opacity', '0');
-		$.Velocity.hook(keypad, 'translateY', '-10%');
+		$.Velocity.hook(keypadRows, 'opacity', '0');
+		$.Velocity.hook(keypadRows, 'translateY', '-10%');
 
 		// Create slideIn effect for keypad
 		$.Velocity.RegisterEffect('transition.slideIn', {
@@ -67,22 +63,13 @@ $(function () {
 			]
 		});
 
-		// Animate display text
-		displayText.velocity({
-			translateY: '-50%',
-			opacity: 1
-		}, {
-			easing: EASE_OUT,
-			duration: startupDuration
-		});
-
 		// Animate display
 		display.velocity({
 			translateY: 0,
 			opacity: 1
 		}, {
 			easing: EASE_OUT,
-			duration: startupDuration,
+			duration: ANIMATION_DURATION,
 			complete: function() {
 				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
 				var durationSet = parseInt(localStorage.getItem('durationSet'));
@@ -115,8 +102,9 @@ $(function () {
 				if (timeStarted && durationSet) {
 					var timeThresholdSec = 10;
 					if (timeLeft() > timeThresholdSec * 1000) {
-						var message = 'Seems like the timer was still running when' +
-							' you last closed this app. Do you want to restore the timer?';
+						var message = 'Seems like the timer was still running' +
+						' when you last closed this app. Do you want to' +
+						' restore the timer?';
 						showNotification(message, [noButton, sureButton]);
 					}
 				}
@@ -129,21 +117,21 @@ $(function () {
 		});
 
 		// Animate keypad
-		keypad.velocity('transition.slideIn', {
+		keypadRows.velocity('transition.slideIn', {
 			easing: EASE_OUT,
-			duration: startupDuration / 2,
-			delay: startupDuration / 4,
-			stagger: startupDuration / 4 / (keypad.length - 1),
+			duration: ANIMATION_DURATION / 2,
+			delay: ANIMATION_DURATION / 4,
+			stagger: ANIMATION_DURATION / 4 / (keypadRows.length - 1),
 			drag: true,
 			display: null
 		});
 	}
 
 	// Clear display and show default message
-	$('#display-text').data('currentTime', '000000')
+	displayText.data('currentTime', '000000')
 
 	// Set click events
-	$('#keypad').on('click', 'td', function () {
+	keypad.on('click', 'td', function () {
 		var keyValue = $(this).text();
 		if (keyValue === 'Clear') {
 			setDisplayTime('');
@@ -154,7 +142,7 @@ $(function () {
 		}
 	});
 	$('#edit-button').click(editTime);
-	$('#display').on('click', '#display-text', togglePause);
+	display.on('click', '#display-text', togglePause);
 	$('#notification-banner').on('click', '.button', hideNotification);
 
 	// Enable keyboard input
@@ -468,7 +456,7 @@ function startTimer(resume, restore) {
 				.velocity({
 					height: '90%',
 					opacity: 1,
-					fontSize: '1em',
+					translateY: 0,
 					boxShadowBlur: '0.2rem'
 				}, {
 					duration: ANIMATION_DURATION,
@@ -512,12 +500,11 @@ function startTimer(resume, restore) {
 				});
 		}
 	} else {
-		showNotification('The time entered was too high. Enter a time \
-		less than 100 hours');
+		showNotification(
+			'The time entered was too high. Enter a time less than 100 hours'
+		);
 		setDisplayTime('');
 	}
-
-
 }
 
 /**
