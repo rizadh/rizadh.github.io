@@ -44,10 +44,13 @@ $(function () {
 	// Startup animation
 	$.Velocity.hook(display, 'translateY', '-100%');
 	$.Velocity.hook(display, 'opacity', '0');
-	if (validTimeString(GET('time'))) {
+
+	// Handle if time is provided in URL
+	var GETtime = GET('time');
+	if (validTimeString(GETtime)) {
 		// Immediately start timer
-		setDisplayTime(('000000' + GET('time')).slice(-6));
-		$.Velocity.hook($('#keypad'), 'opacity', '0');
+		setDisplayTime(('000000' + GETtime).slice(-6));
+		$.Velocity.hook(keypad, 'opacity', '0');
 		startTimer();
 	} else {
 		$.Velocity.hook(keypadRows, 'opacity', '0');
@@ -88,8 +91,7 @@ $(function () {
 						var progress = 1 - timeLeft() / durationSet;
 						if (timeLeft() > 0) {
 							$('#dial-ring path')
-								.data('timeLeft', timeLeft());
-							$('#dial-ring path')
+								.data('timeLeft', timeLeft())
 								.data('progress', progress);
 							startTimer(false, true);
 						} else {
@@ -100,11 +102,11 @@ $(function () {
 					}
 				}
 				if (timeStarted && durationSet) {
-					var timeThresholdSec = 10;
+					var timeThresholdSec = 5;
 					if (timeLeft() > timeThresholdSec * 1000) {
 						var message = 'Seems like the timer was still running' +
-						' when you last closed this app. Do you want to' +
-						' restore the timer?';
+							' when you last closed this app. Do you want to' +
+							' restore the timer?';
 						showNotification(message, [noButton, sureButton]);
 					}
 				}
@@ -147,17 +149,18 @@ $(function () {
 
 	// Enable keyboard input
 	$(document).on('keydown', function (e) {
+		var notificationBanner = $('#notification-banner');
 		// Get the keycode
 		var key = e.keyCode;
 		// Do not allow keyboard input if a notification is show
-		if ($('#notification-banner').data('shown')) {
-			if ($('#notification-banner div').text() !== '') {
+		if (notificationBanner.data('shown')) {
+			if (notificationBanner.find('div').text() !== '') {
 				switch (key) {
 					case 13:
-						$('#notification-banner .emphasize').click();
+						notificationBanner.find('.emphasize').click();
 						break;
 					case 27:
-						$('#notification-banner .alert').click();
+						notificationBanner.find('.alert').click();
 						break;
 				}
 			} else {
