@@ -309,7 +309,7 @@ function validTimeString(timeString) {
 	var minutesToSeconds = timeString.slice(-4, -2) * 60;
 	var seconds = timeString.slice(-2) * 1;
 	var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
-	return totalSeconds > 0 && timeString < 360000;
+	return totalSeconds > 0 && totalSeconds < 360000;
 }
 
 /**
