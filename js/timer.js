@@ -35,7 +35,109 @@ $(function () {
 	$('#display').data('inputMode', true);
 
 	// Startup animation
-	startupAnimation();
+	var startupDuration = ANIMATION_DURATION;
+	var display = $('#display');
+	var displayText = $('#display-text');
+	var keypad = $('#keypad tr');
+
+	if (validTimeString(GET('time'))) {
+		// Immediately start timer
+		setDisplayTime(('000000' + GET('time')).slice(-6));
+		$.Velocity.hook(display, 'height', '0');
+		$.Velocity.hook(display, 'opacity', '0');
+		$.Velocity.hook(display, 'fontSize', '0');
+		$.Velocity.hook($('#keypad'), 'opacity', '0');
+		startTimer();
+	} else {
+		// Hook display and display text
+		$.Velocity.hook(displayText, 'translateY', '-100%');
+		$.Velocity.hook(displayText, 'opacity', '0');
+		$.Velocity.hook(display, 'translateY', '-100%');
+		$.Velocity.hook(display, 'opacity', '0');
+		$.Velocity.hook(keypad, 'opacity', '0');
+		$.Velocity.hook(keypad, 'translateY', '-10%');
+
+		// Create slideIn effect for keypad
+		$.Velocity.RegisterEffect('transition.slideIn', {
+			calls: [
+				[{
+					translateY: 0,
+					opacity: 1
+				}]
+			]
+		});
+
+		// Animate display text
+		displayText.velocity({
+			translateY: '-50%',
+			opacity: 1
+		}, {
+			easing: EASE_OUT,
+			duration: startupDuration
+		});
+
+		// Animate display
+		display.velocity({
+			translateY: 0,
+			opacity: 1
+		}, {
+			easing: EASE_OUT,
+			duration: startupDuration,
+			complete: function() {
+				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
+				var durationSet = parseInt(localStorage.getItem('durationSet'));
+				var noButton = {
+					text: 'No',
+					style: 'alert',
+					clickFunction: function () {
+						localStorage.setItem('timeStarted', '0');
+						localStorage.setItem('durationSet', '0');
+					}
+				};
+				var sureButton = {
+					text: 'Sure',
+					style: 'emphasize',
+					clickFunction: function () {
+						var progress = 1 - timeLeft() / durationSet;
+						if (timeLeft() > 0) {
+							$('#dial-ring path')
+								.data('timeLeft', timeLeft());
+							$('#dial-ring path')
+								.data('progress', progress);
+							startTimer(false, true);
+						} else {
+							showNotification(
+								'Too late, the timer has already ended'
+							);
+						}
+					}
+				}
+				if (timeStarted && durationSet) {
+					var timeThresholdSec = 10;
+					if (timeLeft() > timeThresholdSec * 1000) {
+						var message = 'Seems like the timer was still running when' +
+							' you last closed this app. Do you want to restore the timer?';
+						showNotification(message, [noButton, sureButton]);
+					}
+				}
+
+				/** Returns time left until previous timer ends */
+				function timeLeft() {
+					return (timeStarted + durationSet) - (new Date()).getTime();
+				}
+			}
+		});
+
+		// Animate keypad
+		keypad.velocity('transition.slideIn', {
+			easing: EASE_OUT,
+			duration: startupDuration / 2,
+			delay: startupDuration / 4,
+			stagger: startupDuration / 4 / (keypad.length - 1),
+			drag: true,
+			display: null
+		});
+	}
 
 	// Clear display and show default message
 	setDisplayTime('');
@@ -190,119 +292,7 @@ $(function () {
 	});
 });
 
-/** Animates display into view */
-function startupAnimation() {
-	var startupDuration = ANIMATION_DURATION;
-	var display = $('#display');
-	var displayText = $('#display-text');
-	var keypad = $('#keypad tr');
 
-	if (validTimeString(GET('time'))) {
-		// Immediately start timer
-		setDisplayTime(('000000' + GET('time')).slice(-6));
-		$.Velocity.hook(display, 'height', '0');
-		$.Velocity.hook(display, 'opacity', '0');
-		$.Velocity.hook(display, 'fontSize', '0');
-		$.Velocity.hook($('#keypad'), 'opacity', '0');
-		startTimer();
-	} else {
-		// Hook display and display text
-		$.Velocity.hook(displayText, 'translateY', '-100%');
-		$.Velocity.hook(displayText, 'opacity', '0');
-		$.Velocity.hook(display, 'translateY', '-100%');
-		$.Velocity.hook(display, 'opacity', '0');
-		$.Velocity.hook(keypad, 'opacity', '0');
-		$.Velocity.hook(keypad, 'translateY', '-10%');
-
-		// Create slideIn effect for keypad
-		$.Velocity.RegisterEffect('transition.slideIn', {
-			calls: [
-				[{
-					translateY: 0,
-					opacity: 1
-				}]
-			]
-		});
-
-		// Animate display text
-		displayText.velocity({
-			translateY: '-50%',
-			opacity: 1
-		}, {
-			easing: EASE_OUT,
-			duration: startupDuration
-		});
-
-		// Animate display
-		display.velocity({
-			translateY: 0,
-			opacity: 1
-		}, {
-			easing: EASE_OUT,
-			duration: startupDuration,
-			complete: askForRestore
-		});
-
-		// Animate keypad
-		keypad.velocity('transition.slideIn', {
-			easing: EASE_OUT,
-			duration: startupDuration / 2,
-			delay: startupDuration / 4,
-			stagger: startupDuration / 4 / (keypad.length - 1),
-			drag: true,
-			display: null
-		});
-	}
-}
-
-/** Asks user if they want to restore the previous state of the app */
-function askForRestore() {
-	var timeStarted = parseInt(localStorage.getItem('timeStarted'));
-	var durationSet = parseInt(localStorage.getItem('durationSet'));
-	var noButton = {
-		text: 'No',
-		style: 'alert',
-		clickFunction: function () {
-			localStorage.setItem('timeStarted', '0');
-			localStorage.setItem('durationSet', '0');
-		}
-	};
-	var sureButton = {
-		text: 'Sure',
-		style: 'emphasize',
-		clickFunction: function () {
-			var progress = 1 - timeLeft() / durationSet;
-			if (timeLeft() > 0) {
-				$('#dial-ring path')
-					.data('timeLeft', timeLeft());
-				$('#dial-ring path')
-					.data('progress', progress);
-				startTimer(false, true);
-			} else {
-				showNotification(
-					'Too late, the timer has already ended', [{
-						text: 'Dismiss',
-						style: 'normal',
-						clickFunction: function () {}
-					}]
-				);
-			}
-		}
-	}
-	if (timeStarted && durationSet) {
-		var timeThresholdSec = 10;
-		if (timeLeft() > timeThresholdSec * 1000) {
-			var message = 'Seems like the timer was still running when' +
-				' you last closed this app. Do you want to restore the timer?';
-			showNotification(message, [noButton, sureButton]);
-		}
-	}
-
-	/** Returns time left until previous timer ends */
-	function timeLeft() {
-		return (timeStarted + durationSet) - (new Date()).getTime();
-	}
-}
 
 /**
  * Returns the value of the display.
