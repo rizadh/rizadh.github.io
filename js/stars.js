@@ -31,7 +31,7 @@ function spawnStar(delay, round) {
     var rotation_intensity = -45 + Math.random()*90;
     var color = 240 + Math.random()*120;
     var startup_delay = delay ? Math.random()*stars*10 : Math.random()*stars;
-    var twinkle_intensity = 0 + Math.random()*0.5
+    var twinkle_intensity = Math.random()*1;
     var start_brightness = 80 + Math.random()*20;
     var hook = $.Velocity.hook;
 
