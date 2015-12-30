@@ -1,7 +1,5 @@
 // Represents how many stars are to be display on screen
-var stars = 100;
-// Represents the round number (increments every time # of stars is changed)
-var round_num = 0;
+var stars = Math.round($(window).height() * $(window).width() / 2000);
 
 $(function() {
     // Spawn initial stars
@@ -19,19 +17,14 @@ function changeNumberOfStars() {
 
 function spawnStars(num_stars) {
     // Remove all previous stars
-    $('svg').not(':nth-child(1)').remove();
-    // Increment round number
-    round_num++
+    $('svg').not(':nth-child(1)').remove()
     for (var i = num_stars; i > 0; i--) {
         // Spawn given number of stars in current round
-        spawnStar(true, round_num);
+        spawnStar(true);
     }
 }
 
-function spawnStar(delay, round) {
-    // Only spawn if star is in current round
-    if (round !== round_num) return false;
-
+function spawnStar(delay) {
     // Clone master star
     var element = $('svg:nth-child(1)').clone().appendTo('body');
 
@@ -44,7 +37,7 @@ function spawnStar(delay, round) {
     var rotation_intensity = -45 + Math.random()*90;
     var color = 240 + Math.random()*120;
     var startup_delay = delay ? Math.random()*stars*10 : Math.random()*stars;
-    var twinkle_intensity = Math.random()*1;
+    var twinkle_intensity = Math.random();
     var start_brightness = 80 + Math.random()*20;
 
 
@@ -83,11 +76,6 @@ function spawnStar(delay, round) {
             rotateZ: rotation_angle + rotation_intensity
         }, {
             duration: twinkle_duration,
-            complete: function() {
-                // Remove star after one cycle
-                $(this).remove();
-                // Respawn star in the current round
-                spawnStar(false, round);
-            }
+            loop: true
         });
 }
