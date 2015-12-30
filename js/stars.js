@@ -38,6 +38,7 @@ function spawnStar(delay) {
     var color = 240 + Math.random()*120;
     var startup_delay = delay ? Math.random()*stars*10 : Math.random()*stars;
     var twinkle_intensity = Math.random();
+    var twinkle = Math.random() > 0.5;
     var start_brightness = 80 + Math.random()*20;
 
 
@@ -71,8 +72,8 @@ function spawnStar(delay) {
         }, twinkle_duration)
         // Fade out star
         .velocity({
-            scale: twinkle_intensity,
-            opacity: 0,
+            scale: twinkle ? twinkle_intensity : 0,
+            opacity: twinkle ? 0 : twinkle_intensity,
             rotateZ: rotation_angle + rotation_intensity
         }, {
             duration: twinkle_duration,
