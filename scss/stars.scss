@@ -6,10 +6,10 @@ body {
 }
 
 .star {
-    display: none;
+    // display: none;
     position: absolute;
     background-color: hsla(0, 0%, 100%, 1);
     z-index: 0;
     transform: translate(-50%, -50%);
-    border-radius: 50%;
+    border-radius: 100%;
 }
