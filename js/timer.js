@@ -85,7 +85,6 @@ $(function () {
 			easing: EASE_OUT,
 			duration: ANIMATION_DURATION * 1.5,
 			complete: function() {
-				console.log('done display' + new Date().getTime());
 				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
 				var durationSet = parseInt(localStorage.getItem('durationSet'));
 				var noButton = {
@@ -135,10 +134,7 @@ $(function () {
 			duration: ANIMATION_DURATION,
 			stagger: ANIMATION_DURATION / 18,
 			backwards: true,
-			display: null,
-			complete: function () {
-				console.log('done keypad' + new Date().getTime());
-			}
+			display: null
 		});
 	}
 
