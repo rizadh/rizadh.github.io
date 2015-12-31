@@ -21,8 +21,8 @@ function changeNumberOfStars() {
 function spawnStars(num_stars) {
 	// Remove all previous stars
 	$('.star').remove()
+	// Spawn given number of stars in current round
 	for (var i = num_stars; i > 0; i--) {
-		// Spawn given number of stars in current round
 		spawnStar();
 	}
 }
