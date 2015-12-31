@@ -53,9 +53,7 @@ $(function () {
 		$.Velocity.hook(keypad, 'opacity', '0');
 		$.Velocity.hook(display, 'height', '90%');
 		$.Velocity.hook(display, 'boxShadowblur', '0.2rem');
-		$.Velocity.mock = 2;
 		startTimer();
-		$.Velocity.mock = 1;
 	} else {
 		$.Velocity.hook(keypadButtons, 'scale', '0');
 		$.Velocity.hook(keypadButtons, 'opacity', '0');
