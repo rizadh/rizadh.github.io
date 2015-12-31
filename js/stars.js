@@ -32,14 +32,14 @@ function spawnStar() {
 	var element = $('<div></div>');
 
 	// Create randomized values for stars properties
-	var startup_delay = Math.random()*stars*10;
-	var twinkle_duration = 1500 + Math.random()*500;
-	var size = Math.ceil(Math.random()*5);
-	var x_position = Math.random()*100 + '%';
-	var y_position = Math.random()*100 + '%';
-	var hue = 240 + Math.random()*120;
-	var star_saturation = 75 + Math.random()*25;
-	var star_brightness = 75 + Math.random()*25;
+	var startup_delay = Math.random() * stars * 10;
+	var twinkle_duration = 1500 + Math.random() * 500;
+	var size = Math.ceil(Math.random() * 5);
+	var x_position = Math.random() * 100 + '%';
+	var y_position = Math.random() * 100 + '%';
+	var hue = 240 + Math.random() * 120;
+	var star_saturation = 75 + Math.random() * 25;
+	var star_brightness = 75 + Math.random() * 25;
 	var color = 'hsla(' + hue + ', ' + star_saturation + '%, ' +
 		star_brightness + '%, 1)';
 	var twinkle_intensity = Math.random() / 2;
