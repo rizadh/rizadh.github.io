@@ -37,7 +37,7 @@ function spawnStar() {
 	var size = Math.ceil(Math.random() * 5);
 	var x_position = Math.random() * 100 + '%';
 	var y_position = Math.random() * 100 + '%';
-	var raw_hue = Math.random() > 0.5 ? 220 : 360;
+	var raw_hue = Math.random() > 0.5 ? 200 : 360;
 	var hue_shift = Math.random() * 10;
 	var hue = raw_hue === 360 ? raw_hue - hue_shift : raw_hue + hue_shift;
 	var star_saturation = 80 + Math.random() * 20;
