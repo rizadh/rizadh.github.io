@@ -480,8 +480,7 @@ function startTimer(resume, restore) {
 				.velocity('stop')
 				.velocity({
 					height: '90%',
-					translateY: 0,
-					boxShadowBlur: '0.2rem'
+					translateY: 0
 				}, {
 					duration: ANIMATION_DURATION,
 					easing: EASE_OUT
