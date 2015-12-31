@@ -657,7 +657,9 @@ function editTime() {
 /** Toggles pause state of timer */
 function togglePause() {
 	var display = $('#display');
+	// Handle if display is expanded
 	if (!display.data('inputMode')) {
+		// Handle if timer is expanded
 		if (display.data('paused')) {
 			startTimer(true);
 			display.data('paused', false);
@@ -669,6 +671,7 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
+		// Handle if timer is running
 		} else if (display.hasClass('running')) {
 			$('#dial-ring path').velocity('stop');
 			setDisplayTime('Paused', true);
@@ -681,6 +684,9 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
+		// Handle if timer is finished/not running
+		} else {
+			editTime();
 		}
 	}
 }
