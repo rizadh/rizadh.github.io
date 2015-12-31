@@ -57,13 +57,16 @@ $(function () {
 		$.Velocity.mock = 1;
 	} else {
 		$.Velocity.hook(keypadButtons, 'scale', '0');
+		$.Velocity.hook(keypadButtons, 'opacity', '0');
 		$.Velocity.hook(displayText, 'translateY', '-100%');
+		$.Velocity.hook(displayText, 'opacity', '0');
 
 		// Create slideIn effect for keypad
 		$.Velocity.RegisterEffect('swingIn', {
 			calls: [
 				[{
-					scale: 1
+					scale: 1,
+					opacity: 1
 				}, 1, {
 					easing: EASE_OUT
 				}]
@@ -72,7 +75,8 @@ $(function () {
 
 		// Animate display
 		displayText.velocity({
-			translateY: '-50%'
+			translateY: '-50%',
+			opacity: 1
 		}, {
 			easing: EASE_OUT,
 			duration: ANIMATION_DURATION * 1.5,
@@ -134,6 +138,7 @@ $(function () {
 			duration: ANIMATION_DURATION,
 			stagger: ANIMATION_DURATION / 18,
 			backwards: true,
+			drag: true,
 			display: null
 		});
 	}
