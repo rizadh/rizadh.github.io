@@ -445,11 +445,9 @@ function addDigit(digit) {
 }
 
 function startTimer(resume, restore) {
-	// Create variable to reduce jQuery calls
+	// Create variables to reduce jQuery calls
 	var display = $('#display');
 	var displayText = display.find('#display-text');
-	// Fixed alignment issues if startup animation was interrupted
-	$.Velocity.hook(displayText, 'translateY', '-50%');
 	// Convert display input to seconds
 	var timeString = getDisplayTime();
 	var hoursToSeconds = timeString.slice(-6, -4) * 3600;
@@ -457,14 +455,18 @@ function startTimer(resume, restore) {
 	var seconds = timeString.slice(-2) * 1;
 	var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
 
+	// Fixed alignment issues if startup animation was interrupted
+	$.Velocity.hook(displayText, 'translateY', '-50%');
+
 	// Limit seconds to less than 100 hours
 	if (totalSeconds === 0 && !resume && !restore) {
 		showNotification('Please enter a time first');
 	} else if (totalSeconds < 360000 || restore || resume) {
 		// Start dial motion and set state to timing mode
 		setTime(totalSeconds, resume || restore);
-		display.data('inputMode', false);
-		display.addClass('running');
+		display
+			.data('inputMode', false)
+			.addClass('running');
 
 		if (!resume) {
 			// Expand display
@@ -603,14 +605,17 @@ function setDial(dial, arcRadius, progress) {
 
 /** Activates input mode */
 function editTime() {
+	var display = $('#display');
 	setDisplayTime(getDisplayTime(), true);
-	$('#display').data('inputMode', true).data('paused', false);
-	$('#display').removeClass('running');
+	display
+		.data('inputMode', true)
+		.data('paused', false)
+		.removeClass('running');
 	localStorage.setItem('timeStarted', 0);
 	localStorage.setItem('durationSet', 0);
 	$('#dial-ring path')
 		.velocity('stop');
-	$('#display')
+	display
 		.velocity('stop')
 		.velocity({
 			height: '20%',
@@ -646,10 +651,11 @@ function editTime() {
 
 /** Toggles pause state of timer */
 function togglePause() {
-	if (!$('#display').data('inputMode')) {
-		if ($('#display').data('paused')) {
+	var display = $('#display');
+	if (!display.data('inputMode')) {
+		if (display.data('paused')) {
 			startTimer(true);
-			$('#display').data('paused', false);
+			display.data('paused', false);
 			$('#dial-ring')
 				.velocity('stop')
 				.velocity({
@@ -658,10 +664,10 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
-		} else if ($('#display').hasClass('running')) {
+		} else if (display.hasClass('running')) {
 			$('#dial-ring path').velocity('stop');
 			setDisplayTime('Paused', true);
-			$('#display').data('paused', true);
+			display.data('paused', true);
 			$('#dial-ring')
 				.velocity('stop')
 				.velocity({
@@ -736,10 +742,14 @@ function showNotification(message, buttons) {
 
 /** Hide any notifications that are present */
 function hideNotification() {
-	$(document).off('click.bannerhide', hideNotification);
-	$('#content').off('click.bannerhide', hideNotification);
-	$('#content').css('pointer-events', '');
+	var content = $('#content');
 	var banner = $('#notification-banner');
+
+	$(document).off('click.bannerhide', hideNotification);
+	content
+		.off('click.bannerhide', hideNotification)
+		.css('pointer-events', '');
+
 	if (banner.data('shown')) {
 		$('#notification-banner')
 			.data('shown', false)
