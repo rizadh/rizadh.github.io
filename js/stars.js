@@ -56,9 +56,11 @@ function spawnStar() {
 		.css({
 			width: size,
 			height: size,
+			fontSize: size,
 			left: x_position,
 			top: y_position,
-			backgroundColor: color
+			backgroundColor: color,
+			boxShadowColor: color
 		})
 		// Add random delay to stagger fade in of stars
 		.delay(startup_delay)
