@@ -104,9 +104,10 @@ body {
 
 #keypad {
     position: absolute;
-    left: 0;
+    left: 50%;
     top: 20%;
     width: 100%;
+    max-width: 10rem;
     height: 80%;
     z-index: 0;
 

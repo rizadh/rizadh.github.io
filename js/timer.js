@@ -23,6 +23,7 @@ $(function () {
 	$.Velocity.hook(keyboardHelp, 'translateX', '-50%');
 	$.Velocity.hook(keyboardHelp, 'translateY', '-50%');
 	$.Velocity.hook(displayText, 'translateY', '-50%');
+	$.Velocity.hook(keypad, 'translateX', '-50%');
 
 	// Change Backspce to Delete if on Mac or iOS devices
 	if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
