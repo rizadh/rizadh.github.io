@@ -42,6 +42,7 @@ function spawnStar() {
 	var star_brightness = 75 + Math.random() * 25;
 	var color = 'hsla(' + hue + ', ' + star_saturation + '%, ' +
 		star_brightness + '%, 1)';
+	var glow_color = 'hsla(' + hue + ', 100%, 50%, 1)';
 	var twinkle_intensity = Math.random() / 2;
 	var scale_intensity = Math.random() / 2;
 
@@ -60,7 +61,7 @@ function spawnStar() {
 			left: x_position,
 			top: y_position,
 			backgroundColor: color,
-			boxShadowColor: color
+			boxShadowColor: glow_color
 		})
 		// Add random delay to stagger fade in of stars
 		.delay(startup_delay)
