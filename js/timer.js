@@ -13,7 +13,7 @@ $(function () {
 	var display = $('#display');
 	var displayText = $('#display-text');
 	var keypad = $('#keypad');
-	var keypadRows = keypad.find('tr');
+	var keypadButtons = keypad.find('td');
 	var keyboardHelp = $('#keyboard-help');
 
 	// Attach Fastlick
@@ -43,7 +43,6 @@ $(function () {
 
 	// Startup animation
 	$.Velocity.hook(display, 'translateY', '-100%');
-	$.Velocity.hook(display, 'opacity', '0');
 
 	// Handle if time is provided in URL
 	var GETtime = GET('time');
@@ -57,16 +56,14 @@ $(function () {
 		startTimer();
 		$.Velocity.mock = 1;
 	} else {
-		$.Velocity.hook(keypadRows, 'opacity', '0');
-		$.Velocity.hook(keypadRows, 'rotateX', '5deg');
+		$.Velocity.hook(keypadButtons, 'scale', '0');
 		$.Velocity.hook(displayText, 'translateY', '-100%');
 
 		// Create slideIn effect for keypad
 		$.Velocity.RegisterEffect('swingIn', {
 			calls: [
 				[{
-					rotateX: 0,
-					opacity: 1
+					scale: 1
 				}, 1, {
 					easing: EASE_OUT
 				}]
@@ -75,21 +72,20 @@ $(function () {
 
 		// Animate display
 		displayText.velocity({
-			translateY: '-50%',
-			opacity: 1
+			translateY: '-50%'
 		}, {
 			easing: EASE_OUT,
-			duration: ANIMATION_DURATION * 2,
+			duration: ANIMATION_DURATION * 1.5,
 		});
 
 		// Animate display
 		display.velocity({
-			translateY: 0,
-			opacity: 1
+			translateY: 0
 		}, {
 			easing: EASE_OUT,
-			duration: ANIMATION_DURATION * 2,
+			duration: ANIMATION_DURATION * 1.5,
 			complete: function() {
+				console.log('done display' + new Date().getTime());
 				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
 				var durationSet = parseInt(localStorage.getItem('durationSet'));
 				var noButton = {
@@ -135,12 +131,14 @@ $(function () {
 		});
 
 		// Animate keypad
-		keypadRows.velocity('swingIn', {
+		keypadButtons.velocity('swingIn', {
 			duration: ANIMATION_DURATION,
-			delay: ANIMATION_DURATION / 2,
-			stagger: ANIMATION_DURATION / 6,
-			drag: true,
-			display: null
+			stagger: ANIMATION_DURATION / 18,
+			backwards: true,
+			display: null,
+			complete: function () {
+				console.log('done keypad' + new Date().getTime());
+			}
 		});
 	}
 
@@ -451,6 +449,11 @@ function addDigit(digit) {
 }
 
 function startTimer(resume, restore) {
+	// Create variable to reduce jQuery calls
+	var display = $('#display');
+	var displayText = display.find('#display-text');
+	// Fixed alignment issues if startup animation was interrupted
+	$.Velocity.hook(displayText, 'translateY', '-50%');
 	// Convert display input to seconds
 	var timeString = getDisplayTime();
 	var hoursToSeconds = timeString.slice(-6, -4) * 3600;
@@ -464,16 +467,15 @@ function startTimer(resume, restore) {
 	} else if (totalSeconds < 360000 || restore || resume) {
 		// Start dial motion and set state to timing mode
 		setTime(totalSeconds, resume || restore);
-		$('#display').data('inputMode', false);
-		$('#display').addClass('running');
+		display.data('inputMode', false);
+		display.addClass('running');
 
 		if (!resume) {
 			// Expand display
-			$('#display')
+			display
 				.velocity('stop')
 				.velocity({
 					height: '90%',
-					opacity: 1,
 					translateY: 0,
 					boxShadowBlur: '0.2rem'
 				}, {
