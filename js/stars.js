@@ -33,7 +33,7 @@ function spawnStar() {
 
 	// Create randomized values for stars properties
 	var startup_delay = Math.random()*stars*10;
-	var twinkle_duration = 500 + Math.random()*500;
+	var twinkle_duration = 1500 + Math.random()*500;
 	var size = Math.ceil(Math.random()*5);
 	var x_position = Math.random()*100 + '%';
 	var y_position = Math.random()*100 + '%';
@@ -42,7 +42,8 @@ function spawnStar() {
 	var star_brightness = 75 + Math.random()*25;
 	var color = 'hsla(' + hue + ', ' + star_saturation + '%, ' +
 		star_brightness + '%, 1)';
-	var twinkle_intensity = Math.random();
+	var twinkle_intensity = Math.random() / 2;
+	var scale_intensity = Math.random() / 2;
 
 	// Hook variable properties of star
 	$.Velocity.hook(element, 'scale', 0);
@@ -68,7 +69,7 @@ function spawnStar() {
 		}, twinkle_duration)
 		// Fade out star
 		.velocity({
-			scale: 0,
+			scale: scale_intensity,
 			opacity: twinkle_intensity
 		}, {
 			duration: twinkle_duration,
