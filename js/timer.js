@@ -353,7 +353,7 @@ function setDisplayTime(text, fancy) {
 				timeArray.push(timeValue + unitArray[i]);
 			}
 		}
-		var newTime = timeArray.join('&nbsp;');
+		var newTime = timeArray.join(' ');
 		if ($(window).height()*0.9 > $(window).width()) {
 			var newFontSize;
 			if ($(window).height() < $(window).width()*1.5) {
@@ -367,7 +367,7 @@ function setDisplayTime(text, fancy) {
 			}
 			newDisplayText.css('font-size', newFontSize + 'em');
 		}
-		newDisplayText.html(newTime);
+		newDisplayText.html(newTime.replace(' ', '&nbsp;'));
 		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
 	}
 }
