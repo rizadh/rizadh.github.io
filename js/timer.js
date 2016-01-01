@@ -6,6 +6,8 @@ var EASEFUNC = 'Expo';
 var EASE_OUT = 'easeOut' + EASEFUNC;
 var EASE_IN = 'easeIn' + EASEFUNC;
 var ANIMATION_DURATION = 400;
+var windowWidth;
+var windowHeight;
 
 // Perform when document body is loaded
 $(function () {
@@ -285,8 +287,10 @@ $(function () {
 
 	// Adjust font-sizes when viewport dimensions change
 	$(window).on('load resize orientationChange', function () {
+		windowWidth = $(window).width();
+		windowHeight = $(window).height();
 		// Maximize size of text
-		var maxLength = Math.min($(window).height(), $(window).width()*1.5);
+		var maxLength = Math.min(windowWidth * 1.5, windowHeight);
 		$('html').css('font-size', maxLength / 9);
 	});
 });
@@ -354,16 +358,16 @@ function setDisplayTime(text, fancy) {
 			}
 		}
 		var newTime = timeArray.join(' ');
-		if ($(window).height()*0.9 > $(window).width()) {
+		if (windowHeight * 0.9 > windowWidth && newTime.length > 8) {
 			var newFontSize;
-			if ($(window).height() < $(window).width()*1.5) {
-				var lowerBound = 1/0.9; // Max size
+			if (windowHeight < windowWidth * 1.5) {
+				var lowerBound = 1 / 0.9; // Max size
 				var upperBound = 1.5; // Min size
-				var ratio = $(window).height() / $(window).width();
+				var ratio = windowHeight / windowWidth;
 				var weight = (upperBound - ratio) / (upperBound - lowerBound);
-				newFontSize = Math.min(8/newTime.length*(1-weight)+1*(weight), 1);
+				newFontSize = 8 / newTime.length * (1 - weight) + weight;
 			} else {
-				newFontSize = Math.min(8/newTime.length, 1);
+				newFontSize = 8 / newTime.length;
 			}
 			newDisplayText.css('font-size', newFontSize + 'em');
 		}
