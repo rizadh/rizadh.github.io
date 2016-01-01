@@ -287,8 +287,9 @@ $(function () {
 
 	// Adjust font-sizes when viewport dimensions change
 	$(window).on('load resize orientationChange', function () {
-		windowWidth = $(window).width();
-		windowHeight = $(window).height();
+		var jWindow = $(window);
+		windowWidth = jWindow.width();
+		windowHeight = jWindow.height();
 		// Maximize size of text
 		var maxLength = Math.min(windowWidth * 1.5, windowHeight);
 		$('html').css('font-size', maxLength / 9);
