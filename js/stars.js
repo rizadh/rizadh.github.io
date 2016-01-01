@@ -45,8 +45,6 @@ function spawnStar() {
 	var color = 'hsla(' + hue + ', ' + star_saturation + '%, ' +
 		star_brightness + '%, 1)';
 	var glow_color = 'hsla(' + hue + ', 100%, 50%, 1)';
-	var twinkle_intensity = Math.random() / 2;
-	var scale_intensity = Math.random() / 2;
 
 	// Hook variable properties of star
 	$.Velocity.hook(element, 'scale', 0);
@@ -74,11 +72,21 @@ function spawnStar() {
 		}, twinkle_duration)
 		// Fade out star
 		.velocity({
-			scale: scale_intensity,
-			opacity: twinkle_intensity
+			scale: 0,
+			opacity: 0
 		}, {
 			duration: twinkle_duration,
-			loop: true
+			loop: true,
+			progress: function(e, c, r) {
+				var randomizer = Math.random() > 0.75;
+				var thisElement = $(this);
+				if ($.Velocity.hook(thisElement, 'scale') === 0 && randomizer) {
+					thisElement.css({
+						left: Math.random() * 100 + '%',
+						top: Math.random() * 100 + '%',
+					});
+				}
+			}
 		})
 		// Append star to body
 		.appendTo('body');
