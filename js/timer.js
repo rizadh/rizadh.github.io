@@ -409,8 +409,8 @@ function changeDisplayText(newDisplayText, style) {
 				opacity: 0,
 				scale: 0.5
 			}, {
-				easing: EASE_IN,
-				duration: ANIMATION_DURATION / 4,
+				easing: EASE_OUT,
+				duration: ANIMATION_DURATION,
 				queue: false,
 				display: 'inline-block',
 				complete: function () {
