@@ -3,8 +3,8 @@
 
 $theme-hue: 180;
 
-$main-color: hsla($theme-hue, 80%, 40%, 1);
-$secondary-color: hsla($theme-hue, 40%, 80%, 1);
+$main-color: hsl($theme-hue, 80%, 40%);
+$secondary-color: hsl($theme-hue, 40%, 80%);
 
 $resting-transition-time: 0.2s;
 $hover-transition-time: 0.1s;
@@ -132,7 +132,6 @@ body {
 
         &:active {
             background-color: darken($main-color, $intensity);
-            color: hsla(0, 0%, 100%, 0.5);
             color: $secondary-color;
             transition: background $active-transition-time;
         }
@@ -165,15 +164,20 @@ body {
     &:active {
         background-color: darken($main-color, $intensity);
         transition: background-color $active-transition-time;
+
+        svg {
+            stroke: $secondary-color;
+        }
     }
 
     svg {
         position: absolute;
         width: 100%;
         height: 100%;
+
+        stroke: white;
         stroke-width: 19.5;
         fill: none;
-        stroke: lighten($secondary-color, 10);
     }
 }
 
@@ -268,17 +272,53 @@ body {
         font-size: 0.3rem;
         padding: 0 0.25rem;
         cursor: pointer;
+        transition: color $resting-transition-time;
+
+        &:hover {
+            transition: color $hover-transition-time;
+        }
+
+        &:active {
+            transition: color $active-transition-time;
+        }
     }
 
     .alert {
-        color: hsla(0, 100%, 80%, 1)
+        $button-color: hsl(0, 100%, 80%);
+        color: $button-color;
+
+        &:hover {
+            color: change-color($button-color, $lightness: 90%);
+        }
+
+        &:active {
+            color: transparentize($button-color, 0.75);
+        }
     }
 
     .normal {
-        color: transparentize($secondary-color, 0.25);
+        $button-color: hsl(0, 0%, 75%);
+        color: $button-color;
+
+        &:hover {
+            color: change-color($button-color, $lightness: 90%);
+        }
+
+        &:active {
+            color: transparentize($button-color, 0.75);
+        }
     }
 
     .emphasize {
-        color: lighten($main-color, 10);
+        $button-color: lighten($main-color, 10);
+        color: $button-color;
+
+        &:hover {
+            color: change-color($button-color, $lightness: 90%);
+        }
+
+        &:active {
+            color: transparentize($button-color, 0.75);
+        }
     }
 }
