@@ -1,4 +1,4 @@
-// Represents desnity of stars to be display initially (stars/pixel)
+// Represents density of stars to be display initially (stars/pixel)
 var STAR_DENSITY = 0.0005;
 // Represents how many stars are to be display on screen
 var stars;
