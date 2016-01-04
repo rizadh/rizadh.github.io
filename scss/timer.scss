@@ -118,7 +118,7 @@ body {
         width: 33.33%;
         text-align: center;
         vertical-align: middle;
-        transition: background $resting-transition-time;
+        transition: background $resting-transition-time, color $resting-transition-time;
         cursor: pointer;
 
         color: white;
@@ -127,13 +127,13 @@ body {
 
         &:hover {
             background-color: lighten($main-color, $intensity);
-            transition: background $hover-transition-time;
+            transition: background $hover-transition-time, color $hover-transition-time;
         }
 
         &:active {
             background-color: darken($main-color, $intensity);
             color: $secondary-color;
-            transition: background $active-transition-time;
+            transition: background $active-transition-time, color $active-transition-time;
         }
 
         &.text-cell {
@@ -159,6 +159,10 @@ body {
     &:hover {
         background-color: lighten($main-color, $intensity);
         transition: background-color $hover-transition-time;
+
+        svg {
+            transition:stroke $hover-transition-time;
+        }
     }
 
     &:active {
@@ -167,6 +171,7 @@ body {
 
         svg {
             stroke: $secondary-color;
+            transition: stroke $active-transition-time
         }
     }
 
@@ -178,6 +183,7 @@ body {
         stroke: white;
         stroke-width: 19.5;
         fill: none;
+        transition: stroke $resting-transition-time;
     }
 }
 
