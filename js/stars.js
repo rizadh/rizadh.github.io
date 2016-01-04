@@ -78,13 +78,15 @@ function spawnStar() {
 			duration: twinkle_duration,
 			loop: true,
 			progress: function(e, c, r) {
-				var randomizer = Math.random() > 0.75;
-				var thisElement = $(this);
-				if ($.Velocity.hook(thisElement, 'scale') === 0 && randomizer) {
-					thisElement.css({
-						left: Math.random() * 100 + '%',
-						top: Math.random() * 100 + '%',
-					});
+				var randomizer = Math.random() > 0;
+				if (c === 1 && r === 0) {
+					$(e).data('scalingDown', !$(e).data('scalingDown'));
+					if ($(e).data('scalingDown')) {
+						$(e).css({
+							left: Math.random() * 100 + '%',
+							top: Math.random() * 100 + '%',
+						});
+					}
 				}
 			}
 		})
