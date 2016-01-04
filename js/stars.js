@@ -1,9 +1,11 @@
+// Represents desnity of stars to be display initially (stars/pixel)
+var STAR_DENSITY = 0.0005;
 // Represents how many stars are to be display on screen
-var stars = Math.round($(window).height() * $(window).width() / 2000);
+var stars;
 
 $(function() {
 	// Spawn initial stars
-	spawnStars(stars);
+	spawnStars();
 	// Clicking on document opens up prompt to change number of stars
 	$(document).click(changeNumberOfStars);
 });
@@ -12,17 +14,19 @@ function changeNumberOfStars() {
 	// Text to display to user
 	var prompt_text = 'There are currently ' + stars +
 		' stars. Enter a new number of stars below:';
-	// Get input from user
-	var newStars = prompt(prompt_text);
-	// If input was not empty, spawn given number of stars
-	if (newStars) spawnStars(stars = newStars);
+	// Spawn given number of stars
+	spawnStars(prompt(prompt_text));
 }
 
 function spawnStars(num_stars) {
+	// Set number of stars to given stars, if none given, to previously set
+	// number, if no previously set, then use resolution of window
+	stars = num_stars || stars ||
+		Math.round($(window).height() * $(window).width() * STAR_DENSITY);
 	// Remove all previous stars
-	$('.star').remove()
+	$('.star').remove();
 	// Spawn given number of stars in current round
-	for (var i = num_stars; i > 0; i--) {
+	for (var i = stars; i > 0; i--) {
 		spawnStar();
 	}
 }
@@ -32,7 +36,7 @@ function spawnStar() {
 	var element = $('<div></div>');
 
 	// Create randomized values for stars properties
-	var startup_delay = Math.random() * stars * 10;
+	var startup_delay = Math.random() * Math.max(Math.min(stars, 1000), 200) * 10;
 	var twinkle_duration = 1500 + Math.random() * 500;
 	var size = Math.ceil(Math.random() * 4);
 	var x_position = Math.random() * 100 + '%';
