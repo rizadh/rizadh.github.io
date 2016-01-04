@@ -64,12 +64,14 @@ function spawnStar() {
 			boxShadowColor: glow_color
 		})
 		// Add random delay to stagger fade in of stars
-		.delay(startup_delay)
 		// Fade in star to full size
 		.velocity({
 			scale: 1,
-			opacity: 1
-		}, twinkle_duration)
+			opacity: 1,
+		}, {
+			delay: startup_delay,
+			duration: twinkle_duration
+		})
 		// Fade out star
 		.velocity({
 			scale: 0,
