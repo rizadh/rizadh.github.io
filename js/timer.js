@@ -728,6 +728,9 @@ function showNotification(message, buttons) {
 				.click(button.clickFunction)
 				.prependTo(button_wrapper);
 		}
+	} else {
+		clearTimeout(bannerText.data('hideTimeout'));
+		bannerText.data('hideTimeout', setTimeout(hideNotification, 5000));
 	}
 
 	bannerText.parent()
