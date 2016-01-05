@@ -4,6 +4,8 @@ var STAR_DENSITY = 0.0005;
 var stars;
 
 $(function() {
+	// Attach Fastlick
+	FastClick.attach(document.body);
 	// Spawn initial stars
 	spawnStars();
 	// Clicking on document opens up prompt to change number of stars
