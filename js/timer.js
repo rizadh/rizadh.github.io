@@ -88,31 +88,6 @@ $(function () {
 			complete: function() {
 				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
 				var durationSet = parseInt(localStorage.getItem('durationSet'));
-				var noButton = {
-					text: 'No',
-					style: 'alert',
-					clickFunction: function () {
-						localStorage.setItem('timeStarted', '0');
-						localStorage.setItem('durationSet', '0');
-					}
-				};
-				var sureButton = {
-					text: 'Sure',
-					style: 'emphasize',
-					clickFunction: function () {
-						var progress = 1 - timeLeft() / durationSet;
-						if (timeLeft() > 0) {
-							$('#dial-ring path')
-								.data('timeLeft', timeLeft())
-								.data('progress', progress);
-							startTimer(false, true);
-						} else {
-							showNotification(
-								'Too late, the timer has already ended'
-							);
-						}
-					}
-				}
 				if (timeStarted && durationSet) {
 					var timeThresholdSec = 5;
 					if (timeLeft() > timeThresholdSec * 1000) {
@@ -473,7 +448,7 @@ function setDisplayTime(text, style) {
 				.velocity({
 					fontSize: newFontSize
 				}, {
-					easing: EASE_OUT,
+					easing: [100, 10],
 					duration: ANIMATION_DURATION,
 					queue: false
 				});
