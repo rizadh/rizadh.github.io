@@ -443,7 +443,7 @@ function setDisplayTime(text, style) {
 					}
 				})
 				.end()
-				.appendTo(displayText.parent());
+				.prependTo(displayText.parent());
 
 			displayText
 				.data('currentTime', currentTime)
