@@ -15,7 +15,6 @@ $(function () {
 	var display = $('#display');
 	var displayText = $('#display-text');
 	var keypad = $('#keypad');
-	var keypadButtons = keypad.find('td');
 	var keyboardHelp = $('#keyboard-help');
 
 	// Attach Fastlick
@@ -24,6 +23,7 @@ $(function () {
 	// Hook Velocity to help menu and display-text translate properties
 	$.Velocity.hook(keyboardHelp, 'translateX', '-50%');
 	$.Velocity.hook(keyboardHelp, 'translateY', '-50%');
+	$.Velocity.hook(displayText, 'translateX', '-50%');
 	$.Velocity.hook(displayText, 'translateY', '-50%');
 	$.Velocity.hook(keypad, 'translateX', '-50%');
 
@@ -46,36 +46,37 @@ $(function () {
 
 	// Startup animation
 	$.Velocity.hook(display, 'translateY', '-100%');
+	keypad.css('opacity', 0);
 
 	// Handle if time is provided in URL
 	var GETtime = GET('time');
 	if (validTimeString(GETtime)) {
 		// Immediately start timer
 		setDisplayTime(('000000' + GETtime).slice(-6));
-		$.Velocity.hook(keypad, 'opacity', '0');
-		$.Velocity.hook(display, 'height', '90%');
-		$.Velocity.hook(display, 'boxShadowblur', '0.2rem');
+		display.css('height', '90%');
 		startTimer();
 	} else {
-		$.Velocity.hook(keypadButtons, 'scale', '0');
+		$.Velocity.hook(keypad, 'translateY', '20%');
 		$.Velocity.hook(displayText, 'translateY', '-100%');
-		// Create slideIn effect for keypad
-		$.Velocity.RegisterEffect('swingIn', {
-			calls: [
-				[{
-					scale: 1
-				}, 1, {
-					easing: EASE_OUT
-				}]
-			]
-		});
 
-		// Animate display
-		displayText.velocity({
-			translateY: '-50%'
+		var startupAnimationDuration = ANIMATION_DURATION * 1.5;
+
+		// Animate keypad
+		keypad.velocity({
+			opacity: 1,
+			translateY: 0
 		}, {
 			easing: EASE_OUT,
-			duration: ANIMATION_DURATION * 1.5,
+			duration: startupAnimationDuration
+		});
+
+		// Animate display text
+		displayText.velocity({
+			translateY: '-50%',
+			rotateX: 0
+		}, {
+			easing: EASE_OUT,
+			duration: startupAnimationDuration
 		});
 
 		// Animate display
@@ -83,7 +84,7 @@ $(function () {
 			translateY: 0
 		}, {
 			easing: EASE_OUT,
-			duration: ANIMATION_DURATION * 1.5,
+			duration: startupAnimationDuration,
 			complete: function() {
 				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
 				var durationSet = parseInt(localStorage.getItem('durationSet'));
@@ -128,15 +129,6 @@ $(function () {
 				}
 			}
 		});
-
-		// Animate keypad
-		keypadButtons.velocity('swingIn', {
-			duration: ANIMATION_DURATION,
-			stagger: ANIMATION_DURATION / 18,
-			backwards: true,
-			drag: true,
-			display: null
-		});
 	}
 
 	// Clear display and show default message
@@ -153,6 +145,7 @@ $(function () {
 			addDigit(keyValue);
 		}
 	});
+
 	$('#edit-button').click(editTime);
 	display.on('click', '#display-text', togglePause);
 	$('#notification-banner').on('click', '.button', hideNotification);
@@ -184,7 +177,7 @@ $(function () {
 			case 8:
 				e.preventDefault();
 				if ($('#display').data('inputMode')) {
-					var deletedTime = ('0' + getDisplayTime()).slice(-7, -1);
+					var deletedTime = ('0' + displayTime()).slice(-7, -1);
 					setDisplayTime(deletedTime);
 				}
 				break;
@@ -298,11 +291,8 @@ $(function () {
 
 
 
-/**
- * Returns the value of the display.
- * @param {boolean} actual - True if the actual text of the display is wanted.
- */
-function getDisplayTime() {
+/** Returns the value of the display. */
+function displayTime() {
 	return $('#display-text').data('currentTime');
 }
 
@@ -320,131 +310,189 @@ function validTimeString(timeString) {
  * @param (string) text - Value to be set
  * @param {boolean} actual - If true, display's text is changed directly to
  *                           specified value or if parsing is applied first
- * @param {boolean} fancy - Determines whether fancy animation is used
+ * @param {boolean} style - Determines style of animation used
  */
-function setDisplayTime(text, fancy) {
-	var display = $('#display-text');
-	var newDisplayText = display.clone(true).css('font-size', '1em');
-	if (text === '000000' || text === '') {
-		newDisplayText
-			.data('currentTime', '000000')
-			.text('0s')
-			.css('font-family', 'robotoregular');
-		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
-	} else if (text === 'Done') {
-		newDisplayText
-			.data('currentTime', '000000')
-			.text(text)
-			.css('font-family', 'robotoregular');
-		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
-	} else if (text === 'Paused') {
-		newDisplayText
-			.text(text)
-			.css('font-family', 'robotoregular');
-		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
-	} else if (display.data('currentTime') !== text ||
-		display.text() === 'Paused') {
-		newDisplayText
-			.data('currentTime', text)
-			.css('font-family', 'robotoregular');
-		var timeArray = [];
-		var unitArray = ['h', 'm', 's'];
-		for (var i = 0; i < 3; i++) {
-			var timeValue = text.slice(2 * i, 2 * i + 2);
-			if (timeValue > 0 || timeArray[0] || i === 2) {
-				if (timeValue < 10 && !timeArray[0]) {
-					timeValue = timeValue.slice(-1);
-				}
-				timeArray.push(timeValue + unitArray[i]);
-			}
-		}
-		var newTime = timeArray.join(' ');
-		if (windowHeight * 0.9 > windowWidth && newTime.length > 8) {
-			var newFontSize;
-			if (windowHeight < windowWidth * 1.5) {
-				var lowerBound = 1 / 0.9; // Max size
-				var upperBound = 1.5; // Min size
-				var ratio = windowHeight / windowWidth;
-				var weight = (upperBound - ratio) / (upperBound - lowerBound);
-				newFontSize = 8 / newTime.length * (1 - weight) + weight;
-			} else {
-				newFontSize = 8 / newTime.length;
-			}
-			newDisplayText.css('font-size', newFontSize + 'em');
-		}
-		newDisplayText.html(newTime.replace(' ', '&nbsp;'));
-		changeDisplayText(newDisplayText, fancy ? 'fancy' : '');
-	}
-}
-
-/**
- * Changes the text displayed
- * @param (jQuery) newDisplayText - The new #display element
- * @param {string} style - The style of animation to use when changing text
- */
-function changeDisplayText(newDisplayText, style) {
-	$('#display-text-old').remove();
+function setDisplayTime(text, style) {
+	// Determines whether display needs to be updated
+	var update = false;
+	// New text to be show on display
+	var newText = '';
+	// New font size of display
+	var newFontSize = '1rem';
+	// 6-digit represntation of stored display time
+	var currentTime = '';
+	// jQuery variables for easy access
 	var displayText = $('#display-text');
-	if (style === 'fancy') {
-		var displayHTML = displayText.text();
-		var newDisplayHTML = newDisplayText.text();
-		var displayNewHTML = '';
-		var newDisplayNewHTML = '';
-		if (displayHTML.length === newDisplayHTML.length) {
-			for (var i = 0; i < displayHTML.length; i++) {
-				if (displayHTML[i] === newDisplayHTML[i]) {
-					displayNewHTML += displayHTML[i];
-					newDisplayNewHTML += newDisplayHTML[i];
-				} else {
-					displayNewHTML += '<span>' + displayHTML[i] + '</span>';
-					newDisplayNewHTML += '<span>' + newDisplayHTML[i] + '</span>';
+	var oldDisplayText = displayText.clone(true).attr('id', 'display-text-old');
+
+	// Handle special cases
+	switch (text) {
+		// Handle empty or zero input
+		case '000000':
+		case '':
+			currentTime = '000000';
+			newText = '0s';
+			update = true;
+			break;
+		// Handle timer completion
+		case 'Done':
+			currentTime = '000000';
+			newText = text;
+			update = true;
+			break;
+		// Handle timer pause
+		case 'Paused':
+			newText = text;
+			update = true;
+			break;
+		// Handle regular text change (timing or inputting)
+		default:
+			if (displayText.data('currentTime') !== text ||
+				displayText.text() === 'Paused') {
+				var timeArray = [];
+				var unitArray = ['h', 'm', 's'];
+				for (var i = 0; i < 3; i++) {
+					var timeValue = text.slice(2 * i, 2 * i + 2);
+					if (timeValue > 0 || timeArray[0] || i === 2) {
+						if (timeValue < 10 && !timeArray[0]) {
+							timeValue = timeValue.slice(-1);
+						}
+						timeArray.push(timeValue + unitArray[i]);
+					}
+				}
+				var newTime = timeArray.join(' ');
+
+				// Shrink text to fit into dial ring for narrower windows
+				if (windowHeight * 0.9 > windowWidth && newTime.length > 8) {
+					// Gradually scale down to shrunken size
+					if (windowHeight < windowWidth * 1.5) {
+						// Max possible ratio
+						var lowerBound = 1 / 0.9;
+						// Min possible ratio
+						var upperBound = 1.5;
+						var ratio = windowHeight / windowWidth;
+						var weight = (upperBound - ratio) / (upperBound - lowerBound);
+						newFontSize = 8 / newTime.length * (1 - weight) + weight;
+					}
+					// Limit width to width of 8 characters
+					else {
+						newFontSize = 8 / newTime.length;
+					}
+					newFontSize += 'rem';
+				}
+
+				currentTime = text;
+				newText = newTime;
+				update = true;
+			}
+	}
+
+	// Update display only if it needs to be updated
+	if (update) {
+		// Remove stray elements
+		// $('#display-text-old').remove();
+		// Crossfade style animation
+		if (style === 'crossfade') {
+			var oldDisplayHTML = displayText.text();
+			var newDisplayHTML = newText;
+			var spannedOldDisplayHTML = '';
+			var spannedNewDisplayHTML = '';
+
+			// Selective crossfading only if text is same length
+			if (oldDisplayHTML.length === newDisplayHTML.length) {
+				// Iterate through every letter in each text for matches
+				for (var i = 0; i < oldDisplayHTML.length; i++) {
+					// Add matched text normally to new text
+					if (oldDisplayHTML[i] === newDisplayHTML[i]) {
+						spannedOldDisplayHTML += oldDisplayHTML[i];
+						spannedNewDisplayHTML += newDisplayHTML[i];
+					}
+					// Wrap altered text with span for subsequent animation
+					else {
+						spannedOldDisplayHTML += '<span>' + oldDisplayHTML[i] +
+							'</span>';
+						spannedNewDisplayHTML += '<span>' + newDisplayHTML[i] +
+							'</span>';
+					}
 				}
 			}
-		} else {
-			displayNewHTML += '<span>' + displayHTML + '</span>';
-			newDisplayNewHTML += '<span>' + newDisplayHTML + '</span>';
+			// Crossfade entire text if lengths differ from each other
+			else {
+				spannedOldDisplayHTML = '<span>' + oldDisplayHTML + '</span>';
+				spannedNewDisplayHTML = '<span>' + newDisplayHTML + '</span>';
+			}
+
+			// Regex to find duplicate spans
+			var replaceSpan = /<\/span><span>/gi;
+			oldDisplayText
+				.html(spannedOldDisplayHTML
+					.replace(replaceSpan, '')
+					.replace(' ', '&nbsp;')
+				)
+				.children('span')
+				.velocity({
+					opacity: [0, 1],
+					scale: 0.5
+				}, {
+					easing: EASE_OUT,
+					duration: ANIMATION_DURATION,
+					queue: false,
+					display: 'inline-block',
+					complete: function () {
+						$(this).parent().remove();
+					}
+				})
+				.end()
+				.appendTo(displayText.parent());
+
+			displayText
+				.data('currentTime', currentTime)
+				.html(spannedNewDisplayHTML
+					.replace(replaceSpan, '')
+				 	.replace(' ', '&nbsp;')
+				)
+				.css({
+					fontFamily: 'robotoregular'
+				})
+				.children('span')
+				.css('opacity', 0)
+				.velocity({
+					opacity: 1,
+					scale: [1, 0.5]
+				}, {
+					easing: EASE_OUT,
+					duration: ANIMATION_DURATION,
+					queue: false,
+					display: 'inline-block',
+					complete: function() {
+						$(this).contents().unwrap();
+					}
+				});
+
+			displayText.add(oldDisplayText)
+				.velocity({
+					fontSize: newFontSize
+				}, {
+					easing: EASE_OUT,
+					duration: ANIMATION_DURATION,
+					queue: false
+				});
 		}
-
-		var replaceSpan = /<\/span><span>/gi;
-		displayText
-			.attr('id', 'display-text-old')
-			.html(displayNewHTML.replace(replaceSpan, ''))
-			.children('span')
-			.velocity({
-				opacity: 0,
-				scale: 0.5
-			}, {
-				easing: EASE_OUT,
-				duration: ANIMATION_DURATION,
-				queue: false,
-				display: 'inline-block',
-				complete: function () {
-					$(this).parent().remove();
-				}
-			});
-
-		newDisplayText
-			.html(newDisplayNewHTML.replace(replaceSpan, ''))
-			.children('span')
-			.css('opacity', 0)
-			.velocity({
-				opacity: [1, 0],
-				scale: [1, 0.5]
-			}, {
-				easing: EASE_OUT,
-				duration: ANIMATION_DURATION,
-				queue: false,
-				display: 'inline-block'
-			});
-		newDisplayText.appendTo('#display')
-	} else {
-		displayText.remove();
-		newDisplayText.appendTo('#display');
+		// Default "animation" (solid transition)
+		else {
+			displayText
+				.data('currentTime', currentTime)
+				.css({
+					fontFamily: 'robotoregular',
+					fontSize: newFontSize
+				})
+				.html(newText)
+		}
 	}
 }
 
 function addDigit(digit) {
-	var newTime = (getDisplayTime() + digit).slice(-6);
+	var newTime = (displayTime() + digit).slice(-6);
 	setDisplayTime(newTime);
 }
 
@@ -453,7 +501,7 @@ function startTimer(resume, restore) {
 	var display = $('#display');
 	var displayText = display.find('#display-text');
 	// Convert display input to seconds
-	var timeString = getDisplayTime();
+	var timeString = displayTime();
 	var hoursToSeconds = timeString.slice(-6, -4) * 3600;
 	var minutesToSeconds = timeString.slice(-4, -2) * 60;
 	var seconds = timeString.slice(-2) * 1;
@@ -569,11 +617,11 @@ function setTime(sec, resume) {
 			var times = [hours, minutes, seconds];
 			if (r !== 0) {
 				// Send time text to display
-				setDisplayTime(times.join(''), true);
+				setDisplayTime(times.join(''), 'crossfade');
 			}
 		},
 		complete: function () {
-			setDisplayTime('Done', true);
+			setDisplayTime('Done', 'crossfade');
 			$('#display').removeClass('running');
 			localStorage.setItem('timeStarted', 0);
 			localStorage.setItem('durationSet', 0);
@@ -609,7 +657,7 @@ function setDial(dial, arcRadius, progress) {
 /** Activates input mode */
 function editTime() {
 	var display = $('#display');
-	setDisplayTime(getDisplayTime(), true);
+	setDisplayTime(displayTime(), 'crossfade');
 	display
 		.data('inputMode', true)
 		.data('paused', false)
@@ -669,10 +717,11 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
+		}
 		// Handle if timer is running
-		} else if (display.hasClass('running')) {
+		else if (display.hasClass('running')) {
 			$('#dial-ring path').velocity('stop');
-			setDisplayTime('Paused', true);
+			setDisplayTime('Paused', 'crossfade');
 			display.data('paused', true);
 			$('#dial-ring')
 				.velocity('stop')
@@ -682,8 +731,9 @@ function togglePause() {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION
 				});
+		}
 		// Handle if timer is finished/not running
-		} else {
+		else {
 			editTime();
 		}
 	}
@@ -704,10 +754,8 @@ function toggleKeyboardHelp(forceState) {
 			}, {
 				easing: show ? EASE_OUT : EASE_IN,
 				display: show ? 'block' : 'none',
-				duration: (show ? ANIMATION_DURATION :
-					ANIMATION_DURATION / 4)
+				duration: (show ? ANIMATION_DURATION : ANIMATION_DURATION / 4)
 			});
-
 	} else if (!!helpMenu.data('shown') === !forceState){
 		toggleKeyboardHelp();
 	}
@@ -771,7 +819,7 @@ function hideNotification() {
 			}, {
 				easing: EASE_IN,
 				display: 'none',
-				duration: ANIMATION_DURATION / 4
+				duration: ANIMATION_DURATION / 2
 			});
 	}
 }

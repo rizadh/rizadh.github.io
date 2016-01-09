@@ -8,13 +8,13 @@ $secondary-color: hsl($theme-hue, 40%, 80%);
 
 $resting-transition-time: 0.2s;
 $hover-transition-time: 0.1s;
-$active-transition-time: 0;
+$active-transition-time: 0s;
 
 $translucent-dark-background: hsla($theme-hue, 40%, 20%, 0.9);
 $translucence-blur: blur(5px);
 $translucent-dark-border: 0.02rem solid hsla(0, 0%, 0%, 0.2);
 
-@mixin translucent-dark($border-location) {
+@mixin translucent-dark() {
     background-color: $translucent-dark-background;
     -webkit-backdrop-filter: $translucence-blur;
 }
@@ -40,7 +40,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    -webkit-perspective: 3rem;
+    perspective: 3rem;
 }
 
 #display {
@@ -54,30 +54,52 @@ body {
     box-shadow: 0 0 0.1rem hsla(0, 0%, 0%, 0.5);
     z-index: 2;
 
-    &.running #display-text:hover {
+    &.running #display-text-wrapper:hover {
         cursor: pointer;
-        color: darken($main-color, 5);
-        transition: color $hover-transition-time;
+
+        #display-text {
+            color: darken($main-color, 5);
+            transition: color $hover-transition-time;
+        }
     }
 
-    &.running #display-text:active {
+    &.running #display-text-wrapper:active #display-text {
         color: darken($main-color, 15);
         transition: color $active-transition-time;
     }
 }
 
-#display-text, #display-text-old {
+#display-text-wrapper {
     position: absolute;
-    left: 0;
+    left: 50%;
     top: 50%;
     width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+#display-text, #display-text-old {
+    position: absolute;
     text-align: center;
+
     transition: color $resting-transition-time;
 
     text-align: center;
     font-family: 'roboto_condensedregular';
 
     color: darken($main-color, 10);
+
+    & span.old {
+        color: red;
+    }
+
+    & span.new {
+        color: green;
+    }
+}
+
+#display-text {
+    pointer-events: auto;
 }
 
 #dial-ring {
@@ -110,9 +132,10 @@ body {
     max-width: 10rem;
     height: 80%;
     z-index: 0;
+    transform-origin: bottom;
+    transform-origin: top;
 
     font-family: 'robotoregular';
-    transform-origin: 50% 100%;
 
     td {
         width: 33.33%;
@@ -207,7 +230,7 @@ body {
     pointer-events: auto;
     overflow: auto;
 
-    @include translucent-dark(border);
+    @include translucent-dark();
     border-radius: 0.2rem;
 
     $keyboard-help-padding: 0.2rem;
@@ -269,7 +292,7 @@ body {
     color: white;
     font-family: 'roboto_condensedregular';
 
-    @include translucent-dark(border-bottom);
+    @include translucent-dark();
 
     .button {
         display: inline-block;
