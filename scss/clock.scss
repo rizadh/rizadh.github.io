@@ -42,5 +42,7 @@ svg line {
 }
 
 #center {
-    fill: $accent_color;
+    stroke: $accent_color;
+    stroke-width: 1.5;
+    fill: darken($main_color, 10);
 }
