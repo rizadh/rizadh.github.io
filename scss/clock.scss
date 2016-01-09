@@ -17,7 +17,7 @@ svg {
 }
 
 #frame {
-    stroke-width: 2;
+    stroke-width: 3;
     stroke: $secondary_color;
     fill: darken($main_color, 10);
 }
@@ -28,12 +28,12 @@ svg line {
 
 #hour-hand {
     stroke: $secondary_color;
-    stroke-width: 2;
+    stroke-width: 3;
 }
 
 #minute-hand {
     stroke: darken($secondary_color, 20);
-    stroke-width: 2;
+    stroke-width: 3;
 }
 
 #second-hand {
