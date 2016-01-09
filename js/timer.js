@@ -94,6 +94,31 @@ $(function () {
 						var message = 'Seems like the timer was still running' +
 							' when you last closed this app. Do you want to' +
 							' restore the timer?';
+						var noButton = {
+							text: 'No',
+							style: 'alert',
+							clickFunction: function () {
+								localStorage.setItem('timeStarted', '0');
+								localStorage.setItem('durationSet', '0');
+							}
+						};
+						var sureButton = {
+							text: 'Sure',
+							style: 'emphasize',
+							clickFunction: function () {
+								var progress = 1 - timeLeft() / durationSet;
+								if (timeLeft() > 0) {
+									$('#dial-ring path')
+										.data('timeLeft', timeLeft())
+										.data('progress', progress);
+									startTimer(false, true);
+								} else {
+									showNotification(
+										'Too late, the timer has already ended'
+									);
+								}
+							}
+						}
 						showNotification(message, [noButton, sureButton]);
 					}
 				}
