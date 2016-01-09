@@ -291,6 +291,8 @@ body {
     text-align: center;
     color: white;
     font-family: 'roboto_condensedregular';
+    $shadow-size: 0.5rem;
+    box-shadow: 0 -#{$shadow-size} $shadow-size $shadow-size hsla(0, 0%, 0%, 0.5);
 
     @include translucent-dark();
 
