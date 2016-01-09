@@ -390,7 +390,7 @@ function setDisplayTime(text, style) {
 	// Update display only if it needs to be updated
 	if (update) {
 		// Remove stray elements
-		// $('#display-text-old').remove();
+		$('#display-text-old').remove();
 		// Crossfade style animation
 		if (style === 'crossfade') {
 			var oldDisplayHTML = displayText.text();
