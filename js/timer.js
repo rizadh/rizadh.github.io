@@ -330,16 +330,10 @@ function setDisplayTime(text, style) {
 		// Handle empty or zero input
 		case '000000':
 		case '':
-			currentTime = '000000';
-			newText = '0s';
-			update = true;
-			break;
+			text = '0s';
 		// Handle timer completion
 		case 'Done':
 			currentTime = '000000';
-			newText = text;
-			update = true;
-			break;
 		// Handle timer pause
 		case 'Paused':
 			newText = text;
