@@ -1,4 +1,4 @@
-@import "partials/_fontface";
+@import "fontface";
 
 @include fontFace(roboto_blackitalic, "../fonts/roboto/roboto-blackitalic-webfont");
 @include fontFace(robotoblack, "../fonts/roboto/roboto-black-webfont");
