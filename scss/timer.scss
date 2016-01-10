@@ -21,6 +21,18 @@ $drop-shadow-blur-2: 0.5rem;
     -webkit-backdrop-filter: $translucence-blur;
 }
 
+@mixin button-color($color) {
+    color: $color;
+
+    &:hover {
+        color: change-color($color, $lightness: 90%);
+    }
+
+    &:active {
+        color: transparentize($color, 0.75);
+    }
+}
+
 body {
     background-color: $main-color;
 }
@@ -318,39 +330,16 @@ body {
 
     .alert {
         $button-color: hsl(0, 100%, 80%);
-        color: $button-color;
-
-        &:hover {
-            color: change-color($button-color, $lightness: 90%);
-        }
-
-        &:active {
-            color: transparentize($button-color, 0.75);
-        }
+        @include button-color($button-color);
     }
 
     .normal {
-        color: $secondary-color;
-
-        &:hover {
-            color: change-color($secondary-color, $lightness: 90%);
-        }
-
-        &:active {
-            color: transparentize($secondary-color, 0.75);
-        }
+        $button-color: $secondary-color;
+        @include button-color($button-color);
     }
 
     .emphasize {
         $button-color: lighten($main-color, 10);
-        color: $button-color;
-
-        &:hover {
-            color: change-color($button-color, $lightness: 90%);
-        }
-
-        &:active {
-            color: transparentize($button-color, 0.75);
-        }
+        @include button-color($button-color);
     }
 }
