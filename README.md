@@ -16,7 +16,7 @@ A fun side-project. Not functionally useful but an interesting exhibition of the
 
 ## [Home Page] (http://rizadh.github.io/index.html)
 
-I left this all the way down here because ironically, this page has not been fully developed yet
+I left this all the way down here because ironically, this page has not been fully developed yet. I'll try to get to it soon but in the meantime you have this page :)
 
 ## Planned Projects
 
