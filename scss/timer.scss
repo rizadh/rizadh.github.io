@@ -10,15 +10,17 @@ $resting-transition-time: 0.2s;
 $hover-transition-time: 0.1s;
 $active-transition-time: 0s;
 
-$translucent-dark-background: hsla($theme-hue, 40%, 20%, 0.9);
-$translucence-blur: blur(5px);
-$translucent-dark-border: 0.02rem solid hsla(0, 0%, 0%, 0.2);
 $drop-shadow-blur-1: 0.1rem;
 $drop-shadow-blur-2: 0.5rem;
 
 @mixin translucent-dark() {
-    background-color: $translucent-dark-background;
-    -webkit-backdrop-filter: $translucence-blur;
+    background-color: hsl($theme-hue, 40%, 25%);
+    -webkit-backdrop-filter: blur(0.2rem);
+
+    body.backdrop-filter & {
+        background-color: transparent;
+        -webkit-backdrop-filter: blur(0.5rem) brightness(0.4);
+    }
 }
 
 @mixin button-color($color) {
@@ -246,7 +248,6 @@ body {
 
     @include translucent-dark();
     box-shadow: 0 0 $drop-shadow-blur-2 transparentize(black, 0.5);
-    border-radius: 0.2rem;
 
     $keyboard-help-padding: 0.2rem;
 

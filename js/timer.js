@@ -40,6 +40,14 @@ $(function () {
 	// Sticky hover fix
 	hoverTouchUnstick();
 
+	if (isSupportedCSS('-webkit-backdrop-filter') ||
+		isSupportedCSS('-moz-backdrop-filter') ||
+		isSupportedCSS('-o-backdrop-filter') ||
+		isSupportedCSS('-ms-backdrop-filter') ||
+	    isSupportedCSS('backdrop-filter') ) {
+			$('body').addClass('backdrop-filter');
+	}
+
 	// Initialize input mode variable represents whether keypad is displayed or
 	// not
 	display.data('inputMode', true);
@@ -846,3 +854,6 @@ function GET(q, s) {
 	var re = new RegExp('&amp;' + q + '=([^&amp;]*)', 'i');
 	return (s = s.replace(/^\?/, '&amp;').match(re)) ? s = s[1] : s = '';
 }
+
+/** Check if CSS property is supported on the browser and returns a boolean */
+function isSupportedCSS(prop) { return prop in document.body.style; }
