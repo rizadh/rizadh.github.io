@@ -437,7 +437,7 @@ function setDisplayTime(text, style) {
 					scale: 0.5
 				}, {
 					easing: EASE_OUT,
-					duration: ANIMATION_DURATION,
+					duration: Math.min(ANIMATION_DURATION, 1000),
 					queue: false,
 					display: 'inline-block',
 					complete: function () {
@@ -463,7 +463,7 @@ function setDisplayTime(text, style) {
 					scale: [1, 0.5]
 				}, {
 					easing: EASE_OUT,
-					duration: ANIMATION_DURATION,
+					duration: Math.min(ANIMATION_DURATION, 1000),
 					queue: false,
 					display: 'inline-block',
 					complete: function() {
