@@ -122,7 +122,7 @@ body {
 
     circle {
         stroke-width: $stroke-width;
-        stroke: rgba($path-color , 0.2);
+        stroke: mix($path-color, $secondary-color, 25%);
     }
 }
 
