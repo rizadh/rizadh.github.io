@@ -750,12 +750,13 @@ function toggleKeyboardHelp(forceState) {
 			.data('shown', show)
 			.velocity('stop')
 			.velocity({
-				scale: (show ? [1, 0] : [0.5, 1]),
+				scaleY: (show ? [1, 0] : [0, 1]),
+				scaleX: (show ? [1, 0.5] : [0.5, 1]),
 				opacity: (show ? [1, 0] : [0, 1])
 			}, {
 				easing: show ? EASE_OUT : EASE_IN,
 				display: show ? 'block' : 'none',
-				duration: (show ? ANIMATION_DURATION : ANIMATION_DURATION / 4)
+				duration: (show ? ANIMATION_DURATION : ANIMATION_DURATION / 2)
 			});
 	} else if (!!helpMenu.data('shown') === !forceState){
 		toggleKeyboardHelp();
