@@ -13,6 +13,8 @@ $active-transition-time: 0s;
 $translucent-dark-background: hsla($theme-hue, 40%, 20%, 0.9);
 $translucence-blur: blur(5px);
 $translucent-dark-border: 0.02rem solid hsla(0, 0%, 0%, 0.2);
+$drop-shadow-blur-1: 0.1rem;
+$drop-shadow-blur-2: 0.5rem;
 
 @mixin translucent-dark() {
     background-color: $translucent-dark-background;
@@ -51,7 +53,7 @@ body {
     height: 20%;
 
     background-color: $secondary-color;
-    box-shadow: 0 0 0.1rem hsla(0, 0%, 0%, 0.5);
+    box-shadow: 0 0 $drop-shadow-blur-1 hsla(0, 0%, 0%, 0.5);
     z-index: 2;
 
     &.running #display-text-wrapper:hover {
@@ -291,8 +293,7 @@ body {
     text-align: center;
     color: white;
     font-family: 'roboto_condensedregular';
-    $shadow-size: 0.5rem;
-    box-shadow: 0 -#{$shadow-size} $shadow-size $shadow-size hsla(0, 0%, 0%, 0.5);
+    box-shadow: 0 -#{$drop-shadow-blur-2} $drop-shadow-blur-2 $drop-shadow-blur-2 hsla(0, 0%, 0%, 0.5);
 
     @include translucent-dark();
 
