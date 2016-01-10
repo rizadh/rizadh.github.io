@@ -330,15 +330,14 @@ body {
     }
 
     .normal {
-        $button-color: hsl(0, 0%, 75%);
-        color: $button-color;
+        color: $secondary-color;
 
         &:hover {
-            color: change-color($button-color, $lightness: 90%);
+            color: change-color($secondary-color, $lightness: 90%);
         }
 
         &:active {
-            color: transparentize($button-color, 0.75);
+            color: transparentize($secondary-color, 0.75);
         }
     }
 
