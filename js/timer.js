@@ -5,7 +5,7 @@ var WHOLECIRCLE = 0.99999;
 var EASEFUNC = 'Expo';
 var EASE_OUT = 'easeOut' + EASEFUNC;
 var EASE_IN = 'easeIn' + EASEFUNC;
-var ANIMATION_DURATION = 400;
+var ANIMATION_DURATION = 300;
 var windowWidth;
 var windowHeight;
 

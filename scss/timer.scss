@@ -6,8 +6,8 @@ $theme-hue: 180;
 $main-color: hsl($theme-hue, 80%, 40%);
 $secondary-color: hsl($theme-hue, 40%, 80%);
 
-$resting-transition-time: 0.2s;
-$hover-transition-time: 0.1s;
+$resting-transition-time: 0.3s;
+$hover-transition-time: $resting-transition-time / 2;
 $active-transition-time: 0s;
 
 $drop-shadow-blur-1: 0.1rem;
