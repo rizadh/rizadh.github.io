@@ -12,7 +12,7 @@ Modern, blue-themed analog clock. Displays current time and sports a very simpli
 
 ## [Stars] (http://rizadh.github.io/stars.html)
 
-A fun side-project. Not functionally useful but an interesting exhibition of the power of JavaScript based animation. Can be used as an aribtrary benchmark of device graphic performance.
+A fun side-project. Not functionally useful but an interesting exhibition of the power of JavaScript based animation. Can be used as an arbitrary benchmark of device graphic performance.
 
 ## [Home Page] (http://rizadh.github.io/index.html)
 
@@ -20,6 +20,6 @@ I left this all the way down here because ironically, this page has not been ful
 
 ## Planned Projects
 
-**Scheduler** ~ Or _Schedulo_? Deciding on a name but will be an app geared towards students to help layout their weekly course timetables in an elegantly designed, white-based but colourful web app. Will allow for schedule overlaying to compare two different schedules.
+**Scheduler** ~ Or _Schedulo_? Deciding on a name but will be an app geared towards students to help layout their weekly course timetables in an elegantly designed, white-based but colorful web app. Will allow for schedule overlaying to compare two different schedules.
 
 Have any ideas for me? Send me an [email to me!] (mailto:rizadh@icloud.com)
