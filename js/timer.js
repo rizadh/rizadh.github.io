@@ -174,10 +174,10 @@ $(function () {
 						notificationBanner.find('.alert').click();
 						break;
 				}
+				return false;
 			} else {
 				hideNotification();
 			}
-			return false;
 		}
 		// Perform events depending on keycode
 		switch (key) {
