@@ -69,20 +69,6 @@ body {
     background-color: $secondary-color;
     box-shadow: 0 0 $drop-shadow-blur-1 hsla(0, 0%, 0%, 0.5);
     z-index: 2;
-
-    &.running #display-text-wrapper:hover {
-        cursor: pointer;
-
-        #display-text {
-            color: darken($main-color, 5);
-            transition: color $hover-transition-time;
-        }
-    }
-
-    &.running #display-text-wrapper:active #display-text {
-        color: darken($main-color, 15);
-        transition: color $active-transition-time;
-    }
 }
 
 #display-text-wrapper {
@@ -105,12 +91,15 @@ body {
 
     color: darken($main-color, 10);
 
-    & span.old {
-        color: red;
+    #display.running #display-text-wrapper &:hover {
+        cursor: pointer;
+        color: darken($main-color, 5);
+        transition: color $hover-transition-time;
     }
 
-    & span.new {
-        color: green;
+    #display.running #display-text-wrapper &:active {
+        color: darken($main-color, 15);
+        transition: color $active-transition-time;
     }
 }
 
