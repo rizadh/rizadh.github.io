@@ -328,18 +328,13 @@ body {
         }
     }
 
-    .alert {
-        $button-color: hsl(0, 100%, 80%);
-        @include button-color($button-color);
-    }
+    $alert-color: hsl(0, 100%, 80%);
+    $normal-color: $secondary-color;
+    $emphasize-color: lighten($main-color, 10);
 
-    .normal {
-        $button-color: $secondary-color;
-        @include button-color($button-color);
-    }
+    .alert { @include button-color($alert-color); }
 
-    .emphasize {
-        $button-color: lighten($main-color, 10);
-        @include button-color($button-color);
-    }
+    .normal { @include button-color($normal-color); }
+
+    .emphasize { @include button-color($emphasize-color); }
 }
