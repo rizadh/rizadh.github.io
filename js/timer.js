@@ -669,8 +669,7 @@ function editTime() {
 	display
 		.velocity('stop')
 		.velocity({
-			height: '20%',
-			boxShadowBlur: '0.1rem'
+			height: '20%'
 		}, {
 			duration: ANIMATION_DURATION,
 			easing: EASE_OUT,
