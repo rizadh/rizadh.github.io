@@ -45,7 +45,7 @@ function updateClock(startup) {
     }
 
     // Adjust animation parameters for startup
-    var duration = startup ? 800 : 400;
+    var duration = startup ? 600 : 300;
     var easing = startup ? 'easeOutExpo' : [100, 5];
 
     progress_array.forEach(function(unit, index) {
