@@ -1,10 +1,14 @@
 'use strict';
 
+var BASE_DURATION = 300;
+
 $(function() {
     updateClock(true);
 });
 
 function updateClock(startup) {
+    startup = startup || false;
+
     // Obtain values of each time unit
     var date = new Date();
     var hours = date.getHours();
@@ -40,12 +44,12 @@ function updateClock(startup) {
             opacity: 1
         }, {
             easing: 'easeOutExpo',
-            duration: 800
+            duration: BASE_DURATION * 2
         });
     }
 
     // Adjust animation parameters for startup
-    var duration = startup ? 600 : 300;
+    var duration = BASE_DURATION * (1 + startup);
     var easing = startup ? 'easeOutExpo' : [100, 5];
 
     progress_array.forEach(function(unit, index) {
