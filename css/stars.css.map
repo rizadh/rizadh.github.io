@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,IAAK,CACD,gBAAgB,CAAE,OAAsB,CACxC,gBAAgB,CAAE,oDAAkF,CACpG,qBAAqB,CAAE,KAAK,CAC5B,QAAQ,CAAE,MAAM,CAGpB,KAAM,CACF,QAAQ,CAAE,QAAQ,CAClB,gBAAgB,CAAE,IAAoB,CACtC,OAAO,CAAE,CAAC,CACV,SAAS,CAAE,qBAAqB,CAChC,aAAa,CAAE,IAAI,CACnB,UAAU,CAAE,aAAa",
+"sources": ["../scss/stars.scss"],
+"names": [],
+"file": "stars.css"
+}
