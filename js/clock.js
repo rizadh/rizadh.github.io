@@ -1,3 +1,4 @@
+(function() {
 'use strict';
 
 var BASE_DURATION = 300;
@@ -71,3 +72,4 @@ function updateClock(startup) {
     // Refresh clock in 1 second
     setTimeout(updateClock, 1000);
 }
+})();

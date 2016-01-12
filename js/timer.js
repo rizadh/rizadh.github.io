@@ -1,3 +1,4 @@
+(function() {
 'use strict';
 
 // SVG arcs cannot form a complete circle so a value close to 1 is used
@@ -126,7 +127,7 @@ $(function () {
 									);
 								}
 							}
-						}
+						};
 						showNotification(message, [noButton, sureButton]);
 					}
 				}
@@ -140,7 +141,7 @@ $(function () {
 	}
 
 	// Clear display and show default message
-	displayText.data('currentTime', '000000')
+	displayText.data('currentTime', '000000');
 
 	// Set click events
 	keypad.on('click', 'td', function () {
@@ -335,20 +336,18 @@ function setDisplayTime(text, style) {
 
 	// Handle special cases
 	switch (text) {
-		// Handle empty or zero input
-		case '000000':
-		case '':
+		case '000000': // Handle zero input
+		case '': // Handle empty input
 			text = '0s';
-		// Handle timer completion
-		case 'Done':
+		/* falls through */
+		case 'Done': // Handle timer completion
 			currentTime = '000000';
-		// Handle timer pause
-		case 'Paused':
+		/* falls through */
+		case 'Paused': // Handle timer pause
 			newText = text;
 			update = true;
 			break;
-		// Handle regular text change (timing or inputting)
-		default:
+		default: // Handle regular text change (timing or inputting)
 			if (displayText.data('currentTime') !== text ||
 				displayText.text() === 'Paused') {
 				var timeArray = [];
@@ -403,17 +402,17 @@ function setDisplayTime(text, style) {
 			// Selective crossfading only if text is same length
 			if (oldDisplayHTML.length === newDisplayHTML.length) {
 				// Iterate through every letter in each text for matches
-				for (var i = 0; i < oldDisplayHTML.length; i++) {
+				for (var n = 0; n < oldDisplayHTML.length; n++) {
 					// Add matched text normally to new text
-					if (oldDisplayHTML[i] === newDisplayHTML[i]) {
-						spannedOldDisplayHTML += oldDisplayHTML[i];
-						spannedNewDisplayHTML += newDisplayHTML[i];
+					if (oldDisplayHTML[n] === newDisplayHTML[n]) {
+						spannedOldDisplayHTML += oldDisplayHTML[n];
+						spannedNewDisplayHTML += newDisplayHTML[n];
 					}
 					// Wrap altered text with span for subsequent animation
 					else {
-						spannedOldDisplayHTML += '<span>' + oldDisplayHTML[i] +
+						spannedOldDisplayHTML += '<span>' + oldDisplayHTML[n] +
 							'</span>';
-						spannedNewDisplayHTML += '<span>' + newDisplayHTML[i] +
+						spannedNewDisplayHTML += '<span>' + newDisplayHTML[n] +
 							'</span>';
 					}
 				}
@@ -488,7 +487,7 @@ function setDisplayTime(text, style) {
 					fontFamily: 'robotoregular',
 					fontSize: newFontSize
 				})
-				.html(newText)
+				.html(newText);
 		}
 	}
 }
@@ -758,7 +757,7 @@ function toggleKeyboardHelp(forceState) {
 				display: show ? 'block' : 'none',
 				duration: (show ? ANIMATION_DURATION : ANIMATION_DURATION / 2)
 			});
-	} else if (!!helpMenu.data('shown') === !forceState){
+	} else if ((helpMenu.data('shown') || false) !== forceState){
 		toggleKeyboardHelp();
 	}
 }
@@ -858,3 +857,4 @@ function GET(q, s) {
 
 /** Check if CSS property is supported on the browser and returns a boolean */
 function isSupportedCSS(prop) { return prop in document.body.style; }
+})();
