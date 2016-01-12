@@ -14,25 +14,23 @@ body {
 
 #message-title {
     text-align: center;
-    color: hsla(0, 0%, 100%, 1);
+    color: hsl(0, 0%, 100%);
 
-    font-size: 2em;
+    font-size: 2rem;
     font-family: 'roboto_condensedregular';
     text-transform: uppercase;
-    margin: 0px 20px;
 
     span {
-        color: hsla(0, 80%, 60%, 1);
+        color: hsl(0, 80%, 60%);
     }
 }
 
 #message-desc {
     @extend #message-title;
 
-
-    color: hsla(0, 0%, 50%, 1);
+    color: hsl(0, 0%, 50%);
 
     text-transform: none;
-    font-size: 1.25em;
-    line-height: 1.25em;
+    font-size: 1.25rem;
+    line-height: 1.25rem;
 }
