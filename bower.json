@@ -11,7 +11,7 @@
   "private": true,
   "dependencies": {
     "jquery": "~2.2.0",
-    "normalize-scss": "normalize.scss#~4.0.3",
-    "velocity": "~1.2.3"
+    "velocity": "~1.2.3",
+    "normalize-css": "normalize.css#~3.0.3"
   }
 }
