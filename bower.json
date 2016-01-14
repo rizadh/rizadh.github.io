@@ -1,0 +1,17 @@
+{
+  "name": "Personal Website",
+  "homepage": "https://github.com/rizadh/rizadh.github.io",
+  "authors": [
+    "Rizadh Nizam <rizadh@icloud.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "normalize-scss": "normalize.scss#~4.0.3",
+    "velocity": "~1.2.3"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "rizadh.github.io",
+  "version": "1.0.0",
+  "description": "Personal website",
+  "main": "index.html",
+  "dependencies": {
+    "bower": "^1.7.2",
+    "browserify": "^13.0.0",
+    "grunt": "^0.4.5",
+    "react": "^0.14.6",
+    "reactify": "^1.1.1",
+    "uglify-js": "^2.6.1",
+    "watchify": "^3.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rizadh/rizadh.github.io.git"
+  },
+  "author": "Rizadh Nizam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rizadh/rizadh.github.io/issues"
+  },
+  "homepage": "https://github.com/rizadh/rizadh.github.io#readme"
+}
