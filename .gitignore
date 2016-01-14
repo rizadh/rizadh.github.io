@@ -2,6 +2,6 @@
 .sass-cache
 node_modules
 bower_components
-Gruntfile.js
-package.json
 bower.json
+package.json
+Gruntfile.js
