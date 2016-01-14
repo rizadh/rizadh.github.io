@@ -74,9 +74,7 @@ module.exports = function(grunt) {
                     'fastclick'
                 ],
                 dependencies: {
-                    'underscore': 'jquery',
-                    'backbone': 'underscore',
-                    'jquery-mousewheel': 'jquery'
+                    'velocity': 'jquery'
                 },
             }
         },
