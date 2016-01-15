@@ -1,35 +1,42 @@
-@import "partials/normalize";
-@import "partials/roboto";
+@import "partials/normalize"; // Normalize.scss
+@import "partials/roboto"; // Roboto font
 
-$theme-hue: 180;
-$main-color: hsl($theme-hue, 80%, 40%);
-$secondary-color: hsl($theme-hue, 40%, 80%);
+$theme-hue: 180; // Turqouise hue
+$main-color: hsl($theme-hue, 80%, 40%); // Dark, accent colour based on app hue
+$secondary-color: hsl($theme-hue, 40%, 80%); // Lighter version of app hue
 
-$resting-transition-time: 0.3s;
+$resting-transition-time: 0.3s; // 300ms is the base animation time
 $hover-transition-time: $resting-transition-time / 2;
-$active-transition-time: 0s;
+$active-transition-time: 0s; // No animation for active state
 
 $drop-shadow-blur-1: 0.1rem;
 $drop-shadow-blur-2: 0.5rem;
 
+/** Add a dark background to an element, translucent for supported devices */
 @mixin translucent-dark() {
+    // Solid background, shown if device doesn't support backdrop filters
     background-color: hsl($theme-hue, 40%, 25%);
-    -webkit-backdrop-filter: blur(0.2rem);
 
+    // Transparent background, show if device supports backdrop filters
     body.backdrop-filter & {
+        // Disable background color
         background-color: transparent;
+        // Blur and darken background
         -webkit-backdrop-filter: blur(0.5rem) brightness(0.4);
     }
 }
 
+/** Set the regular, :active and :hover button colors */
 @mixin button-color($color) {
     color: $color;
 
     &:hover {
+        // Lighten colour
         color: change-color($color, $lightness: 90%);
     }
 
     &:active {
+        // Transparentize colour
         color: transparentize($color, 0.75);
     }
 }
@@ -38,6 +45,9 @@ body {
     background-color: $main-color;
 }
 
+
+// Remove quirks of some browsers (mainly mobile) that add un-app-like
+// interface effects
 *, *:hover, *:active, *:focus {
     // Prevent text selection
     -webkit-user-select: none;
@@ -55,7 +65,6 @@ body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    perspective: 3rem;
 }
 
 #display {
