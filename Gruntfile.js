@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 
         copy: {
             normalize: {
-                src: 'bower_components/normalize.css/normalize.css',
+                src: 'bower_components/normalize-css/normalize.css',
                 dest: 'scss/partials/_normalize.scss'
             }
         }
