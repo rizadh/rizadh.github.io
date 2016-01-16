@@ -1,6 +1,6 @@
 (function() {
 'use strict';
-
+// $.Velocity.mock = 10;
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLECIRCLE = 0.99999;
 var EASEFUNC = 'Expo';
@@ -55,17 +55,18 @@ $(function () {
 
 	// Startup animation
 	$.Velocity.hook(display, 'translateY', '-100%');
-	keypad.css('opacity', 0);
+	$.Velocity.hook(keypad, 'scaleX', '0.5');
+	$.Velocity.hook(keypad, 'scaleY', '0');
+	$.Velocity.hook(keypad, 'opacity', '0');
 
 	// Handle if time is provided in URL
 	var GETtime = GET('time');
 	if (validTimeString(GETtime)) {
 		// Immediately start timer
+		$.Velocity.hook(display, 'height', '90%')
 		setDisplayTime(('000000' + GETtime).slice(-6));
-		display.css('height', '90%');
 		startTimer();
 	} else {
-		$.Velocity.hook(keypad, 'translateY', '20%');
 		$.Velocity.hook(displayText, 'translateY', '-100%');
 
 		var startupAnimationDuration = ANIMATION_DURATION * 1.5;
@@ -73,10 +74,11 @@ $(function () {
 		// Animate keypad
 		keypad.velocity({
 			opacity: 1,
-			translateY: 0
+			scaleX: 1,
+			scaleY: 1
 		}, {
 			easing: EASE_OUT,
-			duration: startupAnimationDuration
+			duration: ANIMATION_DURATION
 		});
 
 		// Animate display text
@@ -532,19 +534,18 @@ function startTimer(resume, restore) {
 					duration: ANIMATION_DURATION,
 					easing: EASE_OUT
 				});
-
 			// Fade out keys
 			$('#keypad')
 				.velocity('stop')
 				.velocity({
-					translateY: '10%',
+					scaleX: 0.5,
+					scaleY: 0,
 					opacity: 0
 				}, {
 					easing: EASE_OUT,
 					duration: ANIMATION_DURATION,
 					display: 'none'
 				});
-
 			// Fade in edit button
 			$('#edit-button')
 				.velocity('stop')
@@ -678,7 +679,8 @@ function editTime() {
 	$('#keypad')
 		.velocity('stop')
 		.velocity({
-			translateY: 0,
+			scaleX: 1,
+			scaleY: 1,
 			opacity: 1
 		}, {
 			easing: EASE_OUT,
@@ -693,7 +695,10 @@ function editTime() {
 		}, {
 			easing: EASE_OUT,
 			display: 'none',
-			duration: ANIMATION_DURATION
+			duration: ANIMATION_DURATION,
+			complete: function() {
+				$.Velocity.hook($(this), 'translateY', '0');
+			}
 		});
 	$('#dial-ring')
 		.velocity('stop')
