@@ -45,12 +45,11 @@ function updateClock(startup) {
             opacity: 1
         }, {
             easing: 'easeOutExpo',
-            duration: BASE_DURATION * 2
+            duration: BASE_DURATION
         });
     }
 
-    // Adjust animation parameters for startup
-    var duration = BASE_DURATION * (1 + startup);
+    // Adjust animation physics for startup
     var easing = startup ? 'easeOutExpo' : [100, 5];
 
     progress_array.forEach(function(unit, index) {
@@ -64,7 +63,7 @@ function updateClock(startup) {
                 rotateZ: unit[1]
             }, {
                 easing: easing,
-                duration: duration
+                duration: BASE_DURATION
             });
         }
     });
