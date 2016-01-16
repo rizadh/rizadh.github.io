@@ -67,10 +67,6 @@ $(function () {
 		setDisplayTime(('000000' + GETtime).slice(-6));
 		startTimer();
 	} else {
-		$.Velocity.hook(displayText, 'translateY', '-100%');
-
-		var startupAnimationDuration = ANIMATION_DURATION * 1.5;
-
 		// Animate keypad
 		keypad.velocity({
 			opacity: 1,
@@ -81,21 +77,12 @@ $(function () {
 			duration: ANIMATION_DURATION
 		});
 
-		// Animate display text
-		displayText.velocity({
-			translateY: '-50%',
-			rotateX: 0
-		}, {
-			easing: EASE_OUT,
-			duration: startupAnimationDuration
-		});
-
 		// Animate display
 		display.velocity({
 			translateY: 0
 		}, {
 			easing: EASE_OUT,
-			duration: startupAnimationDuration,
+			duration: ANIMATION_DURATION,
 			complete: function() {
 				var timeStarted = parseInt(localStorage.getItem('timeStarted'));
 				var durationSet = parseInt(localStorage.getItem('durationSet'));
