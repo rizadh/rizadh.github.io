@@ -48,7 +48,7 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            files: ['js/*.js', '!js/*.min.js', 'Gruntfile.js', '!js/libraries.js'],
+            files: ['js/*.js', '!js/*.min.js', 'Gruntfile.js', '!js/libraries.js', '!js/snap.js'],
             options: {
                 browser: true,
                 globals: {
