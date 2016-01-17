@@ -11,6 +11,7 @@ $active-transition-time: 0s; // No animation for active state
 
 $drop-shadow-blur-1: 0.1rem;
 $drop-shadow-blur-2: 0.5rem;
+$drop-shadow: 0.1rem, 0.5rem;
 
 /** Add a dark background to an element, translucent for supported devices */
 @mixin translucent-dark() {
@@ -39,6 +40,11 @@ $drop-shadow-blur-2: 0.5rem;
         // Transparentize colour
         color: transparentize($color, 0.75);
     }
+}
+
+@mixin drop-shadow($level) {
+    $step: 1;
+    box-shadow: 0 0 nth($drop-shadow, $level) hsla(0, 0%, 0%, 0.5);
 }
 
 body {
@@ -75,7 +81,7 @@ body {
     height: 20%;
 
     background-color: $secondary-color;
-    box-shadow: 0 0 $drop-shadow-blur-1 hsla(0, 0%, 0%, 0.5);
+    @include drop-shadow(1);
     z-index: 2;
 }
 
@@ -243,7 +249,7 @@ body {
     overflow: auto;
 
     @include translucent-dark();
-    box-shadow: 0 0 $drop-shadow-blur-2 hsla(0, 0%, 0%, 0.5);
+    @include drop-shadow(2);
 
     $keyboard-help-padding: 0.2rem;
 
@@ -303,8 +309,7 @@ body {
     text-align: center;
     color: white;
     font-family: 'roboto_condensedregular';
-    box-shadow: 0 -#{$drop-shadow-blur-2} $drop-shadow-blur-2 $drop-shadow-blur-2 hsla(0, 0%, 0%, 0.5);
-
+    @include drop-shadow(2);
     @include translucent-dark();
 
     .button {
