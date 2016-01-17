@@ -1,10 +1,9 @@
 module.exports = function(grunt) {
-    require('load-grunt-tasks')(grunt);
+    require('jit-grunt')(grunt);
+    // require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
-
         sass: {
             dist: {
                 files: [
@@ -39,11 +38,11 @@ module.exports = function(grunt) {
         watch: {
             scss: {
                 files: ['scss/*.scss'],
-                tasks: ['newer:sass', 'newer:postcss']
+                tasks: ['scss']
             },
             js: {
                 files: ['js/*.js', '!js/*.min.js'],
-                tasks: ['newer:uglify:dist']
+                tasks: ['js']
             }
         },
 
@@ -113,9 +112,10 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', ['compile']);
-    grunt.registerTask('compile', ['scss', 'uglify:dist']);
+    grunt.registerTask('compile', ['scss', 'js']);
     grunt.registerTask('full', ['update', 'default']);
-    grunt.registerTask('scss', ['sass:dist', 'postcss:dist']);
-    grunt.registerTask('update', ['bower-update', 'bower_concat', 'copy:normalize']);
+    grunt.registerTask('scss', ['newer:sass:dist', 'newer:postcss:dist']);
+    grunt.registerTask('js', ['newer:uglify:dist']);
+    grunt.registerTask('update', ['bower-update', 'bower_concat', 'newer:copy:normalize']);
     grunt.registerTask('lint', ['htmllint', 'jshint']);
 };
