@@ -6,6 +6,8 @@ var stars;
 $(function() {
 	// Attach Fastlick
 	FastClick.attach(document.body);
+	// Set initial star count based on window size
+	stars = Math.round($(window).height() * $(window).width() * STAR_DENSITY);
 	// Spawn initial stars
 	spawnStars();
 	// Clicking on document opens up prompt to change number of stars
@@ -23,8 +25,7 @@ function changeNumberOfStars() {
 function spawnStars(num_stars) {
 	// Set number of stars to given stars, if none given, to previously set
 	// number, if no previously set, then use resolution of window
-	stars = num_stars || stars ||
-		Math.round($(window).height() * $(window).width() * STAR_DENSITY);
+	stars = num_stars || stars;
 	// Remove all previous stars
 	$('.star').remove();
 	// Spawn given number of stars in current round
