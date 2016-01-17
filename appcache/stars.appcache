@@ -1,9 +1,0 @@
-CACHE MANIFEST
-# 14-12-2015
-/stars.html
-css/stars.css
-js/stars.min.js
-# JS Libraries
-js/jquery-2.1.4.min.js
-js/velocity.min.js
-js/tappy.js
