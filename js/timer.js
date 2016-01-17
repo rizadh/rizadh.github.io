@@ -525,7 +525,7 @@ function startTimer(resume, restore) {
             $('#keypad')
                 .velocity('stop')
                 .velocity({
-                    scaleX: 0.5,
+                    scaleX: 0,
                     scaleY: 0,
                     opacity: 0
                 }, {
@@ -666,7 +666,8 @@ function editTime() {
     $('#keypad')
         .velocity('stop')
         .velocity({
-            scaleX: 1,
+			// Emphasize y-axis animation
+            scaleX: [1, 0.5],
             scaleY: 1,
             opacity: 1
         }, {
@@ -742,7 +743,7 @@ function toggleKeyboardHelp(forceState) {
             .velocity('stop')
             .velocity({
                 scaleY: (show ? [1, 0] : [0, 1]),
-                scaleX: (show ? [1, 0.5] : [0.5, 1]),
+                scaleX: (show ? [1, 0.5] : [0, 1]),
                 opacity: (show ? [1, 0] : [0, 1])
             }, {
                 easing: show ? EASE_OUT : EASE_IN,
