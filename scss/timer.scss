@@ -16,7 +16,7 @@ $drop-shadow: 0.1rem, 0.5rem;
 /** Add a dark background to an element, translucent for supported devices */
 @mixin translucent-dark() {
     // Solid background, shown if device doesn't support backdrop filters
-    background-color: hsl($theme-hue, 40%, 25%);
+    background-color: hsla($theme-hue, 40%, 20%, 0.95);
 
     // Transparent background, show if device supports backdrop filters
     body.backdrop-filter & {
