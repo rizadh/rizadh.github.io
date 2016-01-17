@@ -243,7 +243,7 @@ body {
     overflow: auto;
 
     @include translucent-dark();
-    box-shadow: 0 0 $drop-shadow-blur-2 transparentize(black, 0.5);
+    box-shadow: 0 0 $drop-shadow-blur-2 hsla(0, 0%, 0%, 0.5);
 
     $keyboard-help-padding: 0.2rem;
 
