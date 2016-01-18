@@ -111,11 +111,13 @@ module.exports = function(grunt) {
         }
     });
 
+
     grunt.registerTask('default', ['compile']);
+
+    grunt.registerTask('full', ['update', 'compile', 'lint']);
+    grunt.registerTask('update', ['bower-update', 'bower_concat', 'newer:copy:normalize']);
     grunt.registerTask('compile', ['scss', 'js']);
-    grunt.registerTask('full', ['update', 'default']);
     grunt.registerTask('scss', ['newer:sass:dist', 'newer:postcss:dist']);
     grunt.registerTask('js', ['newer:uglify:dist']);
-    grunt.registerTask('update', ['bower-update', 'bower_concat', 'newer:copy:normalize']);
     grunt.registerTask('lint', ['htmllint', 'jshint']);
 };
