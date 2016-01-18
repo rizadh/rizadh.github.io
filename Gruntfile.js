@@ -111,7 +111,6 @@ module.exports = function(grunt) {
         }
     });
 
-
     grunt.registerTask('default', ['compile']);
 
     grunt.registerTask('full', ['update', 'compile', 'lint']);
