@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
     require('jit-grunt')(grunt);
     // require('load-grunt-tasks')(grunt);
-    require('time-grunt')(grunt);
+    // require('time-grunt')(grunt);
 
     grunt.initConfig({
         sass: {
@@ -112,7 +112,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', ['compile']);
-
     grunt.registerTask('full', ['update', 'compile', 'lint']);
     grunt.registerTask('update', ['bower-update', 'bower_concat', 'newer:copy:normalize']);
     grunt.registerTask('compile', ['scss', 'js']);
