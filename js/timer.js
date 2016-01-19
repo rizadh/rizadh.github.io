@@ -12,25 +12,19 @@ var windowHeight;
 
 // Perform when document body is loaded
 $(function () {
-    // Create variables to access DOM elements
-    var display = $('#display');
-    var displayText = $('#display-text');
-    var keypad = $('#keypad');
-    var keyboardHelp = $('#keyboard-help');
-
     // Attach Fastlick
     FastClick.attach(document.body);
 
     // Hook Velocity to help menu and display-text translate properties
-    $.Velocity.hook(keyboardHelp, 'translateX', '-50%');
-    $.Velocity.hook(keyboardHelp, 'translateY', '-50%');
-    $.Velocity.hook(displayText, 'translateX', '-50%');
-    $.Velocity.hook(displayText, 'translateY', '-50%');
-    $.Velocity.hook(keypad, 'translateX', '-50%');
+    $.Velocity.hook($('#keyboard-help'), 'translateX', '-50%');
+    $.Velocity.hook($('#keyboard-help'), 'translateY', '-50%');
+    $.Velocity.hook($('#display-text'), 'translateX', '-50%');
+    $.Velocity.hook($('#display-text'), 'translateY', '-50%');
+    $.Velocity.hook($('#keypad'), 'translateX', '-50%');
 
     // Change Backspce to Delete if on Mac or iOS devices
     if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
-        keyboardHelp.find('.delete').text('Delete');
+        $('#keyboard-help').find('.delete').text('Delete');
     }
 
     // Disable scrolling if running as full-screen iOS web app
@@ -51,25 +45,25 @@ $(function () {
 
     // Initialize input mode variable represents whether keypad is displayed or
     // not
-    display.data('inputMode', true);
+    $('#display').data('inputMode', true);
 
     // Startup animation
-    $.Velocity.hook(keypad, 'scaleX', 0.5);
-    $.Velocity.hook(keypad, 'scaleY', 0);
-    $.Velocity.hook(keypad, 'opacity', 0);
+    $.Velocity.hook($('#keypad'), 'scaleX', 0.5);
+    $.Velocity.hook($('#keypad'), 'scaleY', 0);
+    $.Velocity.hook($('#keypad'), 'opacity', 0);
 
     // Handle if time is provided in URL
     var GETtime = GET('time');
     if (validTimeString(GETtime)) {
         // Immediately start timer
-        $.Velocity.hook(display, 'translateY', '-100%');
+        $.Velocity.hook($('#display'), 'translateY', '-100%');
         setDisplayTime(('000000' + GETtime).slice(-6));
         startTimer();
     } else {
-        $.Velocity.hook(display, 'height', '100%');
-        $.Velocity.hook(displayText, 'opacity', 0);
+        $.Velocity.hook($('#display'), 'height', '100%');
+        $.Velocity.hook($('#display-text'), 'opacity', 0);
         // Animate keypad
-        keypad.velocity({
+        $('#keypad').velocity({
             opacity: 1,
             scaleX: 1,
             scaleY: 1
@@ -78,7 +72,7 @@ $(function () {
             duration: ANIMATION_DURATION
         });
 
-        displayText.velocity({
+        $('#display-text').velocity({
             opacity: 1
         }, {
             easing: EASE_OUT,
@@ -86,7 +80,7 @@ $(function () {
         });
 
         // Animate display
-        display.velocity({
+        $('#display').velocity({
             height: '20%'
         }, {
             easing: EASE_OUT,
@@ -138,10 +132,10 @@ $(function () {
     }
 
     // Clear display and show default message
-    displayText.data('currentTime', '000000');
+    $('#display-text').data('currentTime', '000000');
 
     // Set click events
-    keypad.on('click', 'td', function () {
+    $('#keypad').on('click', 'td', function () {
         var keyValue = $(this).text();
         if (keyValue === 'Clear') {
             setDisplayTime('');
@@ -153,23 +147,22 @@ $(function () {
     });
 
     $('#edit-button').click(editTime);
-    display.on('click', '#display-text', togglePause);
+    $('#display').on('click', '#display-text', togglePause);
     $('#notification-banner').on('click', '.button', hideNotification);
 
     // Enable keyboard input
     $(document).on('keydown', function (e) {
-        var notificationBanner = $('#notification-banner');
         // Get the keycode
         var key = e.keyCode;
         // Do not allow keyboard input if a notification is show
-        if (notificationBanner.data('shown')) {
-            if (notificationBanner.find('div').text() !== '') {
+        if ($('#notification-banner').data('shown')) {
+            if ($('#notification-banner').find('div').text() !== '') {
                 switch (key) {
                     case 13:
-                        notificationBanner.find('.emphasize').click();
+                        $('#notification-banner').find('.emphasize').click();
                         break;
                     case 27:
-                        notificationBanner.find('.alert').click();
+                        $('#notification-banner').find('.alert').click();
                         break;
                 }
                 return false;
@@ -286,9 +279,8 @@ $(function () {
 
     // Adjust font-sizes when viewport dimensions change
     $(window).on('load resize orientationChange', function () {
-        var jWindow = $(window);
-        windowWidth = jWindow.width();
-        windowHeight = jWindow.height();
+        windowWidth = $(window).width();
+        windowHeight = $(window).height();
         // Maximize size of text
         var maxLength = Math.min(windowWidth * 1.5, windowHeight);
         $.Velocity.hook($('html'), 'fontSize', (maxLength / 9) + 'px');
@@ -328,8 +320,7 @@ function setDisplayTime(text, style) {
     // 6-digit represntation of stored display time
     var currentTime = '';
     // jQuery variables for easy access
-    var displayText = $('#display-text');
-    var oldDisplayText = displayText.clone(true).attr('id', 'display-text-old');
+    var oldDisplayText = $('#display-text').clone(true).attr('id', 'display-text-old');
 
     // Handle special cases
     switch (text) {
@@ -345,8 +336,8 @@ function setDisplayTime(text, style) {
             update = true;
             break;
         default: // Handle regular text change (timing or inputting)
-            if (displayText.data('currentTime') !== text ||
-                displayText.text() === 'Paused') {
+            if ($('#display-text').data('currentTime') !== text ||
+                $('#display-text').text() === 'Paused') {
                 var timeArray = [];
                 var unitArray = ['h', 'm', 's'];
                 for (var i = 0; i < 3; i++) {
@@ -391,7 +382,7 @@ function setDisplayTime(text, style) {
         $('#display-text-old').remove();
         // Crossfade style animation
         if (style === 'crossfade') {
-            var oldDisplayHTML = displayText.text();
+            var oldDisplayHTML = $('#display-text').text();
             var newDisplayHTML = newText;
             var spannedOldDisplayHTML = '';
             var spannedNewDisplayHTML = '';
@@ -441,9 +432,9 @@ function setDisplayTime(text, style) {
                     }
                 })
                 .end()
-                .prependTo(displayText.parent());
+                .prependTo($('#display-text').parent());
 
-            displayText
+            $('#display-text')
                 .data('currentTime', currentTime)
                 .html(spannedNewDisplayHTML
                     .replace(replaceSpan, '')
@@ -471,7 +462,7 @@ function setDisplayTime(text, style) {
         }
         // Default "animation" (solid transition)
         else {
-            displayText
+            $('#display-text')
                 .data('currentTime', currentTime)
                 .css({
                     fontFamily: 'robotoregular'
@@ -480,7 +471,7 @@ function setDisplayTime(text, style) {
         }
 
         // Change font-size if needed
-        displayText.add(oldDisplayText)
+        $('#display-text').add(oldDisplayText)
             .velocity({
                 fontSize: newFontSize
             }, {
@@ -497,9 +488,6 @@ function addDigit(digit) {
 }
 
 function startTimer(resume, restore) {
-    // Create variables to reduce jQuery calls
-    var display = $('#display');
-    var displayText = display.find('#display-text');
     // Convert display input to seconds
     var timeString = displayTime();
     var hoursToSeconds = timeString.slice(-6, -4) * 3600;
@@ -508,7 +496,7 @@ function startTimer(resume, restore) {
     var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
 
     // Fixed alignment issues if startup animation was interrupted
-    $.Velocity.hook(displayText, 'translateY', '-50%');
+    $.Velocity.hook($('#display-text'), 'translateY', '-50%');
 
     // Limit seconds to less than 100 hours
     if (totalSeconds === 0 && !resume && !restore) {
@@ -516,13 +504,13 @@ function startTimer(resume, restore) {
     } else if (totalSeconds < 360000 || restore || resume) {
         // Start dial motion and set state to timing mode
         setTime(totalSeconds, resume || restore);
-        display
+        $('#display')
             .data('inputMode', false)
             .addClass('running');
 
         if (!resume) {
             // Expand display
-            display
+            $('#display')
                 .velocity('stop')
                 .velocity({
                     height: '90%',
@@ -582,11 +570,10 @@ function startTimer(resume, restore) {
  */
 function setTime(sec, resume) {
     // Convert seconds to milliseconds
-    var dialPath = $('#dial-ring path');
-    var dialTime = resume ? dialPath.data('timeLeft') : sec * 1000;
-    var initialProgress = resume ? dialPath.data('progress') : 0;
+    var dialTime = resume ? $('#dial-ring path').data('timeLeft') : sec * 1000;
+    var initialProgress = resume ? $('#dial-ring path').data('progress') : 0;
 
-    dialPath.velocity('stop').velocity({
+    $('#dial-ring path').velocity('stop').velocity({
         // Can't go to 1 with SVG arc
         tween: [WHOLECIRCLE, initialProgress]
     }, {
@@ -597,10 +584,10 @@ function setTime(sec, resume) {
             localStorage.setItem('durationSet', dialTime);
         },
         progress: function (e, c, r, s, t) {
-            setDial(dialPath, 40, t);
+            setDial($('#dial-ring path'), 40, t);
             // Store progress in data
-            dialPath.data('progress', t);
-            dialPath.data('timeLeft', r);
+            $('#dial-ring path').data('progress', t);
+            $('#dial-ring path').data('timeLeft', r);
             // Find seconds rounded up
             var totalSeconds = Math.ceil(r / 1000);
             // Find minutes rounded down
@@ -655,9 +642,8 @@ function setDial(dial, arcRadius, progress) {
 
 /** Activates input mode */
 function editTime() {
-    var display = $('#display');
     setDisplayTime(displayTime(), 'crossfade');
-    display
+    $('#display')
         .data('inputMode', true)
         .data('paused', false)
         .removeClass('running');
@@ -665,7 +651,7 @@ function editTime() {
     localStorage.setItem('durationSet', 0);
     $('#dial-ring path')
         .velocity('stop');
-    display
+    $('#display')
         .velocity('stop')
         .velocity({
             height: '20%'
@@ -705,13 +691,12 @@ function editTime() {
 
 /** Toggles pause state of timer */
 function togglePause() {
-    var display = $('#display');
     // Handle if display is expanded
-    if (!display.data('inputMode')) {
+    if (!$('#display').data('inputMode')) {
         // Handle if timer is expanded
-        if (display.data('paused')) {
+        if ($('#display').data('paused')) {
             startTimer(true);
-            display.data('paused', false);
+            $('#display').data('paused', false);
             $('#dial-ring')
                 .velocity('stop')
                 .velocity({
@@ -722,10 +707,10 @@ function togglePause() {
                 });
         }
         // Handle if timer is running
-        else if (display.hasClass('running')) {
+        else if ($('#display').hasClass('running')) {
             $('#dial-ring path').velocity('stop');
             setDisplayTime('Paused', 'crossfade');
-            display.data('paused', true);
+            $('#display').data('paused', true);
             $('#dial-ring')
                 .velocity('stop')
                 .velocity({
@@ -744,11 +729,10 @@ function togglePause() {
 
 /** Toggles keyboard */
 function toggleKeyboardHelp(forceState) {
-    var helpMenu = $('#keyboard-help');
     if (arguments.length === 0) {
-        var show = !helpMenu.data('shown');
+        var show = !$('#keyboard-help').data('shown');
 
-        helpMenu
+        $('#keyboard-help')
             .data('shown', show)
             .velocity('stop')
             .velocity({
@@ -760,15 +744,15 @@ function toggleKeyboardHelp(forceState) {
                 display: show ? 'block' : 'none',
                 duration: (show ? ANIMATION_DURATION : ANIMATION_DURATION / 2)
             });
-    } else if ((helpMenu.data('shown') || false) !== forceState){
+    } else if (($('#keyboard-help').data('shown') || false) !== forceState){
         toggleKeyboardHelp();
     }
 }
 
 /** Show a notification with given message and buttons */
 function showNotification(message, buttons) {
-    var bannerText = $('#notification-banner span').text(message);
-    var button_wrapper = bannerText.siblings('div').empty();
+    $('#notification-banner span').text(message);
+    var button_wrapper = $('#notification-banner span').siblings('div').empty();
 
     if (buttons) {
         $('#content').css('pointer-events', 'none');
@@ -781,14 +765,14 @@ function showNotification(message, buttons) {
                 .prependTo(button_wrapper);
         }
     } else {
-        clearTimeout(bannerText.data('hideTimeout'));
-        bannerText.data('hideTimeout', setTimeout(hideNotification, 5000));
+        clearTimeout($('#notification-banner span').data('hideTimeout'));
+        $('#notification-banner span').data('hideTimeout', setTimeout(hideNotification, 5000));
     }
 
-    bannerText.parent()
+    $('#notification-banner span').parent()
         .velocity('stop')
         .velocity({
-            translateY: bannerText.parent().data('shown') ? 0 : [0, '-100%']
+            translateY: $('#notification-banner span').parent().data('shown') ? 0 : [0, '-100%']
         }, {
             easing: EASE_OUT,
             display: 'block',
@@ -806,15 +790,12 @@ function showNotification(message, buttons) {
 
 /** Hide any notifications that are present */
 function hideNotification() {
-    var content = $('#content');
-    var banner = $('#notification-banner');
-
     $(document).off('click.bannerhide', hideNotification);
-    content
+    $('#content')
         .off('click.bannerhide', hideNotification)
         .css('pointer-events', '');
 
-    if (banner.data('shown')) {
+    if ($('#notification-banner').data('shown')) {
         $('#notification-banner')
             .data('shown', false)
             .velocity('stop')
