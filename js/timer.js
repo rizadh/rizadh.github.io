@@ -1,6 +1,6 @@
 (function() {
 'use strict';
-// $.Velocity.mock = 5;
+
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLECIRCLE = 0.99999;
 var EASEFUNC = 'Expo';
@@ -474,8 +474,7 @@ function setDisplayTime(text, style) {
             displayText
                 .data('currentTime', currentTime)
                 .css({
-                    fontFamily: 'robotoregular'//,
-                    // fontSize: newFontSize
+                    fontFamily: 'robotoregular'
                 })
                 .html(newText);
         }
