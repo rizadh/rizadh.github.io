@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
-    require('jit-grunt')(grunt);
+    require('jit-grunt')(grunt, {
+        htmllint: 'grunt-html'
+    });
     // require('load-grunt-tasks')(grunt);
     // require('time-grunt')(grunt);
 
@@ -117,5 +119,5 @@ module.exports = function(grunt) {
     grunt.registerTask('compile', ['scss', 'js']);
     grunt.registerTask('scss', ['newer:sass:dist', 'newer:postcss:dist']);
     grunt.registerTask('js', ['newer:uglify:dist']);
-    grunt.registerTask('lint', ['htmllint', 'jshint']);
+    grunt.registerTask('lint', ['newer:htmllint', 'newer:jshint']);
 };
