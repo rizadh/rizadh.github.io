@@ -1,6 +1,6 @@
 (function() {
 'use strict';
-// $.Velocity.mock = 10;
+// $.Velocity.mock = 5;
 // SVG arcs cannot form a complete circle so a value close to 1 is used
 var WHOLECIRCLE = 0.99999;
 var EASEFUNC = 'Expo';
@@ -54,19 +54,20 @@ $(function () {
     display.data('inputMode', true);
 
     // Startup animation
-    $.Velocity.hook(display, 'translateY', '-100%');
-    $.Velocity.hook(keypad, 'scaleX', '0.5');
-    $.Velocity.hook(keypad, 'scaleY', '0');
-    $.Velocity.hook(keypad, 'opacity', '0');
+    $.Velocity.hook(keypad, 'scaleX', 0.5);
+    $.Velocity.hook(keypad, 'scaleY', 0);
+    $.Velocity.hook(keypad, 'opacity', 0);
 
     // Handle if time is provided in URL
     var GETtime = GET('time');
     if (validTimeString(GETtime)) {
         // Immediately start timer
-        $.Velocity.hook(display, 'height', '90%')
+        $.Velocity.hook(display, 'translateY', '-100%');
         setDisplayTime(('000000' + GETtime).slice(-6));
         startTimer();
     } else {
+        $.Velocity.hook(display, 'height', '100%');
+        $.Velocity.hook(displayText, 'opacity', 0);
         // Animate keypad
         keypad.velocity({
             opacity: 1,
@@ -77,9 +78,16 @@ $(function () {
             duration: ANIMATION_DURATION
         });
 
+        displayText.velocity({
+            opacity: 1
+        }, {
+            easing: EASE_OUT,
+            duration: ANIMATION_DURATION
+        });
+
         // Animate display
         display.velocity({
-            translateY: 0
+            height: '20%'
         }, {
             easing: EASE_OUT,
             duration: ANIMATION_DURATION,
@@ -422,7 +430,7 @@ function setDisplayTime(text, style) {
                 .children('span')
                 .velocity({
                     opacity: [0, 1],
-                    scale: 0.5
+                    scale: 0
                 }, {
                     easing: EASE_OUT,
                     duration: Math.min(ANIMATION_DURATION, 1000),
@@ -448,7 +456,7 @@ function setDisplayTime(text, style) {
                 .css('opacity', 0)
                 .velocity({
                     opacity: 1,
-                    scale: [1, 0.5]
+                    scale: [1, 0]
                 }, {
                     easing: EASE_OUT,
                     duration: Math.min(ANIMATION_DURATION, 1000),
@@ -459,25 +467,28 @@ function setDisplayTime(text, style) {
                     }
                 });
 
-            displayText.add(oldDisplayText)
-                .velocity({
-                    fontSize: newFontSize
-                }, {
-                    easing: [100, 10],
-                    duration: ANIMATION_DURATION,
-                    queue: false
-                });
+
         }
         // Default "animation" (solid transition)
         else {
             displayText
                 .data('currentTime', currentTime)
                 .css({
-                    fontFamily: 'robotoregular',
-                    fontSize: newFontSize
+                    fontFamily: 'robotoregular'//,
+                    // fontSize: newFontSize
                 })
                 .html(newText);
         }
+
+        // Change font-size if needed
+        displayText.add(oldDisplayText)
+            .velocity({
+                fontSize: newFontSize
+            }, {
+                easing: EASE_OUT,
+                duration: ANIMATION_DURATION,
+                queue: false
+            });
     }
 }
 
