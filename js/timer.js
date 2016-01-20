@@ -87,6 +87,10 @@ $(function () {
 
     helpMenu = (function() {
         var menu = $('#keyboard-help');
+
+        $.Velocity.hook(menu, 'translateX', '-50%');
+        $.Velocity.hook(menu, 'translateY', '-50%');
+
         var toggle = function(forceState) {
             if (arguments.length === 0) {
                 var show = !menu.data('shown');
@@ -117,8 +121,7 @@ $(function () {
     FastClick.attach(document.body);
 
     // Hook Velocity to help menu and display-text translate properties
-    $.Velocity.hook($('#keyboard-help'), 'translateX', '-50%');
-    $.Velocity.hook($('#keyboard-help'), 'translateY', '-50%');
+
     $.Velocity.hook($('#display-text'), 'translateX', '-50%');
     $.Velocity.hook($('#display-text'), 'translateY', '-50%');
     $.Velocity.hook($('#keypad'), 'translateX', '-50%');
