@@ -9,9 +9,81 @@ var EASE_IN = 'easeIn' + EASEFUNC;
 var ANIMATION_DURATION = 300;
 var windowWidth;
 var windowHeight;
+var notification;
 
 // Perform when document body is loaded
 $(function () {
+    // Create instances of UI objects
+    notification = (function() {
+        var banner = $('#notification-banner');
+        var bannerSpan = banner.find('span');
+
+        /** Show a notification with given message and buttons */
+        var show = function(message, buttons) {
+            bannerSpan.text(message);
+            var button_wrapper = bannerSpan.siblings('div').empty();
+
+            if (buttons) {
+                $('#content').css('pointer-events', 'none');
+                for (var i = buttons.length - 1; i >= 0; i--) {
+                    var button = buttons[i];
+                    $('<div></div>')
+                        .text(button.text)
+                        .addClass(button.style + ' button')
+                        .click(button.clickFunction)
+                        .prependTo(button_wrapper);
+                }
+            } else {
+                clearTimeout(bannerSpan.data('hideTimeout'));
+                bannerSpan.data('hideTimeout', setTimeout(notification.hide, 5000));
+            }
+
+            banner
+                .velocity('stop')
+                .velocity({
+                    translateY: banner.data('shown') ? 0 : [0, '-100%']
+                }, {
+                    easing: EASE_OUT,
+                    display: 'block',
+                    duration: ANIMATION_DURATION,
+                    complete: function() {
+                        if (buttons) {
+                            $('#content').on('click.bannerhide', notification.hide);
+                        } else {
+                            $(document).on('click.bannerhide', notification.hide);
+                        }
+                    }
+                })
+                .data('shown', true);
+        };
+
+        /** Hide any notifications that are present */
+        var hide = function() {
+            $(document).off('click.bannerhide', notification.hide);
+            $('#content')
+                .off('click.bannerhide', notification.hide)
+                .css('pointer-events', '');
+
+            if (banner.data('shown')) {
+                banner
+                    .data('shown', false)
+                    .velocity('stop')
+                    .velocity({
+                        translateY: '-100%'
+                    }, {
+                        easing: EASE_IN,
+                        display: 'none',
+                        duration: ANIMATION_DURATION / 2
+                    });
+            }
+        };
+
+        return {
+            show: show,
+            hide: hide
+        };
+    })();
+
     // Attach Fastlick
     FastClick.attach(document.body);
 
@@ -113,13 +185,13 @@ $(function () {
                                         .data('progress', progress);
                                     startTimer(false, true);
                                 } else {
-                                    showNotification(
+                                    notification.show(
                                         'Too late, the timer has already ended'
                                     );
                                 }
                             }
                         };
-                        showNotification(message, [noButton, sureButton]);
+                        notification.show(message, [noButton, sureButton]);
                     }
                 }
 
@@ -148,7 +220,7 @@ $(function () {
 
     $('#edit-button').click(editTime);
     $('#display').on('click', '#display-text', togglePause);
-    $('#notification-banner').on('click', '.button', hideNotification);
+    $('#notification-banner').on('click', '.button', notification.hide);
 
     // Enable keyboard input
     $(document).on('keydown', function (e) {
@@ -167,7 +239,7 @@ $(function () {
                 }
                 return false;
             } else {
-                hideNotification();
+                notification.hide();
             }
         }
         // Perform events depending on keycode
@@ -254,7 +326,7 @@ $(function () {
         if (!touchDevice && (!suggestedMouse || showAgain)) {
             localStorage.setItem('mouse-suggested', 'true');
             sessionStorage.setItem('mouse-suggested', 'true');
-            showNotification(
+            notification.show(
                 'Seems like you have a keyboard. ' +
                 'Want to learn a few shortcuts?', [{
                     text: 'Never',
@@ -500,7 +572,7 @@ function startTimer(resume, restore) {
 
     // Limit seconds to less than 100 hours
     if (totalSeconds === 0 && !resume && !restore) {
-        showNotification('Please enter a time first');
+        notification.show('Please enter a time first');
     } else if (totalSeconds < 360000 || restore || resume) {
         // Start dial motion and set state to timing mode
         setTime(totalSeconds, resume || restore);
@@ -556,7 +628,7 @@ function startTimer(resume, restore) {
                 });
         }
     } else {
-        showNotification(
+        notification.show(
             'The time entered was too high. Enter a time less than 100 hours'
         );
         setDisplayTime('');
@@ -746,66 +818,6 @@ function toggleKeyboardHelp(forceState) {
             });
     } else if (($('#keyboard-help').data('shown') || false) !== forceState){
         toggleKeyboardHelp();
-    }
-}
-
-/** Show a notification with given message and buttons */
-function showNotification(message, buttons) {
-    $('#notification-banner span').text(message);
-    var button_wrapper = $('#notification-banner span').siblings('div').empty();
-
-    if (buttons) {
-        $('#content').css('pointer-events', 'none');
-        for (var i = buttons.length - 1; i >= 0; i--) {
-            var button = buttons[i];
-            $('<div></div>')
-                .text(button.text)
-                .addClass(button.style + ' button')
-                .click(button.clickFunction)
-                .prependTo(button_wrapper);
-        }
-    } else {
-        clearTimeout($('#notification-banner span').data('hideTimeout'));
-        $('#notification-banner span').data('hideTimeout', setTimeout(hideNotification, 5000));
-    }
-
-    $('#notification-banner span').parent()
-        .velocity('stop')
-        .velocity({
-            translateY: $('#notification-banner span').parent().data('shown') ? 0 : [0, '-100%']
-        }, {
-            easing: EASE_OUT,
-            display: 'block',
-            duration: ANIMATION_DURATION,
-            complete: function() {
-                if (buttons) {
-                    $('#content').on('click.bannerhide', hideNotification);
-                } else {
-                    $(document).on('click.bannerhide', hideNotification);
-                }
-            }
-        })
-        .data('shown', true);
-}
-
-/** Hide any notifications that are present */
-function hideNotification() {
-    $(document).off('click.bannerhide', hideNotification);
-    $('#content')
-        .off('click.bannerhide', hideNotification)
-        .css('pointer-events', '');
-
-    if ($('#notification-banner').data('shown')) {
-        $('#notification-banner')
-            .data('shown', false)
-            .velocity('stop')
-            .velocity({
-                translateY: '-100%'
-            }, {
-                easing: EASE_IN,
-                display: 'none',
-                duration: ANIMATION_DURATION / 2
-            });
     }
 }
 
