@@ -9,12 +9,102 @@ var EASE_IN = 'easeIn' + EASEFUNC;
 var ANIMATION_DURATION = 300;
 var windowWidth;
 var windowHeight;
+
+// UI objects (temporary fix)
 var notification;
 var helpMenu;
+var app;
+var keypad;
+var displayText;
+var events;
+var display;
 
 // Perform when document body is loaded
 $(function () {
     // Create instances of UI objects
+
+    // Adapted from David Walsh (davidwalsh.com)
+    var events = (function(){
+        var topics = {};
+        var hOP = topics.hasOwnProperty;
+        return {
+            subscribe: function(topic, listener) {
+                // Create the topic's object if not yet created
+                if(!hOP.call(topics, topic)) topics[topic] = [];
+
+                // Add the listener to queue
+                var index = topics[topic].push(listener) -1;
+
+                // Provide handle back for removal of topic
+                return {
+                    remove: function() {
+                        delete topics[topic][index];
+                    }
+                };
+            },
+            publish: function(topic, info) {
+                // If the topic doesn't exist, or there's no listeners in queue, just leave
+                if(!hOP.call(topics, topic)) return;
+
+                // Cycle through topics queue, fire!
+                topics[topic].forEach(function(item) {
+                    item(info != undefined ? info : {});
+                });
+            }
+        };
+    })();
+
+    app = (function() {
+        // Attach Fastlick
+        FastClick.attach(document.body);
+
+        // Sticky hover fix
+        hoverTouchUnstick();
+
+        // Change Backspce to Delete if on Mac or iOS devices
+        if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
+            $('#keyboard-help').find('.delete').text('Delete');
+        }
+
+        // Disable scrolling if running as full-screen iOS web app
+        if (window.navigator.standalone) {
+            $(document).on('touchmove', false);
+        }
+
+        // Enable the use of backdrop filters if supported
+        if (isSupportedCSS('-webkit-backdrop-filter') ||
+            isSupportedCSS('-moz-backdrop-filter') ||
+            isSupportedCSS('-o-backdrop-filter') ||
+            isSupportedCSS('-ms-backdrop-filter') ||
+            isSupportedCSS('backdrop-filter') ) {
+                $('body').addClass('backdrop-filter');
+        }
+    })();
+
+    display = (function() {
+        var display = $('#display');
+        // Represents if keypad is displayed
+        display.data('inputMode', true);
+    })();
+
+    keypad = (function() {
+        var keypad = $('#keypad');
+
+        $.Velocity.hook(keypad, 'translateX', '-50%');
+        $.Velocity.hook(keypad, 'scaleX', 0.5);
+        $.Velocity.hook(keypad, 'scaleY', 0);
+        $.Velocity.hook(keypad, 'opacity', 0);
+    })();
+
+    displayText = (function() {
+        var displayText = $('#display-text');
+
+        // Clear display and show default message
+        displayText.data('currentTime', '000000');
+        $.Velocity.hook(displayText, 'translateX', '-50%');
+        $.Velocity.hook(displayText, 'translateY', '-50%');
+    })();
+
     notification = (function() {
         var banner = $('#notification-banner');
         var bannerSpan = banner.find('span');
@@ -118,45 +208,6 @@ $(function () {
         }
     })();
 
-    // Attach Fastlick
-    FastClick.attach(document.body);
-
-    // Hook Velocity to help menu and display-text translate properties
-
-    $.Velocity.hook($('#display-text'), 'translateX', '-50%');
-    $.Velocity.hook($('#display-text'), 'translateY', '-50%');
-    $.Velocity.hook($('#keypad'), 'translateX', '-50%');
-
-    // Change Backspce to Delete if on Mac or iOS devices
-    if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
-        $('#keyboard-help').find('.delete').text('Delete');
-    }
-
-    // Disable scrolling if running as full-screen iOS web app
-    if (window.navigator.standalone) {
-        $(document).on('touchmove', false);
-    }
-
-    // Sticky hover fix
-    hoverTouchUnstick();
-
-    if (isSupportedCSS('-webkit-backdrop-filter') ||
-        isSupportedCSS('-moz-backdrop-filter') ||
-        isSupportedCSS('-o-backdrop-filter') ||
-        isSupportedCSS('-ms-backdrop-filter') ||
-        isSupportedCSS('backdrop-filter') ) {
-            $('body').addClass('backdrop-filter');
-    }
-
-    // Initialize input mode variable represents whether keypad is displayed or
-    // not
-    $('#display').data('inputMode', true);
-
-    // Startup animation
-    $.Velocity.hook($('#keypad'), 'scaleX', 0.5);
-    $.Velocity.hook($('#keypad'), 'scaleY', 0);
-    $.Velocity.hook($('#keypad'), 'opacity', 0);
-
     // Handle if time is provided in URL
     var GETtime = GET('time');
     if (validTimeString(GETtime)) {
@@ -235,9 +286,6 @@ $(function () {
             }
         });
     }
-
-    // Clear display and show default message
-    $('#display-text').data('currentTime', '000000');
 
     // Set click events
     $('#keypad').on('click', 'td', function () {
