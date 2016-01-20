@@ -392,8 +392,6 @@ $(function () {
     });
 });
 
-
-
 /** Returns the value of the display. */
 function displayTime() {
     return $('#display-text').data('currentTime');
@@ -678,45 +676,47 @@ function setTime(sec, resume) {
     var dialTime = resume ? $('#dial-ring path').data('timeLeft') : sec * 1000;
     var initialProgress = resume ? $('#dial-ring path').data('progress') : 0;
 
-    $('#dial-ring path').velocity('stop').velocity({
+    $('#dial-ring path')
+        .velocity('stop')
+        .velocity({
         // Can't go to 1 with SVG arc
         tween: [WHOLECIRCLE, initialProgress]
-    }, {
-        duration: dialTime,
-        easing: 'linear',
-        begin: function () {
-            localStorage.setItem('timeStarted', (new Date()).getTime());
-            localStorage.setItem('durationSet', dialTime);
-        },
-        progress: function (e, c, r, s, t) {
-            setDial($('#dial-ring path'), 40, t);
-            // Store progress in data
-            $('#dial-ring path').data('progress', t);
-            $('#dial-ring path').data('timeLeft', r);
-            // Find seconds rounded up
-            var totalSeconds = Math.ceil(r / 1000);
-            // Find minutes rounded down
-            var minutes = Math.floor(totalSeconds / 60) % 60;
-            // Find hours rounded down
-            var hours = Math.floor(totalSeconds / 3600);
-            // Find remaining seconds
-            var seconds = totalSeconds % 60;
-            // Force 2 digits
-            seconds = ('0' + seconds).slice(-2);
-            minutes = ('0' + minutes).slice(-2);
-            hours = ('0' + hours).slice(-2);
-            var times = [hours, minutes, seconds];
-            if (r !== 0) {
-                // Send time text to display
-                setDisplayTime(times.join(''), 'crossfade');
+        }, {
+            duration: dialTime,
+            easing: 'linear',
+            begin: function () {
+                localStorage.setItem('timeStarted', (new Date()).getTime());
+                localStorage.setItem('durationSet', dialTime);
+            },
+            progress: function (e, c, r, s, t) {
+                setDial($('#dial-ring path'), 40, t);
+                // Store progress in data
+                $('#dial-ring path').data('progress', t);
+                $('#dial-ring path').data('timeLeft', r);
+                // Find seconds rounded up
+                var totalSeconds = Math.ceil(r / 1000);
+                // Find minutes rounded down
+                var minutes = Math.floor(totalSeconds / 60) % 60;
+                // Find hours rounded down
+                var hours = Math.floor(totalSeconds / 3600);
+                // Find remaining seconds
+                var seconds = totalSeconds % 60;
+                // Force 2 digits
+                seconds = ('0' + seconds).slice(-2);
+                minutes = ('0' + minutes).slice(-2);
+                hours = ('0' + hours).slice(-2);
+                var times = [hours, minutes, seconds];
+                if (r !== 0) {
+                    // Send time text to display
+                    setDisplayTime(times.join(''), 'crossfade');
+                }
+            },
+            complete: function () {
+                setDisplayTime('Done', 'crossfade');
+                $('#display').removeClass('running');
+                localStorage.setItem('timeStarted', 0);
+                localStorage.setItem('durationSet', 0);
             }
-        },
-        complete: function () {
-            setDisplayTime('Done', 'crossfade');
-            $('#display').removeClass('running');
-            localStorage.setItem('timeStarted', 0);
-            localStorage.setItem('durationSet', 0);
-        }
     });
 }
 
