@@ -10,6 +10,7 @@ var ANIMATION_DURATION = 300;
 var windowWidth;
 var windowHeight;
 var notification;
+var helpMenu;
 
 // Perform when document body is loaded
 $(function () {
@@ -82,6 +83,34 @@ $(function () {
             show: show,
             hide: hide
         };
+    })();
+
+    helpMenu = (function() {
+        var menu = $('#keyboard-help');
+        var toggle = function(forceState) {
+            if (arguments.length === 0) {
+                var show = !menu.data('shown');
+
+                menu
+                    .data('shown', show)
+                    .velocity('stop')
+                    .velocity({
+                        scaleY: (show ? [1, 0] : [0, 1]),
+                        scaleX: (show ? [1, 0.5] : [0, 1]),
+                        opacity: (show ? [1, 0] : [0, 1])
+                    }, {
+                        easing: show ? EASE_OUT : EASE_IN,
+                        display: show ? 'block' : 'none',
+                        duration: (show ? ANIMATION_DURATION : ANIMATION_DURATION / 2)
+                    });
+            } else if ((menu.data('shown') || false) !== forceState){
+                toggle();
+            }
+        };
+
+        return {
+            toggle: toggle
+        }
     })();
 
     // Attach Fastlick
@@ -276,7 +305,7 @@ $(function () {
                 if (!$('#display').data('inputMode')) {
                     togglePause();
                 } else {
-                    toggleKeyboardHelp();
+                    helpMenu.toggle();
                 }
                 break;
 
@@ -303,7 +332,7 @@ $(function () {
 
         // Hide help menu unless spacebar was clicked
         if (key !== 32) {
-            toggleKeyboardHelp(false);
+            helpMenu.toggle(false);
         }
     });
 
@@ -315,7 +344,7 @@ $(function () {
     // Hide keyboard help when anything is tapped
     $(document).click(function (e) {
         if (!$(e.target).hasClass('button')) {
-            toggleKeyboardHelp(false);
+            helpMenu.toggle(false);
         }
         var touchDevice = localStorage.getItem('touch-device');
         var suggestedMouse = localStorage.getItem('mouse-suggested');
@@ -342,7 +371,7 @@ $(function () {
                     text: 'Yes, show me',
                     style: 'emphasize',
                     clickFunction: function () {
-                        toggleKeyboardHelp(true);
+                        helpMenu.toggle(true);
                     }
                 }]
             );
@@ -796,28 +825,6 @@ function togglePause() {
         else {
             editTime();
         }
-    }
-}
-
-/** Toggles keyboard */
-function toggleKeyboardHelp(forceState) {
-    if (arguments.length === 0) {
-        var show = !$('#keyboard-help').data('shown');
-
-        $('#keyboard-help')
-            .data('shown', show)
-            .velocity('stop')
-            .velocity({
-                scaleY: (show ? [1, 0] : [0, 1]),
-                scaleX: (show ? [1, 0.5] : [0, 1]),
-                opacity: (show ? [1, 0] : [0, 1])
-            }, {
-                easing: show ? EASE_OUT : EASE_IN,
-                display: show ? 'block' : 'none',
-                duration: (show ? ANIMATION_DURATION : ANIMATION_DURATION / 2)
-            });
-    } else if (($('#keyboard-help').data('shown') || false) !== forceState){
-        toggleKeyboardHelp();
     }
 }
 
