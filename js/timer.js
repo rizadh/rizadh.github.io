@@ -18,6 +18,7 @@ $(function () {
     notification = (function() {
         var banner = $('#notification-banner');
         var bannerSpan = banner.find('span');
+        var timeout;
 
         /** Show a notification with given message and buttons */
         var show = function(message, buttons) {
@@ -35,8 +36,8 @@ $(function () {
                         .prependTo(button_wrapper);
                 }
             } else {
-                clearTimeout(bannerSpan.data('hideTimeout'));
-                bannerSpan.data('hideTimeout', setTimeout(notification.hide, 5000));
+                clearTimeout(timeout);
+                timeout = setTimeout(notification.hide, 5000);
             }
 
             banner
@@ -797,7 +798,7 @@ function editTime() {
 function togglePause() {
     // Handle if display is expanded
     if (!$('#display').data('inputMode')) {
-        // Handle if timer is expanded
+        // Handle if timer is paused
         if ($('#display').data('paused')) {
             startTimer(true);
             $('#display').data('paused', false);
