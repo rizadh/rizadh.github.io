@@ -9,6 +9,7 @@ var EASE_IN = 'easeIn' + EASEFUNC;
 var ANIMATION_DURATION = 300;
 var windowWidth;
 var windowHeight;
+var startupType;
 
 // UI objects (temporary fix)
 var notification;
@@ -43,7 +44,8 @@ $(function () {
                 };
             },
             publish: function(topic, info) {
-                // If the topic doesn't exist, or there's no listeners in queue, just leave
+                // If the topic doesn't exist, or there's no listeners in queue,
+                // just leave
                 if(!hOP.call(topics, topic)) return;
 
                 // Cycle through topics queue, fire!
@@ -79,12 +81,84 @@ $(function () {
             isSupportedCSS('backdrop-filter') ) {
                 $('body').addClass('backdrop-filter');
         }
+
+        // Use special startup type if time is given in URL
+        var GETtime = GET('time');
+        if (validTimeString(GETtime)) {
+            startupType = 'given';
+        } else {
+            startupType = 'normal';
+        }
+
+        var timeGivenStartup = function() {
+            // Immediately start timer
+            setDisplayTime(('000000' + GETtime).slice(-6));
+            startTimer();
+        }
+
+        events.subscribe('startup.given', timeGivenStartup);
     })();
 
     display = (function() {
         var display = $('#display');
         // Represents if keypad is displayed
         display.data('inputMode', true);
+        events.subscribe('startup.given', function() {
+            $.Velocity.hook($('#display'), 'translateY', '-100%');
+        });
+        events.subscribe('startup.normal', function() {
+            $.Velocity.hook($('#display'), 'height', '100%');
+            // Animate display
+            $('#display').velocity({
+                height: '20%'
+            }, {
+                easing: EASE_OUT,
+                duration: ANIMATION_DURATION,
+                complete: function() {
+                    var timeStarted = parseInt(localStorage.getItem('timeStarted'));
+                    var durationSet = parseInt(localStorage.getItem('durationSet'));
+                    if (timeStarted && durationSet) {
+                        var timeThresholdSec = 5;
+                        if (timeLeft() > timeThresholdSec * 1000) {
+                            var message = 'Seems like the timer was still running' +
+                                ' when you last closed this app. Do you want to' +
+                                ' restore the timer?';
+                            var noButton = {
+                                text: 'No',
+                                style: 'alert',
+                                clickFunction: function () {
+                                    localStorage.setItem('timeStarted', '0');
+                                    localStorage.setItem('durationSet', '0');
+                                }
+                            };
+                            var sureButton = {
+                                text: 'Sure',
+                                style: 'emphasize',
+                                clickFunction: function () {
+                                    var progress = 1 - timeLeft() / durationSet;
+                                    if (timeLeft() > 0) {
+                                        $('#dial-ring path')
+                                            .data('timeLeft', timeLeft())
+                                            .data('progress', progress);
+                                        startTimer(false, true);
+                                    } else {
+                                        notification.show(
+                                            'Too late, the timer has already ended'
+                                        );
+                                    }
+                                }
+                            };
+                            notification.show(message, [noButton, sureButton]);
+                        }
+                    }
+
+                    /** Returns time left until previous timer ends */
+                    function timeLeft() {
+                        return (timeStarted + durationSet) - (new Date()).getTime();
+                    }
+                }
+            });
+        });
     })();
 
     keypad = (function() {
@@ -94,6 +168,17 @@ $(function () {
         $.Velocity.hook(keypad, 'scaleX', 0.5);
         $.Velocity.hook(keypad, 'scaleY', 0);
         $.Velocity.hook(keypad, 'opacity', 0);
+
+        events.subscribe('startup.normal', function() {
+            keypad.velocity({
+                opacity: 1,
+                scaleX: 1,
+                scaleY: 1
+            }, {
+                easing: EASE_OUT,
+                duration: ANIMATION_DURATION
+            });
+        });
     })();
 
     displayText = (function() {
@@ -103,6 +188,16 @@ $(function () {
         displayText.data('currentTime', '000000');
         $.Velocity.hook(displayText, 'translateX', '-50%');
         $.Velocity.hook(displayText, 'translateY', '-50%');
+
+        events.subscribe('startup.normal', function() {
+            $.Velocity.hook($('#display-text'), 'opacity', 0);
+            displayText.velocity({
+                opacity: 1
+            }, {
+                easing: EASE_OUT,
+                duration: ANIMATION_DURATION
+            });
+        });
     })();
 
     notification = (function() {
@@ -207,85 +302,6 @@ $(function () {
             toggle: toggle
         }
     })();
-
-    // Handle if time is provided in URL
-    var GETtime = GET('time');
-    if (validTimeString(GETtime)) {
-        // Immediately start timer
-        $.Velocity.hook($('#display'), 'translateY', '-100%');
-        setDisplayTime(('000000' + GETtime).slice(-6));
-        startTimer();
-    } else {
-        $.Velocity.hook($('#display'), 'height', '100%');
-        $.Velocity.hook($('#display-text'), 'opacity', 0);
-        // Animate keypad
-        $('#keypad').velocity({
-            opacity: 1,
-            scaleX: 1,
-            scaleY: 1
-        }, {
-            easing: EASE_OUT,
-            duration: ANIMATION_DURATION
-        });
-
-        $('#display-text').velocity({
-            opacity: 1
-        }, {
-            easing: EASE_OUT,
-            duration: ANIMATION_DURATION
-        });
-
-        // Animate display
-        $('#display').velocity({
-            height: '20%'
-        }, {
-            easing: EASE_OUT,
-            duration: ANIMATION_DURATION,
-            complete: function() {
-                var timeStarted = parseInt(localStorage.getItem('timeStarted'));
-                var durationSet = parseInt(localStorage.getItem('durationSet'));
-                if (timeStarted && durationSet) {
-                    var timeThresholdSec = 5;
-                    if (timeLeft() > timeThresholdSec * 1000) {
-                        var message = 'Seems like the timer was still running' +
-                            ' when you last closed this app. Do you want to' +
-                            ' restore the timer?';
-                        var noButton = {
-                            text: 'No',
-                            style: 'alert',
-                            clickFunction: function () {
-                                localStorage.setItem('timeStarted', '0');
-                                localStorage.setItem('durationSet', '0');
-                            }
-                        };
-                        var sureButton = {
-                            text: 'Sure',
-                            style: 'emphasize',
-                            clickFunction: function () {
-                                var progress = 1 - timeLeft() / durationSet;
-                                if (timeLeft() > 0) {
-                                    $('#dial-ring path')
-                                        .data('timeLeft', timeLeft())
-                                        .data('progress', progress);
-                                    startTimer(false, true);
-                                } else {
-                                    notification.show(
-                                        'Too late, the timer has already ended'
-                                    );
-                                }
-                            }
-                        };
-                        notification.show(message, [noButton, sureButton]);
-                    }
-                }
-
-                /** Returns time left until previous timer ends */
-                function timeLeft() {
-                    return (timeStarted + durationSet) - (new Date()).getTime();
-                }
-            }
-        });
-    }
 
     // Set click events
     $('#keypad').on('click', 'td', function () {
@@ -438,6 +454,7 @@ $(function () {
         var maxLength = Math.min(windowWidth * 1.5, windowHeight);
         $.Velocity.hook($('html'), 'fontSize', (maxLength / 9) + 'px');
     });
+    events.publish('startup.' + startupType);
 });
 
 /** Returns the value of the display. */
