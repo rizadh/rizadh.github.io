@@ -117,7 +117,7 @@ $(function () {
                 case 8:
                     e.preventDefault();
                     if (display.inputMode) {
-                        var deletedTime = ('0' + displayTime()).slice(-7, -1);
+                        var deletedTime = ('0' + displayText.time).slice(-7, -1);
                         setDisplayTime(deletedTime);
                     }
                     break;
@@ -355,6 +355,12 @@ $(function () {
                 duration: ANIMATION_DURATION
             });
         });
+
+        return {
+            get time() {
+                return displayText.data('currentTime');
+            }
+        }
     })();
 
     notification = (function() {
@@ -486,11 +492,6 @@ $(function () {
 
     events.publish('startup.' + startupType);
 });
-
-/** Returns the value of the display. */
-function displayTime() {
-    return $('#display-text').data('currentTime');
-}
 
 /** Check if the supplied number represents a displayable amount of time */
 function validTimeString(timeString) {
@@ -681,13 +682,13 @@ function setDisplayTime(text, style) {
 }
 
 function addDigit(digit) {
-    var newTime = (displayTime() + digit).slice(-6);
+    var newTime = (displayText.time + digit).slice(-6);
     setDisplayTime(newTime);
 }
 
 function startTimer(resume, restore) {
     // Convert display input to seconds
-    var timeString = displayTime();
+    var timeString = displayText.time;
     var hoursToSeconds = timeString.slice(-6, -4) * 3600;
     var minutesToSeconds = timeString.slice(-4, -2) * 60;
     var seconds = timeString.slice(-2) * 1;
@@ -842,7 +843,7 @@ function setDial(dial, arcRadius, progress) {
 
 /** Activates input mode */
 function editTime() {
-    setDisplayTime(displayTime(), 'crossfade');
+    setDisplayTime(displayText.time, 'crossfade');
     $('#display')
         .data('inputMode', true)
         .data('paused', false)
