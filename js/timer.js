@@ -515,9 +515,7 @@ $(function () {
 /**
  * Sets the display time
  * @param (string) text - Value to be set
- * @param {boolean} actual - If true, display's text is changed directly to
- *                           specified value or if parsing is applied first
- * @param {boolean} style - Determines style of animation used
+ * @param {string} style - Determines style of animation used
  */
 function setDisplayTime(text, style) {
     // Determines whether display needs to be updated
