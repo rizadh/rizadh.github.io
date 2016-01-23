@@ -104,7 +104,7 @@ $(function() {
                 case 13:
                     // Activate editing mode if not activated
                     if (display.inputMode) {
-                        startTimer();
+                        app.startTimer();
                     } else {
                         editTime();
                     }
@@ -205,6 +205,36 @@ $(function() {
             }
         });
 
+        function startTimer(resume, restore) {
+            // Convert display input to seconds
+            var timeString = displayText.time;
+            var hoursToSeconds = timeString.slice(-6, -4) * 3600;
+            var minutesToSeconds = timeString.slice(-4, -2) * 60;
+            var seconds = timeString.slice(-2) * 1;
+            var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
+
+            // Limit seconds to less than 100 hours
+            if (totalSeconds === 0 && !resume && !restore) {
+                notification.show('Please enter a time first');
+            } else if (totalSeconds < 360000 || restore || resume) {
+                // Start dial motion and set state to timing mode
+                setTime(totalSeconds, resume || restore);
+                display.inputMode = false;
+
+                if (!resume) {
+                    display.expand();
+                    keypad.shrink();
+                    editButton.slideIn();
+                    dialRing.scaleIn();
+                }
+            } else {
+                notification.show(
+                    'The time entered was too high. Enter a time less than 100 hours'
+                );
+                displayText.setTime('');
+            }
+        }
+
         events.subscribe('startup', function() {
             // Use special startup type if time is given in URL
             if (displayText.validateTime(GET('time'))) {
@@ -219,6 +249,10 @@ $(function() {
             displayText.setTime(('000000' + GET('time')).slice(-6));
             startTimer();
         });
+
+        return {
+            startTimer: startTimer
+        }
     })();
 
     var display = (function() {
@@ -226,6 +260,18 @@ $(function() {
 
         // Represents if keypad is displayed
         display.data('inputMode', true);
+
+        function expand() {
+            display
+                .velocity('stop')
+                .velocity({
+                    height: '90%',
+                    translateY: 0
+                }, {
+                    duration: ANIMATION_DURATION,
+                    easing: EASE_OUT
+                });
+        }
 
         events.subscribe('startup.given', function() {
             $.Velocity.hook(display, 'translateY', '-100%');
@@ -264,7 +310,7 @@ $(function() {
                                         $('#dial-ring path')
                                             .data('timeLeft', timeLeft())
                                             .data('progress', progress);
-                                        startTimer(false, true);
+                                        app.startTimer(false, true);
                                     } else {
                                         notification.show(
                                             'Too late, the timer has already ended'
@@ -285,8 +331,12 @@ $(function() {
         });
 
         return {
+            expand: expand,
             get inputMode() {
                 return display.data('inputMode');
+            },
+            set inputMode(mode) {
+                mode ? $('#display').data('inputMode', true).removeClass('running') : $('#display').data('inputMode', false).addClass('running');
             }
         }
     })();
@@ -299,13 +349,27 @@ $(function() {
         $.Velocity.hook(keypad, 'scaleY', 0);
         $.Velocity.hook(keypad, 'opacity', 0);
 
+        function shrink() {
+            keypad
+                .velocity('stop')
+                .velocity({
+                    scaleX: 0,
+                    scaleY: 0,
+                    opacity: 0
+                }, {
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION,
+                    display: 'none'
+                });
+        }
+
         // Set click events
         keypad.on('click', 'td', function () {
             var keyValue = $(this).text();
             if (keyValue === 'Clear') {
                 displayText.setTime('');
             } else if (keyValue === 'Start') {
-                startTimer();
+                app.startTimer();
             } else {
                 displayText.addDigit(keyValue);
             }
@@ -321,6 +385,10 @@ $(function() {
                 duration: ANIMATION_DURATION
             });
         });
+
+        return {
+            shrink: shrink
+        }
     })();
 
     var displayText = (function() {
@@ -668,84 +736,47 @@ $(function() {
     var editButton = (function() {
         var $editButton = $('#edit-button');
 
+        function slideIn() {
+            $editButton
+                .velocity('stop')
+                .velocity({
+                    translateY: [0, '100%'],
+                    opacity: [1, 0]
+                }, {
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION,
+                    display: 'block'
+                });
+        }
+
         $editButton.click(editTime);
+
+        return {
+            slideIn: slideIn
+        }
     })();
 
-    function startTimer(resume, restore) {
-        // Convert display input to seconds
-        var timeString = displayText.time;
-        var hoursToSeconds = timeString.slice(-6, -4) * 3600;
-        var minutesToSeconds = timeString.slice(-4, -2) * 60;
-        var seconds = timeString.slice(-2) * 1;
-        var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
-
-        // Fixed alignment issues if startup animation was interrupted
-        $.Velocity.hook($('#display-text'), 'translateY', '-50%');
-
-        // Limit seconds to less than 100 hours
-        if (totalSeconds === 0 && !resume && !restore) {
-            notification.show('Please enter a time first');
-        } else if (totalSeconds < 360000 || restore || resume) {
-            // Start dial motion and set state to timing mode
-            setTime(totalSeconds, resume || restore);
-            $('#display')
-                .data('inputMode', false)
-                .addClass('running');
-
-            if (!resume) {
-                // Expand display
-                $('#display')
-                    .velocity('stop')
-                    .velocity({
-                        height: '90%',
-                        translateY: 0
-                    }, {
-                        duration: ANIMATION_DURATION,
-                        easing: EASE_OUT
-                    });
-                // Fade out keys
-                $('#keypad')
-                    .velocity('stop')
-                    .velocity({
-                        scaleX: 0,
-                        scaleY: 0,
-                        opacity: 0
-                    }, {
-                        easing: EASE_OUT,
-                        duration: ANIMATION_DURATION,
-                        display: 'none'
-                    });
-                // Fade in edit button
-                $('#edit-button')
-                    .velocity('stop')
-                    .velocity({
-                        translateY: [0, '100%'],
-                        opacity: [1, 0]
-                    }, {
-                        easing: EASE_OUT,
-                        duration: ANIMATION_DURATION,
-                        display: 'block'
-                    });
-
-                // Fade in ring
-                $('#dial-ring')
-                    .velocity('stop')
-                    .velocity({
-                        opacity: [1, 0],
-                        scale: [1, 0]
-                    }, {
-                        easing: EASE_OUT,
-                        duration: ANIMATION_DURATION,
-                        display: 'block'
-                    });
-            }
-        } else {
-            notification.show(
-                'The time entered was too high. Enter a time less than 100 hours'
-            );
-            displayText.setTime('');
+    var dialRing = (function() {
+        var dial = $('#dial-ring');
+        function scaleIn() {
+            dial
+                .velocity('stop')
+                .velocity({
+                    opacity: [1, 0],
+                    scale: [1, 0]
+                }, {
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION,
+                    display: 'block'
+                });
         }
-    }
+
+        return {
+            scaleIn: scaleIn
+        }
+    })();
+
+
 
     /**
      * Initiate the timer
@@ -881,7 +912,7 @@ $(function() {
         if (!$('#display').data('inputMode')) {
             // Handle if timer is paused
             if ($('#display').data('paused')) {
-                startTimer(true);
+                app.startTimer(true);
                 $('#display').data('paused', false);
                 $('#dial-ring')
                     .velocity('stop')
