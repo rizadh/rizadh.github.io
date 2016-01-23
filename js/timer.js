@@ -164,7 +164,7 @@ $(function () {
                     if (display.inputMode) {
                         // Obtain entered character
                         var keyValue = String.fromCharCode(key);
-                        addDigit(keyValue);
+                        displayText.addDigit(keyValue);
                         break;
                     }
 
@@ -320,7 +320,7 @@ $(function () {
             } else if (keyValue === 'Start') {
                 startTimer();
             } else {
-                addDigit(keyValue);
+                displayText.addDigit(keyValue);
             }
         });
 
@@ -356,7 +356,12 @@ $(function () {
             });
         });
 
+        var addDigit = function(digit) {
+            setDisplayTime((displayText.data('currentTime') + digit).slice(-6));
+        }
+
         return {
+            addDigit: addDigit,
             get time() {
                 return displayText.data('currentTime');
             }
@@ -681,10 +686,6 @@ function setDisplayTime(text, style) {
     }
 }
 
-function addDigit(digit) {
-    var newTime = (displayText.time + digit).slice(-6);
-    setDisplayTime(newTime);
-}
 
 function startTimer(resume, restore) {
     // Convert display input to seconds
