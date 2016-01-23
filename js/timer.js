@@ -80,14 +80,6 @@ $(function () {
                 $('body').addClass('backdrop-filter');
         }
 
-        // Use special startup type if time is given in URL
-        var GETtime = GET('time');
-        if (validTimeString(GETtime)) {
-            startupType = 'given';
-        } else {
-            startupType = 'normal';
-        }
-
         // Enable keyboard input
         $document.on('keydown', function (e) {
             // Get the keycode
@@ -227,9 +219,18 @@ $(function () {
             }
         });
 
+        events.subscribe('startup', function() {
+            // Use special startup type if time is given in URL
+            if (displayText.validateTime(GET('time'))) {
+                startupType = 'given';
+            } else {
+                startupType = 'normal';
+            }
+        });
+
         events.subscribe('startup.given', function() {
             // Immediately start timer
-            setDisplayTime(('000000' + GETtime).slice(-6));
+            setDisplayTime(('000000' + GET('time')).slice(-6));
             startTimer();
         });
     })();
@@ -358,10 +359,20 @@ $(function () {
 
         var addDigit = function(digit) {
             setDisplayTime((displayText.data('currentTime') + digit).slice(-6));
+        };
+
+        /** Check if the supplied number represents a displayable amount of time */
+        var validateTime = function(timeString) {
+            var hoursToSeconds = timeString.slice(-6, -4) * 3600;
+            var minutesToSeconds = timeString.slice(-4, -2) * 60;
+            var seconds = timeString.slice(-2) * 1;
+            var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
+            return totalSeconds > 0 && totalSeconds < 360000;
         }
 
         return {
             addDigit: addDigit,
+            validateTime: validateTime,
             get time() {
                 return displayText.data('currentTime');
             }
@@ -495,17 +506,11 @@ $(function () {
         $editButton.click(editTime);
     })();
 
+    events.publish('startup');
     events.publish('startup.' + startupType);
 });
 
-/** Check if the supplied number represents a displayable amount of time */
-function validTimeString(timeString) {
-    var hoursToSeconds = timeString.slice(-6, -4) * 3600;
-    var minutesToSeconds = timeString.slice(-4, -2) * 60;
-    var seconds = timeString.slice(-2) * 1;
-    var totalSeconds = hoursToSeconds + minutesToSeconds + seconds;
-    return totalSeconds > 0 && totalSeconds < 360000;
-}
+
 
 /**
  * Sets the display time
