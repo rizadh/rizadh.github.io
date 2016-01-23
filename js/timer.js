@@ -66,11 +66,6 @@ $(function () {
         // Sticky hover fix
         hoverTouchUnstick();
 
-        // Change Backspce to Delete if on Mac or iOS devices
-        if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
-            $('#keyboard-help').find('.delete').text('Delete');
-        }
-
         // Disable scrolling if running as full-screen iOS web app
         if (window.navigator.standalone) {
             $document.on('touchmove', false);
@@ -91,12 +86,6 @@ $(function () {
             startupType = 'given';
         } else {
             startupType = 'normal';
-        }
-
-        var timeGivenStartup = function() {
-            // Immediately start timer
-            setDisplayTime(('000000' + GETtime).slice(-6));
-            startTimer();
         }
 
         // Enable keyboard input
@@ -238,7 +227,11 @@ $(function () {
             }
         });
 
-        events.subscribe('startup.given', timeGivenStartup);
+        events.subscribe('startup.given', function() {
+            // Immediately start timer
+            setDisplayTime(('000000' + GETtime).slice(-6));
+            startTimer();
+        });
     })();
 
     display = (function() {
@@ -354,7 +347,7 @@ $(function () {
         displayText.click(togglePause);
 
         events.subscribe('startup.normal', function() {
-            $.Velocity.hook($('#display-text'), 'opacity', 0);
+            $.Velocity.hook(displayText, 'opacity', 0);
             displayText.velocity({
                 opacity: 1
             }, {
@@ -440,10 +433,10 @@ $(function () {
             hide: hide,
             clickButton: clickButton,
             get isShown() {
-                return $('#notification-banner').data('shown');
+                return banner.data('shown');
             },
             get isEmpty() {
-                return $('#notification-banner').find('div').text() !== '';
+                return banner.find('div').text() !== '';
             }
         };
     })();
@@ -453,6 +446,11 @@ $(function () {
 
         $.Velocity.hook(menu, 'translateX', '-50%');
         $.Velocity.hook(menu, 'translateY', '-50%');
+
+        // Change Backspce to Delete if on Mac or iOS devices
+        if (navigator.platform.match(/(Mac|iPhone|iPod|iPad)/i)) {
+            menu.find('.delete').text('Delete');
+        }
 
         var toggle = function(forceState) {
             if (arguments.length === 0) {
