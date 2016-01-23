@@ -252,7 +252,7 @@ $(function () {
 
         return {
             get inputMode() {
-                return display.data('inputMode') === true;
+                return display.data('inputMode');
             }
         }
     })();
