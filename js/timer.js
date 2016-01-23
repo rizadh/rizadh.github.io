@@ -19,6 +19,7 @@ var keypad;
 var displayText;
 var events;
 var display;
+var editButton;
 
 // Perform when document body is loaded
 $(function () {
@@ -57,6 +58,8 @@ $(function () {
     })();
 
     app = (function() {
+        var $window = $(window);
+        var $document = $(document);
         // Attach Fastlick
         FastClick.attach(document.body);
 
@@ -70,7 +73,7 @@ $(function () {
 
         // Disable scrolling if running as full-screen iOS web app
         if (window.navigator.standalone) {
-            $(document).on('touchmove', false);
+            $document.on('touchmove', false);
         }
 
         // Enable the use of backdrop filters if supported
@@ -97,7 +100,7 @@ $(function () {
         }
 
         // Enable keyboard input
-        $(document).on('keydown', function (e) {
+        $document.on('keydown', function (e) {
             // Get the keycode
             var key = e.keyCode;
             // Do not allow keyboard input if a notification is show
@@ -124,7 +127,7 @@ $(function () {
                 // Backspace - delete a character from display
                 case 8:
                     e.preventDefault();
-                    if (display.inputmode) {
+                    if (display.inputMode) {
                         var deletedTime = ('0' + displayTime()).slice(-7, -1);
                         setDisplayTime(deletedTime);
                     }
@@ -181,6 +184,57 @@ $(function () {
             // Hide help menu unless spacebar was clicked
             if (key !== 32) {
                 helpMenu.toggle(false);
+            }
+        });
+
+        // Disable suggesting a mouse if user has a touch device
+        $document.on('touchstart', function () {
+            localStorage.setItem('touch-device', 'true');
+        });
+
+        // Adjust font-sizes when viewport dimensions change
+        $window.on('load resize orientationChange', function () {
+            windowWidth = $window.width();
+            windowHeight = $window.height();
+            // Maximize size of text
+            var maxLength = Math.min(windowWidth * 1.5, windowHeight);
+            $.Velocity.hook($('html'), 'fontSize', (maxLength / 9) + 'px');
+        });
+
+        $document.click(function (e) {
+            // Hide keyboard help when anything is tapped
+            if (!$(e.target).hasClass('button')) {
+                helpMenu.toggle(false);
+            }
+            var touchDevice = localStorage.getItem('touch-device');
+            var suggestedMouse = localStorage.getItem('mouse-suggested');
+            var suggestedMouseSession = sessionStorage.getItem('mouse-suggested');
+            var tempSuggestion = suggestedMouse === 'temp';
+            var showAgain = tempSuggestion && !suggestedMouseSession;
+
+            if (!touchDevice && (!suggestedMouse || showAgain)) {
+                localStorage.setItem('mouse-suggested', 'true');
+                sessionStorage.setItem('mouse-suggested', 'true');
+                notification.show(
+                    'Seems like you have a keyboard. ' +
+                    'Want to learn a few shortcuts?', [{
+                        text: 'Never',
+                        style: 'alert',
+                        clickFunction: function () {}
+                    }, {
+                        text: 'Not right now',
+                        style: 'normal',
+                        clickFunction: function () {
+                            localStorage.setItem('mouse-suggested', 'temp');
+                        }
+                    }, {
+                        text: 'Yes, show me',
+                        style: 'emphasize',
+                        clickFunction: function () {
+                            helpMenu.toggle(true);
+                        }
+                    }]
+                );
             }
         });
 
@@ -265,6 +319,18 @@ $(function () {
         $.Velocity.hook(keypad, 'scaleY', 0);
         $.Velocity.hook(keypad, 'opacity', 0);
 
+        // Set click events
+        keypad.on('click', 'td', function () {
+            var keyValue = $(this).text();
+            if (keyValue === 'Clear') {
+                setDisplayTime('');
+            } else if (keyValue === 'Start') {
+                startTimer();
+            } else {
+                addDigit(keyValue);
+            }
+        });
+
         events.subscribe('startup.normal', function() {
             keypad.velocity({
                 opacity: 1,
@@ -284,6 +350,8 @@ $(function () {
         displayText.data('currentTime', '000000');
         $.Velocity.hook(displayText, 'translateX', '-50%');
         $.Velocity.hook(displayText, 'translateY', '-50%');
+
+        displayText.click(togglePause);
 
         events.subscribe('startup.normal', function() {
             $.Velocity.hook($('#display-text'), 'opacity', 0);
@@ -365,6 +433,8 @@ $(function () {
             banner.find('.' + type).click();
         };
 
+        banner.on('click', '.button', hide);
+
         return {
             show: show,
             hide: hide,
@@ -410,72 +480,12 @@ $(function () {
         }
     })();
 
-    // Set click events
-    $('#keypad').on('click', 'td', function () {
-        var keyValue = $(this).text();
-        if (keyValue === 'Clear') {
-            setDisplayTime('');
-        } else if (keyValue === 'Start') {
-            startTimer();
-        } else {
-            addDigit(keyValue);
-        }
-    });
+    editButton = (function() {
+        var $editButton = $('#edit-button');
 
-    $('#edit-button').click(editTime);
-    $('#display').on('click', '#display-text', togglePause);
-    $('#notification-banner').on('click', '.button', notification.hide);
+        $editButton.click(editTime);
+    })();
 
-    // Disable suggesting a mouse if user has a touch device
-    $(document).on('touchstart', function () {
-        localStorage.setItem('touch-device', 'true');
-    });
-
-    // Hide keyboard help when anything is tapped
-    $(document).click(function (e) {
-        if (!$(e.target).hasClass('button')) {
-            helpMenu.toggle(false);
-        }
-        var touchDevice = localStorage.getItem('touch-device');
-        var suggestedMouse = localStorage.getItem('mouse-suggested');
-        var suggestedMouseSession = sessionStorage.getItem('mouse-suggested');
-        var tempSuggestion = suggestedMouse === 'temp';
-        var showAgain = tempSuggestion && !suggestedMouseSession;
-
-        if (!touchDevice && (!suggestedMouse || showAgain)) {
-            localStorage.setItem('mouse-suggested', 'true');
-            sessionStorage.setItem('mouse-suggested', 'true');
-            notification.show(
-                'Seems like you have a keyboard. ' +
-                'Want to learn a few shortcuts?', [{
-                    text: 'Never',
-                    style: 'alert',
-                    clickFunction: function () {}
-                }, {
-                    text: 'Not right now',
-                    style: 'normal',
-                    clickFunction: function () {
-                        localStorage.setItem('mouse-suggested', 'temp');
-                    }
-                }, {
-                    text: 'Yes, show me',
-                    style: 'emphasize',
-                    clickFunction: function () {
-                        helpMenu.toggle(true);
-                    }
-                }]
-            );
-        }
-    });
-
-    // Adjust font-sizes when viewport dimensions change
-    $(window).on('load resize orientationChange', function () {
-        windowWidth = $(window).width();
-        windowHeight = $(window).height();
-        // Maximize size of text
-        var maxLength = Math.min(windowWidth * 1.5, windowHeight);
-        $.Velocity.hook($('html'), 'fontSize', (maxLength / 9) + 'px');
-    });
     events.publish('startup.' + startupType);
 });
 
