@@ -96,20 +96,110 @@ $(function () {
             startTimer();
         }
 
+        // Enable keyboard input
+        $(document).on('keydown', function (e) {
+            // Get the keycode
+            var key = e.keyCode;
+            // Do not allow keyboard input if a notification is show
+            if (notification.isShown) {
+                if (notification.isEmpty) {
+                    switch (key) {
+                        case 13:
+                            notification.clickButton('emphasize');
+                            break;
+                        case 27:
+                            notification.clickButton('alert');
+                            break;
+                    }
+                    return false;
+                } else {
+                    notification.hide();
+                    if (key === 13) {
+                        return false;
+                    }
+                }
+            }
+            // Perform events depending on keycode
+            switch (key) {
+                // Backspace - delete a character from display
+                case 8:
+                    e.preventDefault();
+                    if (display.inputmode) {
+                        var deletedTime = ('0' + displayTime()).slice(-7, -1);
+                        setDisplayTime(deletedTime);
+                    }
+                    break;
+
+                // Enter - start or cancel timer
+                case 13:
+                    // Activate editing mode if not activated
+                    if (display.inputMode) {
+                        startTimer();
+                    } else {
+                        editTime();
+                    }
+                    break;
+
+                // Escape - cancel timer
+                case 27:
+                    // Activate editing mode if not activated
+                    if (!display.inputMode) {
+                        editTime();
+                    }
+                    break;
+
+                // Space - toggle keyboard help menu
+                case 32:
+                    if (display.inputMode) {
+                        helpMenu.toggle();
+                    } else {
+                        togglePause();
+                    }
+                    break;
+
+                // 0 to 9 - input digits into display
+                case 48:
+                case 49:
+                case 50:
+                case 51:
+                case 52:
+                case 53:
+                case 54:
+                case 55:
+                case 56:
+                case 57:
+                    // Activate editing mode if not activated
+                    if (display.inputMode) {
+                        // Obtain entered character
+                        var keyValue = String.fromCharCode(key);
+                        addDigit(keyValue);
+                        break;
+                    }
+
+            }
+
+            // Hide help menu unless spacebar was clicked
+            if (key !== 32) {
+                helpMenu.toggle(false);
+            }
+        });
+
         events.subscribe('startup.given', timeGivenStartup);
     })();
 
     display = (function() {
         var display = $('#display');
+
         // Represents if keypad is displayed
         display.data('inputMode', true);
+
         events.subscribe('startup.given', function() {
-            $.Velocity.hook($('#display'), 'translateY', '-100%');
+            $.Velocity.hook(display, 'translateY', '-100%');
         });
+
         events.subscribe('startup.normal', function() {
-            $.Velocity.hook($('#display'), 'height', '100%');
-            // Animate display
-            $('#display').velocity({
+            $.Velocity.hook(display, 'height', '100%');
+            display.velocity({
                 height: '20%'
             }, {
                 easing: EASE_OUT,
@@ -159,6 +249,12 @@ $(function () {
                 }
             });
         });
+
+        return {
+            get inputMode() {
+                return display.data('inputMode') === true;
+            }
+        }
     })();
 
     keypad = (function() {
@@ -265,9 +361,20 @@ $(function () {
             }
         };
 
+        var clickButton = function(type) {
+            banner.find('.' + type).click();
+        };
+
         return {
             show: show,
-            hide: hide
+            hide: hide,
+            clickButton: clickButton,
+            get isShown() {
+                return $('#notification-banner').data('shown');
+            },
+            get isEmpty() {
+                return $('#notification-banner').find('div').text() !== '';
+            }
         };
     })();
 
@@ -318,91 +425,6 @@ $(function () {
     $('#edit-button').click(editTime);
     $('#display').on('click', '#display-text', togglePause);
     $('#notification-banner').on('click', '.button', notification.hide);
-
-    // Enable keyboard input
-    $(document).on('keydown', function (e) {
-        // Get the keycode
-        var key = e.keyCode;
-        // Do not allow keyboard input if a notification is show
-        if ($('#notification-banner').data('shown')) {
-            if ($('#notification-banner').find('div').text() !== '') {
-                switch (key) {
-                    case 13:
-                        $('#notification-banner').find('.emphasize').click();
-                        break;
-                    case 27:
-                        $('#notification-banner').find('.alert').click();
-                        break;
-                }
-                return false;
-            } else {
-                notification.hide();
-            }
-        }
-        // Perform events depending on keycode
-        switch (key) {
-            // Backspace - delete a character from display
-            case 8:
-                e.preventDefault();
-                if ($('#display').data('inputMode')) {
-                    var deletedTime = ('0' + displayTime()).slice(-7, -1);
-                    setDisplayTime(deletedTime);
-                }
-                break;
-
-            // Enter - start or cancel timer
-            case 13:
-                // Activate editing mode if not activated
-                if ($('#display').data('inputMode')) {
-                    startTimer();
-                } else {
-                    editTime();
-                }
-                break;
-
-            // Escape - cancel timer
-            case 27:
-                // Activate editing mode if not activated
-                if (!$('#display').data('inputMode')) {
-                    editTime();
-                }
-                break;
-
-            // Space - toggle keyboard help menu
-            case 32:
-                if (!$('#display').data('inputMode')) {
-                    togglePause();
-                } else {
-                    helpMenu.toggle();
-                }
-                break;
-
-            // 0 to 9 - input digits into display
-            case 48:
-            case 49:
-            case 50:
-            case 51:
-            case 52:
-            case 53:
-            case 54:
-            case 55:
-            case 56:
-            case 57:
-                // Activate editing mode if not activated
-                if ($('#display').data('inputMode')) {
-                    // Obtain entered character
-                    var keyValue = String.fromCharCode(key);
-                    addDigit(keyValue);
-                    break;
-                }
-
-        }
-
-        // Hide help menu unless spacebar was clicked
-        if (key !== 32) {
-            helpMenu.toggle(false);
-        }
-    });
 
     // Disable suggesting a mouse if user has a touch device
     $(document).on('touchstart', function () {
