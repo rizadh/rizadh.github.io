@@ -11,19 +11,6 @@ $(function() {
     var windowHeight;
     var startupType;
 
-    // UI objects (temporary fix)
-    var notification;
-    var helpMenu;
-    var app;
-    var keypad;
-    var displayText;
-    var events;
-    var display;
-    var editButton;
-
-    // Perform when document body is loaded
-    // Create instances of UI objects
-
     // Adapted from David Walsh (davidwalsh.com)
     var events = (function(){
         var topics = {};
@@ -56,7 +43,7 @@ $(function() {
         };
     })();
 
-    app = (function() {
+    var app = (function() {
         var $window = $(window);
         var $document = $(document);
         // Attach Fastlick
@@ -234,7 +221,7 @@ $(function() {
         });
     })();
 
-    display = (function() {
+    var display = (function() {
         var display = $('#display');
 
         // Represents if keypad is displayed
@@ -304,7 +291,7 @@ $(function() {
         }
     })();
 
-    keypad = (function() {
+    var keypad = (function() {
         var keypad = $('#keypad');
 
         $.Velocity.hook(keypad, 'translateX', '-50%');
@@ -336,7 +323,7 @@ $(function() {
         });
     })();
 
-    displayText = (function() {
+    var displayText = (function() {
         var displayText = $('#display-text');
 
         // Clear display and show default message
@@ -557,7 +544,7 @@ $(function() {
         }
     })();
 
-    notification = (function() {
+    var notification = (function() {
         var banner = $('#notification-banner');
         var bannerSpan = banner.find('span');
         var timeout;
@@ -641,7 +628,7 @@ $(function() {
         };
     })();
 
-    helpMenu = (function() {
+    var helpMenu = (function() {
         var menu = $('#keyboard-help');
 
         $.Velocity.hook(menu, 'translateX', '-50%');
@@ -678,7 +665,7 @@ $(function() {
         }
     })();
 
-    editButton = (function() {
+    var editButton = (function() {
         var $editButton = $('#edit-button');
 
         $editButton.click(editTime);
