@@ -404,8 +404,6 @@ $(function() {
         events.subscribe('edit', shrink);
 
         return {
-            expand: expand,
-            shrink: shrink,
             get inputMode() {
                 return display.data('inputMode');
             },
@@ -487,11 +485,6 @@ $(function() {
 
         events.subscribe('start', shrink);
         events.subscribe('edit', expand);
-
-        return {
-            shrink: shrink,
-            expand: expand
-        }
     })();
 
     var displayText = (function() {
@@ -876,11 +869,6 @@ $(function() {
 
         events.subscribe('start', slideIn);
         events.subscribe('edit', zoomOut);
-
-        return {
-            slideIn: slideIn,
-            zoomOut: zoomOut
-        }
     })();
 
     var dialRing = (function() {
@@ -1017,12 +1005,7 @@ $(function() {
         events.subscribe('resume', fadeIn);
 
         return {
-            scaleIn: scaleIn,
-            fadeOut: fadeOut,
-            stop: stop,
-            wind: wind,
-            fadeIn: fadeIn,
-            halfFade: halfFade
+            wind: wind
         }
     })();
 
