@@ -1026,8 +1026,6 @@ $(function() {
         }
     })();
 
-
-
     events.publish('startup');
     events.publish('startup.' + startupType);
 });
