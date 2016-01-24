@@ -402,6 +402,7 @@ $(function() {
 
         events.subscribe('start', expand);
         events.subscribe('edit', shrink);
+        events.subscribe('done', done);
 
         return {
             get inputMode() {
@@ -509,6 +510,10 @@ $(function() {
 
         events.subscribe('edit', function() {
             setTime(displayText.data('currentTime'), 'crossfade');
+        });
+
+        events.subscribe('done', function() {
+            setTime('Done', 'crossfade')
         });
 
         /** Check if the supplied number represents a displayable amount of time */
@@ -981,8 +986,7 @@ $(function() {
                         }
                     },
                     complete: function () {
-                        displayText.setTime('Done', 'crossfade');
-                        display.done();
+                        events.publish('done');
                         localStorage.setItem('timeStarted', 0);
                         localStorage.setItem('durationSet', 0);
                     }
