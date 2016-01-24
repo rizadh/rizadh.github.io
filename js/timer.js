@@ -239,13 +239,7 @@ $(function() {
                 // Start dial motion and set state to timing mode
                 dialRing.wind(totalSeconds, resume || restore);
                 display.inputMode = false;
-
-                if (!resume) {
-                    display.expand();
-                    keypad.shrink();
-                    editButton.slideIn();
-                    dialRing.scaleIn();
-                }
+                if (!resume) events.publish('start');
             } else {
                 notification.show(
                     'The time entered was too high. Enter a time less than 100 hours'
@@ -256,14 +250,9 @@ $(function() {
 
         /** Activates input mode */
         function editTime() {
-            displayText.setTime(displayText.time, 'crossfade');
             localStorage.setItem('timeStarted', 0);
             localStorage.setItem('durationSet', 0);
-            dialRing.stop();
-            display.shrink();
-            keypad.expand();
-            editButton.zoomOut();
-            dialRing.fadeOut();
+            events.publish('edit');
         }
 
         /** Toggles pause state of timer */
@@ -274,14 +263,13 @@ $(function() {
                 if (display.paused) {
                     app.startTimer(true);
                     display.paused = false;
-                    dialRing.fadeIn();
+                    events.publish('resume');
                 }
                 // Handle if timer is running
                 else if (display.running) {
                     displayText.setTime('Paused', 'crossfade');
                     display.paused = true;
-                    dialRing.halfFade();
-                    dialRing.stop();
+                    events.publish('pause');
                 }
                 // Handle if timer is finished/not running
                 else {
@@ -351,6 +339,10 @@ $(function() {
                 });
         }
 
+        function done() {
+            display.removeClass('running');
+        }
+
         events.subscribe('startup.given', function() {
             $.Velocity.hook(display, 'translateY', '-100%');
         });
@@ -408,9 +400,8 @@ $(function() {
             });
         });
 
-        function done() {
-            display.removeClass('running');
-        }
+        events.subscribe('start', expand);
+        events.subscribe('edit', shrink);
 
         return {
             expand: expand,
@@ -494,6 +485,9 @@ $(function() {
             });
         });
 
+        events.subscribe('start', shrink);
+        events.subscribe('edit', expand);
+
         return {
             shrink: shrink,
             expand: expand
@@ -518,6 +512,10 @@ $(function() {
                 easing: EASE_OUT,
                 duration: ANIMATION_DURATION
             });
+        });
+
+        events.subscribe('edit', function() {
+            setTime(displayText.data('currentTime'), 'crossfade');
         });
 
         /** Check if the supplied number represents a displayable amount of time */
@@ -876,6 +874,9 @@ $(function() {
 
         button.click(app.editTime);
 
+        events.subscribe('start', slideIn);
+        events.subscribe('edit', zoomOut);
+
         return {
             slideIn: slideIn,
             zoomOut: zoomOut
@@ -1006,6 +1007,14 @@ $(function() {
         function stop() {
             path.velocity('stop');
         }
+
+        events.subscribe('start', scaleIn);
+        events.subscribe('edit', stop);
+        events.subscribe('edit', fadeOut);
+        events.subscribe('pause', stop);
+        events.subscribe('pause', halfFade);
+        events.subscribe('pause', halfFade);
+        events.subscribe('resume', fadeIn);
 
         return {
             scaleIn: scaleIn,
