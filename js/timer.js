@@ -957,14 +957,11 @@ $(function() {
                         var moveToStart = 'm0 ' + (-arcRadius);
                         var makeArc = 'A' + arcDimensions + arcParameters + arcPos;
 
-                        // Creath path from segments
-                        var dialPath = moveToCenter + moveToStart + makeArc;
-
                         // Set path
-                        path.attr('d', dialPath);
-                        // Store progress in data
-                        path.data('progress', t);
-                        path.data('timeLeft', r);
+                        path
+                            .attr('d', moveToCenter + moveToStart + makeArc)
+                            .data('progress', t)
+                            .data('timeLeft', r);
                         // Find seconds rounded up
                         var totalSeconds = Math.ceil(r / 1000);
                         // Find minutes rounded down
@@ -1000,7 +997,6 @@ $(function() {
         events.subscribe('edit', stop);
         events.subscribe('edit', fadeOut);
         events.subscribe('pause', stop);
-        events.subscribe('pause', halfFade);
         events.subscribe('pause', halfFade);
         events.subscribe('resume', fadeIn);
 
