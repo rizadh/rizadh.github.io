@@ -142,7 +142,7 @@ $(function() {
                     if (display.inputMode) {
                         helpMenu.toggle();
                     } else {
-                        togglePause();
+                        app.togglePause();
                     }
                     break;
 
@@ -266,6 +266,30 @@ $(function() {
             dialRing.fadeOut();
         }
 
+        /** Toggles pause state of timer */
+        function togglePause() {
+            // Handle if display is expanded
+            if (!display.inputMode) {
+                // Handle if timer is paused
+                if (display.paused) {
+                    app.startTimer(true);
+                    display.paused = false;
+                    dialRing.fadeIn();
+                }
+                // Handle if timer is running
+                else if (display.running) {
+                    displayText.setTime('Paused', 'crossfade');
+                    display.paused = true;
+                    dialRing.halfFade();
+                    dialRing.stop();
+                }
+                // Handle if timer is finished/not running
+                else {
+                    app.editTime();
+                }
+            }
+        }
+
         /** Check if CSS property is supported on the browser and returns a boolean */
         function isSupportedCSS(prop) { return prop in document.body.style; }
 
@@ -290,7 +314,8 @@ $(function() {
 
         return {
             startTimer: startTimer,
-            editTime: editTime
+            editTime: editTime,
+            togglePause: togglePause
         }
     })();
 
@@ -394,7 +419,16 @@ $(function() {
                 return display.data('inputMode');
             },
             set inputMode(mode) {
-                mode ? $('#display').data('inputMode', true).data('paused', false).removeClass('running') : $('#display').data('inputMode', false).addClass('running');
+                mode ? display.data('inputMode', true).data('paused', false).removeClass('running') : display.data('inputMode', false).addClass('running');
+            },
+            get paused() {
+                return display.data('paused');
+            },
+            set paused(state) {
+                display.data('paused', state);
+            },
+            get running() {
+                return display.hasClass('running');
             },
             done: done
         }
@@ -474,7 +508,7 @@ $(function() {
         $.Velocity.hook(displayText, 'translateX', '-50%');
         $.Velocity.hook(displayText, 'translateY', '-50%');
 
-        displayText.click(togglePause);
+        displayText.click(app.togglePause);
 
         events.subscribe('startup.normal', function() {
             $.Velocity.hook(displayText, 'opacity', 0);
@@ -851,6 +885,7 @@ $(function() {
     var dialRing = (function() {
         var dial = $('#dial-ring');
         var path = $('#dial-ring path');
+
         function scaleIn() {
             dial
                 .velocity('stop')
@@ -868,6 +903,28 @@ $(function() {
             dial
                 .velocity('stop')
                 .velocity('fadeOut', 100);
+        }
+
+        function fadeIn() {
+            dial
+                .velocity('stop')
+                .velocity({
+                    opacity: 1
+                }, {
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION
+                });
+        }
+
+        function halfFade() {
+            $('#dial-ring')
+                .velocity('stop')
+                .velocity({
+                    opacity: 0.25
+                }, {
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION
+                });
         }
 
         /**
@@ -954,49 +1011,13 @@ $(function() {
             scaleIn: scaleIn,
             fadeOut: fadeOut,
             stop: stop,
-            wind: wind
+            wind: wind,
+            fadeIn: fadeIn,
+            halfFade: halfFade
         }
     })();
 
 
-
-    /** Toggles pause state of timer */
-    function togglePause() {
-        // Handle if display is expanded
-        if (!$('#display').data('inputMode')) {
-            // Handle if timer is paused
-            if ($('#display').data('paused')) {
-                app.startTimer(true);
-                $('#display').data('paused', false);
-                $('#dial-ring')
-                    .velocity('stop')
-                    .velocity({
-                        opacity: 1
-                    }, {
-                        easing: EASE_OUT,
-                        duration: ANIMATION_DURATION
-                    });
-            }
-            // Handle if timer is running
-            else if ($('#display').hasClass('running')) {
-                $('#dial-ring path').velocity('stop');
-                displayText.setTime('Paused', 'crossfade');
-                $('#display').data('paused', true);
-                $('#dial-ring')
-                    .velocity('stop')
-                    .velocity({
-                        opacity: 0.25
-                    }, {
-                        easing: EASE_OUT,
-                        duration: ANIMATION_DURATION
-                    });
-            }
-            // Handle if timer is finished/not running
-            else {
-                app.editTime();
-            }
-        }
-    }
 
     events.publish('startup');
     events.publish('startup.' + startupType);
