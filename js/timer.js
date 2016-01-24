@@ -10,6 +10,7 @@ $(function() {
     var windowWidth;
     var windowHeight;
     var startupType;
+    var startupTime;
 
     // Adapted from David Walsh (davidwalsh.com)
     var events = (function(){
@@ -50,7 +51,25 @@ $(function() {
         FastClick.attach(document.body);
 
         // Sticky hover fix
-        hoverTouchUnstick();
+        // Check if the device supports touch events
+        if ('ontouchstart' in document.documentElement) {
+        // Loop through each stylesheet
+        for (var sheetI = document.styleSheets.length - 1; sheetI >= 0; sheetI--) {
+        var sheet = document.styleSheets[sheetI];
+        // Verify if cssRules exists in sheet
+        if (sheet.cssRules) {
+        // Loop through each rule in sheet
+        for (var ruleI = sheet.cssRules.length - 1; ruleI >= 0; ruleI--) {
+        var rule = sheet.cssRules[ruleI];
+        // Verify rule has selector text
+        if (rule.selectorText) {
+        // Replace hover psuedo-class with active psuedo-class
+        rule.selectorText = rule.selectorText.replace(':hover', ':active');
+        }
+        }
+        }
+        }
+        }
 
         // Disable scrolling if running as full-screen iOS web app
         if (window.navigator.standalone) {
@@ -106,7 +125,7 @@ $(function() {
                     if (display.inputMode) {
                         app.startTimer();
                     } else {
-                        editTime();
+                        app.editTime();
                     }
                     break;
 
@@ -114,7 +133,7 @@ $(function() {
                 case 27:
                     // Activate editing mode if not activated
                     if (!display.inputMode) {
-                        editTime();
+                        app.editTime();
                     }
                     break;
 
@@ -218,7 +237,7 @@ $(function() {
                 notification.show('Please enter a time first');
             } else if (totalSeconds < 360000 || restore || resume) {
                 // Start dial motion and set state to timing mode
-                setTime(totalSeconds, resume || restore);
+                dialRing.wind(totalSeconds, resume || restore);
                 display.inputMode = false;
 
                 if (!resume) {
@@ -235,10 +254,29 @@ $(function() {
             }
         }
 
+        /** Activates input mode */
+        function editTime() {
+            displayText.setTime(displayText.time, 'crossfade');
+            localStorage.setItem('timeStarted', 0);
+            localStorage.setItem('durationSet', 0);
+            dialRing.stop();
+            display.shrink();
+            keypad.expand();
+            editButton.zoomOut();
+            dialRing.fadeOut();
+        }
+
+        /** Check if CSS property is supported on the browser and returns a boolean */
+        function isSupportedCSS(prop) { return prop in document.body.style; }
+
         events.subscribe('startup', function() {
             // Use special startup type if time is given in URL
-            if (displayText.validateTime(GET('time'))) {
+            var s = window.location.search;
+            var re = new RegExp('&amp;' + 'time' + '=([^&amp;]*)', 'i');
+            (s = s.replace(/^\?/, '&amp;').match(re)) ? s = s[1] : s = '';
+            if (displayText.validateTime(s)) {
                 startupType = 'given';
+                startupTime = s;
             } else {
                 startupType = 'normal';
             }
@@ -246,12 +284,13 @@ $(function() {
 
         events.subscribe('startup.given', function() {
             // Immediately start timer
-            displayText.setTime(('000000' + GET('time')).slice(-6));
+            displayText.setTime(('000000' + startupTime).slice(-6));
             startTimer();
         });
 
         return {
-            startTimer: startTimer
+            startTimer: startTimer,
+            editTime: editTime
         }
     })();
 
@@ -270,6 +309,20 @@ $(function() {
                 }, {
                     duration: ANIMATION_DURATION,
                     easing: EASE_OUT
+                });
+        }
+
+        function shrink() {
+            display
+                .data('inputMode', true)
+                .data('paused', false)
+                .removeClass('running')
+                .velocity('stop')
+                .velocity({
+                    height: '20%'
+                }, {
+                    duration: ANIMATION_DURATION,
+                    easing: EASE_OUT,
                 });
         }
 
@@ -330,14 +383,20 @@ $(function() {
             });
         });
 
+        function done() {
+            display.removeClass('running');
+        }
+
         return {
             expand: expand,
+            shrink: shrink,
             get inputMode() {
                 return display.data('inputMode');
             },
             set inputMode(mode) {
-                mode ? $('#display').data('inputMode', true).removeClass('running') : $('#display').data('inputMode', false).addClass('running');
-            }
+                mode ? $('#display').data('inputMode', true).data('paused', false).removeClass('running') : $('#display').data('inputMode', false).addClass('running');
+            },
+            done: done
         }
     })();
 
@@ -360,6 +419,21 @@ $(function() {
                     easing: EASE_OUT,
                     duration: ANIMATION_DURATION,
                     display: 'none'
+                });
+        }
+
+        function expand() {
+            keypad
+                .velocity('stop')
+                .velocity({
+        			// Emphasize y-axis animation
+                    scaleX: [1, 0.5],
+                    scaleY: 1,
+                    opacity: 1
+                }, {
+                    easing: EASE_OUT,
+                    duration: ANIMATION_DURATION,
+                    display: 'table'
                 });
         }
 
@@ -387,7 +461,8 @@ $(function() {
         });
 
         return {
-            shrink: shrink
+            shrink: shrink,
+            expand: expand
         }
     })();
 
@@ -734,10 +809,10 @@ $(function() {
     })();
 
     var editButton = (function() {
-        var $editButton = $('#edit-button');
+        var button = $('#edit-button');
 
         function slideIn() {
-            $editButton
+            button
                 .velocity('stop')
                 .velocity({
                     translateY: [0, '100%'],
@@ -749,15 +824,33 @@ $(function() {
                 });
         }
 
-        $editButton.click(editTime);
+        function zoomOut() {
+            button
+                .velocity('stop')
+                .velocity({
+                    opacity: 0,
+                    translateY: '-700%'
+                }, {
+                    easing: EASE_OUT,
+                    display: 'none',
+                    duration: ANIMATION_DURATION,
+                    complete: function() {
+                        $.Velocity.hook($(this), 'translateY', '0');
+                    }
+                });
+        }
+
+        button.click(app.editTime);
 
         return {
-            slideIn: slideIn
+            slideIn: slideIn,
+            zoomOut: zoomOut
         }
     })();
 
     var dialRing = (function() {
         var dial = $('#dial-ring');
+        var path = $('#dial-ring path');
         function scaleIn() {
             dial
                 .velocity('stop')
@@ -771,140 +864,101 @@ $(function() {
                 });
         }
 
+        function fadeOut() {
+            dial
+                .velocity('stop')
+                .velocity('fadeOut', 100);
+        }
+
+        /**
+         * Initiate the timer
+         * @param {number} sec - Number of seconds to time
+         * @param {boolean} resume - If true, timer will resume from stored state
+         */
+        function wind(sec, resume) {
+            // Convert seconds to milliseconds
+            var dialTime = resume ? path.data('timeLeft') : sec * 1000;
+            var initialProgress = resume ? path.data('progress') : 0;
+
+            path
+                .velocity('stop')
+                .velocity({
+                // Can't go to 1 with SVG arc
+                tween: [WHOLECIRCLE, initialProgress]
+                }, {
+                    duration: dialTime,
+                    easing: 'linear',
+                    begin: function () {
+                        localStorage.setItem('timeStarted', (new Date()).getTime());
+                        localStorage.setItem('durationSet', dialTime);
+                    },
+                    progress: function (e, c, r, s, t) {
+                        // setDial($('#dial-ring path'), 40, t);
+                        var boxRadius = 50;
+                        var arcRadius = 40;
+
+                        // Calculate path parameters
+                        var offset = boxRadius - arcRadius;
+                        var sweep = t >= 0.5 ? 1 : 0;
+                        var arcPosX = offset + arcRadius * (1 + Math.sin(2 * Math.PI * t));
+                        var arcPosY = offset + arcRadius * (1 - Math.cos(2 * Math.PI * t));
+                        var arcPos = arcPosX + ' ' + arcPosY;
+                        var arcDimensions = arcRadius + ' ' + arcRadius;
+                        var arcParameters = ' 0 ' + sweep + ' 1 ';
+
+                        // Calculate path segments
+                        var moveToCenter = 'M' + boxRadius + ' ' + boxRadius;
+                        var moveToStart = 'm0 ' + (-arcRadius);
+                        var makeArc = 'A' + arcDimensions + arcParameters + arcPos;
+
+                        // Creath path from segments
+                        var dialPath = moveToCenter + moveToStart + makeArc;
+
+                        // Set path
+                        path.attr('d', dialPath);
+                        // Store progress in data
+                        path.data('progress', t);
+                        path.data('timeLeft', r);
+                        // Find seconds rounded up
+                        var totalSeconds = Math.ceil(r / 1000);
+                        // Find minutes rounded down
+                        var minutes = Math.floor(totalSeconds / 60) % 60;
+                        // Find hours rounded down
+                        var hours = Math.floor(totalSeconds / 3600);
+                        // Find remaining seconds
+                        var seconds = totalSeconds % 60;
+                        // Force 2 digits
+                        seconds = ('0' + seconds).slice(-2);
+                        minutes = ('0' + minutes).slice(-2);
+                        hours = ('0' + hours).slice(-2);
+                        var times = [hours, minutes, seconds];
+                        if (r !== 0) {
+                            // Send time text to display
+                            displayText.setTime(times.join(''), 'crossfade');
+                        }
+                    },
+                    complete: function () {
+                        displayText.setTime('Done', 'crossfade');
+                        display.done();
+                        localStorage.setItem('timeStarted', 0);
+                        localStorage.setItem('durationSet', 0);
+                    }
+            });
+        }
+
+        function stop() {
+            path.velocity('stop');
+        }
+
         return {
-            scaleIn: scaleIn
+            scaleIn: scaleIn,
+            fadeOut: fadeOut,
+            stop: stop,
+            wind: wind
         }
     })();
 
 
-
-    /**
-     * Initiate the timer
-     * @param {number} sec - Number of seconds to time
-     * @param {boolean} resume - If true, timer will resume from stored state
-     */
-    function setTime(sec, resume) {
-        // Convert seconds to milliseconds
-        var dialTime = resume ? $('#dial-ring path').data('timeLeft') : sec * 1000;
-        var initialProgress = resume ? $('#dial-ring path').data('progress') : 0;
-
-        $('#dial-ring path')
-            .velocity('stop')
-            .velocity({
-            // Can't go to 1 with SVG arc
-            tween: [WHOLECIRCLE, initialProgress]
-            }, {
-                duration: dialTime,
-                easing: 'linear',
-                begin: function () {
-                    localStorage.setItem('timeStarted', (new Date()).getTime());
-                    localStorage.setItem('durationSet', dialTime);
-                },
-                progress: function (e, c, r, s, t) {
-                    setDial($('#dial-ring path'), 40, t);
-                    // Store progress in data
-                    $('#dial-ring path').data('progress', t);
-                    $('#dial-ring path').data('timeLeft', r);
-                    // Find seconds rounded up
-                    var totalSeconds = Math.ceil(r / 1000);
-                    // Find minutes rounded down
-                    var minutes = Math.floor(totalSeconds / 60) % 60;
-                    // Find hours rounded down
-                    var hours = Math.floor(totalSeconds / 3600);
-                    // Find remaining seconds
-                    var seconds = totalSeconds % 60;
-                    // Force 2 digits
-                    seconds = ('0' + seconds).slice(-2);
-                    minutes = ('0' + minutes).slice(-2);
-                    hours = ('0' + hours).slice(-2);
-                    var times = [hours, minutes, seconds];
-                    if (r !== 0) {
-                        // Send time text to display
-                        displayText.setTime(times.join(''), 'crossfade');
-                    }
-                },
-                complete: function () {
-                    displayText.setTime('Done', 'crossfade');
-                    $('#display').removeClass('running');
-                    localStorage.setItem('timeStarted', 0);
-                    localStorage.setItem('durationSet', 0);
-                }
-        });
-    }
-
-    /** Set dial of given radius to given progress */
-    function setDial(dial, arcRadius, progress) {
-        var boxRadius = 50;
-
-        // Calculate path parameters
-        var offset = boxRadius - arcRadius;
-        var sweep = progress >= 0.5 ? 1 : 0;
-        var arcPosX = offset + arcRadius * (1 + Math.sin(2 * Math.PI * progress));
-        var arcPosY = offset + arcRadius * (1 - Math.cos(2 * Math.PI * progress));
-        var arcPos = arcPosX + ' ' + arcPosY;
-        var arcDimensions = arcRadius + ' ' + arcRadius;
-        var arcParameters = ' 0 ' + sweep + ' 1 ';
-
-        // Calculate path segments
-        var moveToCenter = 'M' + boxRadius + ' ' + boxRadius;
-        var moveToStart = 'm0 ' + (-arcRadius);
-        var makeArc = 'A' + arcDimensions + arcParameters + arcPos;
-
-        // Creath path from segments
-        var dialPath = moveToCenter + moveToStart + makeArc;
-
-        // Set path
-        dial.attr('d', dialPath);
-    }
-
-    /** Activates input mode */
-    function editTime() {
-        displayText.setTime(displayText.time, 'crossfade');
-        $('#display')
-            .data('inputMode', true)
-            .data('paused', false)
-            .removeClass('running');
-        localStorage.setItem('timeStarted', 0);
-        localStorage.setItem('durationSet', 0);
-        $('#dial-ring path')
-            .velocity('stop');
-        $('#display')
-            .velocity('stop')
-            .velocity({
-                height: '20%'
-            }, {
-                duration: ANIMATION_DURATION,
-                easing: EASE_OUT,
-            });
-        $('#keypad')
-            .velocity('stop')
-            .velocity({
-    			// Emphasize y-axis animation
-                scaleX: [1, 0.5],
-                scaleY: 1,
-                opacity: 1
-            }, {
-                easing: EASE_OUT,
-                duration: ANIMATION_DURATION,
-                display: 'table'
-            });
-        $('#edit-button')
-            .velocity('stop')
-            .velocity({
-                opacity: 0,
-                translateY: '-700%'
-            }, {
-                easing: EASE_OUT,
-                display: 'none',
-                duration: ANIMATION_DURATION,
-                complete: function() {
-                    $.Velocity.hook($(this), 'translateY', '0');
-                }
-            });
-        $('#dial-ring')
-            .velocity('stop')
-            .velocity('fadeOut', 100);
-    }
 
     /** Toggles pause state of timer */
     function togglePause() {
@@ -939,43 +993,10 @@ $(function() {
             }
             // Handle if timer is finished/not running
             else {
-                editTime();
+                app.editTime();
             }
         }
     }
-
-    /** Prevent sticker hover state on some devices */
-    function hoverTouchUnstick() {
-        // Check if the device supports touch events
-        if ('ontouchstart' in document.documentElement) {
-        // Loop through each stylesheet
-        for (var sheetI = document.styleSheets.length - 1; sheetI >= 0; sheetI--) {
-        var sheet = document.styleSheets[sheetI];
-        // Verify if cssRules exists in sheet
-        if (sheet.cssRules) {
-        // Loop through each rule in sheet
-        for (var ruleI = sheet.cssRules.length - 1; ruleI >= 0; ruleI--) {
-        var rule = sheet.cssRules[ruleI];
-        // Verify rule has selector text
-        if (rule.selectorText) {
-        // Replace hover psuedo-class with active psuedo-class
-        rule.selectorText = rule.selectorText.replace(':hover', ':active');
-        }
-        }
-        }
-        }
-        }
-    }
-
-    /** Retrive GET request from URL */
-    function GET(q, s) {
-        s = (s) ? s : window.location.search;
-        var re = new RegExp('&amp;' + q + '=([^&amp;]*)', 'i');
-        return (s = s.replace(/^\?/, '&amp;').match(re)) ? s = s[1] : s = '';
-    }
-
-    /** Check if CSS property is supported on the browser and returns a boolean */
-    function isSupportedCSS(prop) { return prop in document.body.style; }
 
     events.publish('startup');
     events.publish('startup.' + startupType);
