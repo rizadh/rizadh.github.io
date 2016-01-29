@@ -105,13 +105,13 @@ body {
 
     color: darken($main-color, 10);
 
-    #display.running #display-text-wrapper &:hover {
+    &:hover {
         cursor: pointer;
         color: darken($main-color, 5);
         transition: color $hover-transition-time;
     }
 
-    #display.running #display-text-wrapper &:active {
+    &:active {
         color: darken($main-color, 15);
         transition: color $active-transition-time;
     }
