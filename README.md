@@ -14,9 +14,9 @@ Modern, blue-themed analog clock. Displays current time and sports a very simpli
 
 A fun side-project. Not functionally useful but an interesting exhibition of the power of JavaScript based animation. Can be used as an arbitrary benchmark of device graphic performance.
 
-### [Legacy Site] (http://crimson.x10.mx/index.html)
+### [Crimsons Studios (Legacy Site)] (http://crimson.x10.mx/index.html)
 
-My older site hosting a few older projects.
+My older site hosting a few older projects, the most notable being the countdown app.
 
 ### Planned Projects
 
