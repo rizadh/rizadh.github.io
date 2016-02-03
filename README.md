@@ -14,6 +14,10 @@ Modern, blue-themed analog clock. Displays current time and sports a very simpli
 
 A fun side-project. Not functionally useful but an interesting exhibition of the power of JavaScript based animation. Can be used as an arbitrary benchmark of device graphic performance.
 
+### [Legacy Site] (http://crimson.x10.mx/index.html)
+
+My older site hosting a few older projects.
+
 ### Planned Projects
 
 **Scheduler** ~ Or _Schedulo_? Deciding on a name but will be an app geared towards students to help layout their weekly course timetables in an elegantly designed, white-based but colorful web app. Will allow for schedule overlaying to compare two different schedules.
