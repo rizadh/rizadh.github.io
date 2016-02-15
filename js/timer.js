@@ -1,3 +1,4 @@
+/*jshint -W030 */
 $(function() {
     'use strict';
 
@@ -38,7 +39,7 @@ $(function() {
 
                 // Cycle through topics queue, fire!
                 topics[topic].forEach(function(item) {
-                    item(info != undefined ? info : {});
+                    item(info !== undefined ? info : {});
                 });
             }
         };
@@ -304,7 +305,7 @@ $(function() {
             startTimer: startTimer,
             editTime: editTime,
             togglePause: togglePause
-        }
+        };
     })();
 
     var display = (function() {
@@ -421,7 +422,7 @@ $(function() {
                 return display.hasClass('running');
             },
             done: done
-        }
+        };
     })();
 
     var keypad = (function() {
@@ -513,7 +514,7 @@ $(function() {
         });
 
         events.subscribe('done', function() {
-            setTime('Done', 'crossfade')
+            setTime('Done', 'crossfade');
         });
 
         /** Check if the supplied number represents a displayable amount of time */
@@ -705,7 +706,7 @@ $(function() {
 
         function addDigit(digit) {
             setTime((displayText.data('currentTime') + digit).slice(-6));
-        };
+        }
 
         return {
             addDigit: addDigit,
@@ -714,7 +715,7 @@ $(function() {
             get time() {
                 return displayText.data('currentTime');
             }
-        }
+        };
     })();
 
     var notification = (function() {
@@ -759,7 +760,7 @@ $(function() {
                     }
                 })
                 .data('shown', true);
-        };
+        }
 
         /** Hide any notifications that are present */
         function hide() {
@@ -780,11 +781,11 @@ $(function() {
                         duration: ANIMATION_DURATION / 2
                     });
             }
-        };
+        }
 
         function clickButton(type) {
             banner.find('.' + type).click();
-        };
+        }
 
         banner.on('click', '.button', hide);
 
@@ -831,11 +832,11 @@ $(function() {
             } else if ((menu.data('shown') || false) !== forceState){
                 toggle();
             }
-        };
+        }
 
         return {
             toggle: toggle
-        }
+        };
     })();
 
     var editButton = (function() {
@@ -1006,7 +1007,7 @@ $(function() {
 
         return {
             wind: wind
-        }
+        };
     })();
 
     events.publish('startup');
