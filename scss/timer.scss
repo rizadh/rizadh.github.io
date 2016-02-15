@@ -1,33 +1,33 @@
-@import "partials/normalize"; // Normalize.scss
-@import "partials/roboto"; // Roboto font
+@import 'partials/normalize'; // Normalize.scss
+@import 'partials/roboto'; // Roboto font
 
 $theme-hue: 180; // Turqouise hue
 $main-color: hsl($theme-hue, 80%, 40%); // Dark, accent colour based on app hue
 $secondary-color: hsl($theme-hue, 40%, 80%); // Lighter version of app hue
 
-$resting-transition-time: 0.3s; // 300ms is the base animation time
+$resting-transition-time: .3s; // 300ms is the base animation time
 $hover-transition-time: $resting-transition-time / 2;
 $active-transition-time: 0s; // No animation for active state
 
-$drop-shadow-blur-1: 0.1rem;
-$drop-shadow-blur-2: 0.5rem;
-$drop-shadow: 0.1rem, 0.5rem;
+$drop-shadow-blur-1: .1rem;
+$drop-shadow-blur-2: .5rem;
+$drop-shadow: .1rem, .5rem;
 
-/** Add a dark background to an element, translucent for supported devices */
-@mixin translucent-dark() {
+// Add a dark background to an element, translucent for supported devices
+@mixin translucent-dark {
     // Solid background, shown if device doesn't support backdrop filters
-    background-color: hsla($theme-hue, 40%, 20%, 0.95);
+    background-color: hsla($theme-hue, 40%, 20%, .95);
 
     // Transparent background, show if device supports backdrop filters
     body.backdrop-filter & {
         // Disable background color
         background-color: transparent;
         // Blur and darken background
-        -webkit-backdrop-filter: blur(0.5rem) brightness(0.4);
+        -webkit-backdrop-filter: blur(.5rem) brightness(.4);
     }
 }
 
-/** Set the regular, :active and :hover button colors */
+// Set the regular, :active and :hover button colors
 @mixin button-color($color) {
     color: $color;
 
@@ -38,13 +38,13 @@ $drop-shadow: 0.1rem, 0.5rem;
 
     &:active {
         // Transparentize colour
-        color: transparentize($color, 0.75);
+        color: transparentize($color, .75);
     }
 }
 
 @mixin drop-shadow($level) {
     $step: 1;
-    box-shadow: 0 0 nth($drop-shadow, $level) hsla(0, 0%, 0%, 0.5);
+    box-shadow: 0 0 nth($drop-shadow, $level) hsla(0, 0%, 0%, .5);
 }
 
 body {
@@ -178,7 +178,7 @@ body {
         }
 
         &.text-cell {
-            font-size: 0.5em;
+            font-size: .5em;
         }
     }
 }
@@ -251,10 +251,10 @@ body {
     @include translucent-dark();
     @include drop-shadow(2);
 
-    $keyboard-help-padding: 0.2rem;
+    $keyboard-help-padding: .2rem;
 
     .title td{
-        font-size: 0.5rem;
+        font-size: .5rem;
         text-align: center;
         color: white;
         text-transform: uppercase;
@@ -264,23 +264,23 @@ body {
 
     .shortcut td {
         vertical-align: top;
-        font-size: 0.4rem;
+        font-size: .4rem;
         text-align: left;
         color: $secondary-color;
         text-transform: lowercase;
         font-family: 'roboto_condensedregular';
-        padding: 0.05rem $keyboard-help-padding;
-        padding-left: 0.1rem;
+        padding: .05rem $keyboard-help-padding;
+        padding-left: .1rem;
 
         &:last-child > span {
-            font-size: 0.75em;
-            opacity: 0.5;
+            font-size: .75em;
+            opacity: .5;
             vertical-align: top;
         }
 
         &:first-child {
-            padding: 0.05rem $keyboard-help-padding;
-            padding-right: 0.1rem;
+            padding: .05rem $keyboard-help-padding;
+            padding-right: .1rem;
             text-transform: uppercase;
             color: $secondary-color;
             text-align: right;
@@ -288,8 +288,8 @@ body {
     }
 
     .dismiss td {
-        color: transparentize($secondary-color, 0.5);
-        font-size: 0.3rem;
+        color: transparentize($secondary-color, .5);
+        font-size: .3rem;
         text-transform: uppercase;
         text-align: center;
         font-family: 'roboto_condensedregular';
@@ -302,10 +302,10 @@ body {
     position: absolute;
     z-index: 3;
     width: 100%;
-    padding: 0.2rem;
+    padding: .2rem;
     box-sizing: border-box;
 
-    font-size: 0.4rem;
+    font-size: .4rem;
     text-align: center;
     color: white;
     font-family: 'roboto_condensedregular';
@@ -316,8 +316,8 @@ body {
         display: inline-block;
         text-transform: uppercase;
         font-family: 'roboto_condensedregular';
-        font-size: 0.3rem;
-        padding: 0 0.25rem;
+        font-size: .3rem;
+        padding: 0 .25rem;
         cursor: pointer;
         transition: color $resting-transition-time;
 
