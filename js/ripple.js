@@ -1,40 +1,38 @@
 ripple = (function(){
+    'use strict';
 
-    rippleSize = '1em';
-    rippleColor = 'white';
+    var rippleSize, rippleColor, rippleDuration;
 
-    function enable(size, color) {
+    function enable(size, color, duration) {
         rippleSize = size;
         rippleColor = color;
+        rippleDuration = duration;
         $(document).on('click.ripple', function(event) {
-            $('<div class="ripple"></div>').appendTo('body')
-                .css({
+            var $ripple = $('<div class="ripple"></div>');
+            $.Velocity.hook($ripple, 'translateX', '-50%');
+            $.Velocity.hook($ripple, 'translateY', '-50%');
+            $.Velocity.hook($ripple, 'scale', '0');
+            $ripple.css({
                     position: 'absolute',
-                    borderRadius: '100%',
+                    top: event.pageY,
+                    left: event.pageX,
+                    width: rippleSize,
+                    height: rippleSize,
                     zIndex: 99,
+                    opacity: 1,
                     background: rippleColor,
+                    borderRadius: '100%',
                     pointerEvents: 'none'
                 })
                 .velocity({
-                    width: 0,
-                    height: 0,
-                    opacity: 0.5,
-                    translateX: '-50%',
-                    translateY: '-50%'
-                }, 0, function() {
-                    $(this).css({
-                        top: event.pageY,
-                        left: event.pageX
-                    });
-                }).velocity({
-                    width: rippleSize,
-                    height: rippleSize,
+                    scale: 1,
                     opacity: 0
                 }, {
-                    duration: 1000,
-                    easing: [0.2, 0.75, 0, 1],
+                    duration: rippleDuration,
+                    easing: 'easeOutExpo',
                     complete: function() { $(this).remove(); }
-                });
+                })
+                .appendTo('body');
         });
     }
 
@@ -50,10 +48,15 @@ ripple = (function(){
         rippleColor = newColor;
     }
 
+    function changeDuration(newDuration) {
+        rippleDuration = newDuration;
+    }
+
     return {
         enable: enable,
         disable: disable,
         changeSize: changeSize,
-        changeColor: changeColor
+        changeColor: changeColor,
+        changeDuration: changeDuration
     };
 })();
