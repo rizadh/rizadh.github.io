@@ -19,7 +19,7 @@ ripple = (function(){
                     width: rippleSize,
                     height: rippleSize,
                     zIndex: 99,
-                    opacity: 1,
+                    opacity: 0.75,
                     background: rippleColor,
                     borderRadius: '100%',
                     pointerEvents: 'none'
