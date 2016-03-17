@@ -280,6 +280,10 @@ $(function() {
                     app.editTime();
                 }
             }
+            // Handle contracted display (edit mode)
+            else {
+                app.startTimer();
+            }
         }
 
         /** Check if CSS property is supported on the browser and returns a boolean */
