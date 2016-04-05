@@ -1,4 +1,4 @@
-Ripple = (function(){
+var Ripple = (function(){
     'use strict';
 
     // Store ripple attributes
