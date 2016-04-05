@@ -15,7 +15,7 @@ $(function() {
     var startupTime;
 
     // Enable ripple effect
-    ripple.enable('1.5em', 'white', 750);
+    Ripple.enable('1.5em', 'white', 750);
 
     // Adapted from David Walsh (davidwalsh.com)
     var events = (function(){
