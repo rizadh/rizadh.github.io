@@ -1,0 +1,20 @@
+@import "fontface";
+
+@include fontFace(roboto_blackitalic, "../../fonts/roboto/roboto-blackitalic-webfont");
+@include fontFace(robotoblack, "../../fonts/roboto/roboto-black-webfont");
+@include fontFace(roboto_condensedbold_italic, "../../fonts/roboto/roboto-condensedbold-italic-webfont");
+@include fontFace(roboto_condensedlight, "../../fonts/roboto/robotocondensed-light-webfont");
+@include fontFace(roboto_condenseditalic, "../../fonts/roboto/robotocondensed-italic-webfont");
+@include fontFace(robotobold_italic, "../../fonts/roboto/roboto-bolditalic-webfont");
+@include fontFace(roboto_condensedregular, "../../fonts/roboto/robotocondensed-regular-webfont");
+@include fontFace(robotobold, "../../fonts/roboto/roboto-bold-webfont");
+@include fontFace(roboto_condensedbold, "../../fonts/roboto/robotocondensed-bold-webfont");
+@include fontFace(robotoitalic, "../../fonts/roboto/roboto-italic-webfont");
+@include fontFace(roboto_condensedregular, "../../fonts/roboto/robotocondensed-regular-webfont");
+@include fontFace(robotolight, "../../fonts/roboto/roboto-light-webfont");
+@include fontFace(robotomedium, "../../fonts/roboto/roboto-medium-webfont");
+@include fontFace(robotolight_italic, "../../fonts/roboto/roboto-lightitalic-webfont");
+@include fontFace(robotomedium_italic, "../../fonts/roboto/roboto-mediumitalic-webfont");
+@include fontFace(robotothin, "../../fonts/roboto/roboto-thin-webfont");
+@include fontFace(robotoregular, "../../fonts/roboto/roboto-regular-webfont");
+@include fontFace(robotothin_italic, "../../fonts/roboto/roboto-thinitalic-webfont");

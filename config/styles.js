@@ -1,17 +1,27 @@
 module.exports.tasks = {
     watch: {
         scss: {
-            files: ['scss/*.scss'],
+            files: ['styles/src/*.scss'],
             tasks: ['newer:scss']
         }
     },
+    copy: {
+        normalize: {
+          src: 'bower_components/normalize-css/normalize.css',
+          dest: 'styles/src/partials/_normalize.scss'
+        }
+    },
     sass: {
+        options: {
+            update: true,
+            sourcemap: 'none'
+        },
         dist: {
             files: [{
                 expand: true,
-                cwd: 'scss/',
-                src: ['*.scss'],
-                dest: 'css/',
+                cwd: 'styles/src/',
+                src: '*.scss',
+                dest: 'styles/dist/',
                 ext: '.css'
             }]
         }
@@ -28,9 +38,9 @@ module.exports.tasks = {
             files: [
                 {
                     expand: true,
-                    cwd: 'css/',
-                    src: ['*.css'],
-                    dest: 'css/',
+                    cwd: 'styles/dist/',
+                    src: '*.css',
+                    dest: 'styles/dist/',
                     ext: '.css'
                 }
             ]

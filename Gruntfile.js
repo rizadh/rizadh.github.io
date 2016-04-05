@@ -13,6 +13,6 @@ module.exports = function(grunt) {
         grunt.registerTask('update', ['bower-update', 'bower_concat', 'copy:normalize']);
         grunt.registerTask('compile', ['scss', 'js']);
             grunt.registerTask('scss', ['sass:dist', 'postcss:dist']);
-            grunt.registerTask('js', ['uglify:dist']);
+            grunt.registerTask('js', ['concat', 'uglify:dist']);
         grunt.registerTask('lint', ['htmllint', 'jshint']);
 };

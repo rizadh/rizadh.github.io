@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,IAAK;EACD,gBAAgB,EAAE,OAAsB;EACxC,QAAQ,EAAE,MAAM;;AAGpB,KAAM;EACF,QAAQ,EAAE,QAAQ;EAClB,SAAS,EAAE,qBAAqB;EAChC,aAAa,EAAE,IAAI;EACnB,UAAU,EAAE,aAAa",
-"sources": ["../scss/stars.scss"],
-"names": [],
-"file": "stars.css"
-}

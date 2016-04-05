@@ -1,26 +1,46 @@
 module.exports.tasks = {
     watch: {
         js: {
-            files: ['js/*.js', '!js/*.min.js'],
-            tasks: ['newer:jshint', 'newer:js']
+            files: ['scripts/src/**.js'],
+            tasks: ['newer:jshint', 'newer:uglify']
         }
+    },
+    bower_concat: {
+        all: {
+            dest: 'scripts/src/libs/core_libs.js',
+            include: ['jquery', 'velocity', 'fastclick'],
+            dependencies: {
+                'velocity': 'jquery'
+            }
+        }
+    },
+    concat: {
+        timer: {
+            src: ['scripts/src/libs/core_libs.js', 'scripts/src/libs/events.js', 'scripts/src/libs/ripple.js', 'scripts/src/_timer_*.js'],
+            dest: 'scripts/dist/timer.js'
+        },
+        clock: {
+            src: ['scripts/src/libs/core_libs.js', 'scripts/src/_clock_*.js'],
+            dest: 'scripts/dist/clock.js'
+        },
+        stars: {
+            src: ['scripts/src/libs/core_libs.js', 'scripts/src/_stars_*.js'],
+            dest: 'scripts/dist/stars.js'
+        },
     },
     uglify: {
         dist: {
-            options: {
-                sourceMap: true
-            },
             files: [{
                 expand: true,
-                cwd: 'js/',
-                src: ['*.js', '!*.min.js'],
-                dest: 'js/',
-                ext: '.min.js'
+                cwd: 'scripts/dist',
+                src: '*.js',
+                dest: 'scripts/dist',
+                ext: '.js'
             }]
         }
     },
     jshint: {
-        files: ['js/*.js', '!js/*.min.js', 'Gruntfile.js', '!js/libraries.js'],
+        files: 'scripts/src/*.js',
         options: {
             browser: true,
             globals: {
