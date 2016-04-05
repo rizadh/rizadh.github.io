@@ -1,4 +1,4 @@
-ripple = (function(){
+Ripple = (function(){
     'use strict';
 
     // Store ripple attributes
@@ -11,7 +11,7 @@ ripple = (function(){
         rippleColor = color;
         rippleDuration = duration;
         // Attach handler to click event
-        $(document).on('click.ripple', function(event) {
+        $(document).on('click.Ripple', function(event) {
             // Create ripple div
             var $ripple = $('<div class="ripple"></div>');
             // Hook initial properties
@@ -49,7 +49,7 @@ ripple = (function(){
 
     // Disable ripple effect
     function disable() {
-        $(document).off('click.ripple');
+        $(document).off('click.Ripple');
     }
 
     // Change size of ripple (with units)
