@@ -1,7 +1,7 @@
 module.exports.tasks = {
     watch: {
         html: {
-          iles: ['*.html'],
+          files: ['*.html'],
           tasks: ['newer:htmllint']
         }
     },
