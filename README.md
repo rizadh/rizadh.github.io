@@ -22,4 +22,4 @@ My older site hosting a few older projects, the most notable being the countdown
 
 **Scheduler** ~ Or _Schedulo_? Deciding on a name but will be an app geared towards students to help layout their weekly course timetables in an elegantly designed, white-based but colorful web app. Will allow for schedule overlaying to compare two different schedules.
 
-Have any ideas for me? Send me an [email](mailto:rizadh@icloud.com) to me!
+Have any ideas for me? Send me an [email](mailto:rizadh@icloud.com)!
