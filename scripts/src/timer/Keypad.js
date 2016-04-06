@@ -7,8 +7,7 @@ var Keypad = (function() {
         keypad = $('#keypad');
 
         $.Velocity.hook(keypad, 'translateX', '-50%');
-        $.Velocity.hook(keypad, 'scaleX', 0.5);
-        $.Velocity.hook(keypad, 'scaleY', 0);
+        $.Velocity.hook(keypad, 'translateY', '20%');
         $.Velocity.hook(keypad, 'opacity', 0);
 
         // Set click events
@@ -28,8 +27,7 @@ var Keypad = (function() {
         keypad
             .velocity('stop')
             .velocity({
-                scaleX: 0,
-                scaleY: 0,
+                translateY: '20%',
                 opacity: 0
             }, {
                 easing: globals.EASE_OUT,
@@ -42,9 +40,7 @@ var Keypad = (function() {
         keypad
             .velocity('stop')
             .velocity({
-                // Emphasize y-axis animation
-                scaleX: [1, 0.5],
-                scaleY: 1,
+                translateY: 0,
                 opacity: 1
             }, {
                 easing: globals.EASE_OUT,
@@ -53,17 +49,7 @@ var Keypad = (function() {
             });
     }
 
-    Events.subscribe('startup.normal', function() {
-        keypad.velocity({
-            opacity: 1,
-            scaleX: 1,
-            scaleY: 1
-        }, {
-            easing: globals.EASE_OUT,
-            duration: globals.ANIMATION_DURATION
-        });
-    });
-
+    Events.subscribe('startup.normal', expand);
     Events.subscribe('start', shrink);
     Events.subscribe('edit', expand);
 
