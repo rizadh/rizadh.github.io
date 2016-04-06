@@ -1,5 +1,5 @@
 // Adapted from David Walsh (davidwalsh.com)
-var events = (function(){
+var Events = (function(){
     var topics = {};
     var hOP = topics.hasOwnProperty;
     return {

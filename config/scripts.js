@@ -1,8 +1,8 @@
 module.exports.tasks = {
     watch: {
         js: {
-            files: ['scripts/src/**.js'],
-            tasks: ['newer:jshint', 'newer:uglify']
+            files: ['scripts/src/**/*.js'],
+            tasks: ['newer:jshint', 'newer:concat', 'newer:uglify']
         }
     },
     bower_concat: {
@@ -16,7 +16,7 @@ module.exports.tasks = {
     },
     concat: {
         timer: {
-            src: ['scripts/src/libs/core_libs.js', 'scripts/src/libs/events.js', 'scripts/src/libs/ripple.js', 'scripts/src/timer_*.js'],
+            src: ['scripts/src/libs/core_libs.js', 'scripts/src/libs/events.js', 'scripts/src/libs/ripple.js', 'scripts/src/timer/*.js'],
             dest: 'scripts/dist/timer.js'
         },
         clock: {
@@ -40,7 +40,7 @@ module.exports.tasks = {
         }
     },
     jshint: {
-        files: 'scripts/src/*.js',
+        files: ['scripts/src/**/*.js', '!scripts/src/libs/**/*.js'],
         options: {
             browser: true,
             globals: {
