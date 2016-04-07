@@ -32,6 +32,7 @@ module.exports = function(grunt) {
             timer: {
                 src: ['scripts/src/libs/events.js',
                       'scripts/src/libs/ripple.js',
+                      'scripts/src/libs/sticky_hover_fix.js',
                       'scripts/src/timer_*.js'],
                 dest: 'scripts/dist/timer.js'
             },
