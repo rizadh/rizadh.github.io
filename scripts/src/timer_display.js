@@ -45,6 +45,7 @@ var Display = (function() {
 
     Events.subscribe('startup.normal', function() {
         $.Velocity.hook(display, 'height', '100%');
+        // $.Velocity.hook(display, 'opacity', '0');
         display.velocity({
             height: '20%'
         }, {

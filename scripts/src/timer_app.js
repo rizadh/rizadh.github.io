@@ -10,11 +10,16 @@ var App = (function() {
         var $window = $(window);
         var $document = $(document);
 
+        // Disable scrolling if running as full-screen iOS web app
+        if (window.navigator.standalone) {
+            $document.on('touchmove', false);
+        }
+
         // Sticky hover fix
         // Check if the device supports touch events
         if ('ontouchstart' in document.documentElement) {
         // Loop through each stylesheet
-        for (var sheetI = document.styleSheets.length - 1; sheetI >= 0; sheetI--) {
+        for (var sheetI = document.styleSheets.length-1;sheetI>= 0;sheetI--) {
         var sheet = document.styleSheets[sheetI];
         // Verify if cssRules exists in sheet
         if (sheet.cssRules) {
@@ -29,11 +34,6 @@ var App = (function() {
         }
         }
         }
-        }
-
-        // Disable scrolling if running as full-screen iOS web app
-        if (window.navigator.standalone) {
-            $document.on('touchmove', false);
         }
 
         // Enable the use of backdrop filters if supported
