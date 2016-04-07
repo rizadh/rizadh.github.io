@@ -16,15 +16,17 @@ module.exports.tasks = {
     },
     concat: {
         timer: {
-            src: ['scripts/src/libs/core_libs.js', 'scripts/src/libs/events.js', 'scripts/src/libs/ripple.js', 'scripts/src/timer/*.js'],
+            src: ['scripts/src/libs/events.js',
+                  'scripts/src/libs/ripple.js',
+                  'scripts/src/timer/*.js'],
             dest: 'scripts/dist/timer.js'
         },
         clock: {
-            src: ['scripts/src/libs/core_libs.js', 'scripts/src/clock_*.js'],
+            src: 'scripts/src/clock_*.js',
             dest: 'scripts/dist/clock.js'
         },
         stars: {
-            src: ['scripts/src/libs/core_libs.js', 'scripts/src/stars_*.js'],
+            src: 'scripts/src/stars_*.js',
             dest: 'scripts/dist/stars.js'
         },
     },
@@ -37,6 +39,10 @@ module.exports.tasks = {
                 dest: 'scripts/dist',
                 ext: '.js'
             }]
+        },
+        libs: {
+            src: 'scripts/src/libs/core_libs.js',
+            dest: 'scripts/dist/libs/core_libs.js'
         }
     },
     jshint: {

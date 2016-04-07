@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['compile']);
 
     grunt.registerTask('full', ['update', 'compile', 'lint']);
-        grunt.registerTask('update', ['bower-update', 'bower_concat', 'copy:normalize']);
+        grunt.registerTask('update', ['bower-update', 'bower_concat', 'copy:normalize', 'uglify:libs']);
         grunt.registerTask('compile', ['scss', 'js']);
             grunt.registerTask('scss', ['sass:dist', 'postcss:dist']);
             grunt.registerTask('js', ['concat', 'uglify:dist']);
