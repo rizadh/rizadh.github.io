@@ -20,7 +20,7 @@ module.exports = function(grunt) {
             }
         },
         bower_concat: {
-            all: {
+            libs: {
                 dest: 'scripts/src/libs/core_libs.js',
                 include: ['jquery', 'velocity', 'fastclick'],
                 dependencies: {
@@ -102,7 +102,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['scss', 'js']);
 
     grunt.registerTask('full', ['update', 'lint', 'scss', 'js']);
-        grunt.registerTask('update', ['bower-update', 'bower_concat', 'copy:normalize', 'uglify:libs']);
+        grunt.registerTask('update', ['bower-update', 'bower_concat:libs', 'copy:normalize', 'uglify:libs']);
         grunt.registerTask('lint', 'jshint');
         grunt.registerTask('scss', 'sass:dist');
         grunt.registerTask('js', ['concat', 'uglify:dist']);
