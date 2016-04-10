@@ -5,7 +5,7 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var clean = require('gulp-clean');
 var jshint = require('gulp-jshint');
-var mainBowerFiles = require('main-bower-files');
+var bower = require('main-bower-files');
 var filter = require('gulp-filter');
 var merge = require('merge-stream');
 var postcss = require('gulp-postcss');
@@ -32,7 +32,7 @@ gulp.task('lint', function() {
 
 gulp.task('importLibs', function(){
     var scripts = gulp
-        .src(mainBowerFiles(), {base: 'bower_components'})
+        .src(bower(), {base: 'bower_components'})
         .pipe(filter('**/*.js'))
         .pipe(concat('core_libs.js'))
         .pipe(uglify())
