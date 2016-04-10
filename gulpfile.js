@@ -8,11 +8,24 @@ var jshint = require('gulp-jshint');
 var mainBowerFiles = require('main-bower-files');
 var filter = require('gulp-filter');
 var merge = require('merge-stream');
+var postcss = require('gulp-postcss');
+
+// CSS Processors
+var cssnano = require('cssnano');
+var autoprefixer = require('autoprefixer');
+var pixrem = require('pixrem');
 
 gulp.task('scss', function() {
+    processors = [
+        autoprefixer(),
+        pixrem(),
+        cssnano()
+    ];
+
     return gulp
         .src('./styles/src/*.scss')
         .pipe(sass({outputStyle: 'compressed'}))
+        .pipe(postcss(processors))
         .pipe(gulp.dest('./styles/dist'));
 });
 
