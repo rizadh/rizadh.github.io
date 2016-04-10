@@ -24,17 +24,6 @@ gulp.task('scss', function() {
         .pipe(gulp.dest('./styles/dist'));
 });
 
-gulp.task('js:timer', function() {
-    return gulp
-        .src(['./scripts/src/libs/events.js',
-              './scripts/src/libs/ripple.js',
-              './scripts/src/libs/sticky_hover_fix.js',
-              './scripts/src/_timer_*.js'])
-        .pipe(concat('timer.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./scripts/dist'));
-});
-
 gulp.task('lint', function() {
     return gulp
         .src('./scripts/src/**/*.js')
@@ -68,11 +57,22 @@ gulp.task('watch', function() {
     gulp.watch('./styles/src/*.js', ['scss']);
 });
 
-gulp.task('js', ['importLibs', 'js:timer'], function() {
-    return gulp
+gulp.task('js', ['importLibs'], function() {
+    var general = gulp
         .src(['./scripts/src/*.js', '!./scripts/src/_*.js'])
         .pipe(uglify())
         .pipe(gulp.dest('./scripts/dist'));
+
+    var timer = gulp
+            .src(['./scripts/src/libs/events.js',
+                  './scripts/src/libs/ripple.js',
+                  './scripts/src/libs/sticky_hover_fix.js',
+                  './scripts/src/_timer_*.js'])
+            .pipe(concat('timer.js'))
+            .pipe(uglify())
+            .pipe(gulp.dest('./scripts/dist'));
+
+    return merge(general, timer);
 });
 
-gulp.task('default', ['scss', 'js', 'lint']);
+gulp.task('default', ['lint', 'js', 'scss']);
