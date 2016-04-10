@@ -29,7 +29,7 @@ gulp.task('js:timer', function() {
         .src(['./scripts/src/libs/events.js',
               './scripts/src/libs/ripple.js',
               './scripts/src/libs/sticky_hover_fix.js',
-              './scripts/src/timer_*.js'])
+              './scripts/src/_timer_*.js'])
         .pipe(concat('timer.js'))
         .pipe(uglify())
         .pipe(gulp.dest('./scripts/dist'));
