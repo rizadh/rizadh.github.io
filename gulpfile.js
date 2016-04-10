@@ -7,6 +7,7 @@ var clean = require('gulp-clean');
 var jshint = require('gulp-jshint');
 var mainBowerFiles = require('main-bower-files');
 var filter = require('gulp-filter');
+var merge = require('merge-stream');
 
 gulp.task('scss', function() {
     return gulp
@@ -26,40 +27,26 @@ gulp.task('js:timer', function() {
         .pipe(gulp.dest('./scripts/dist'));
 });
 
-gulp.task('js:clock', function() {
-    return gulp
-        .src('./scripts/src/clock_*.js')
-        .pipe(uglify())
-        .pipe(rename('clock.js'))
-        .pipe(gulp.dest('./scripts/dist'));
-});
-
-gulp.task('js:stars', function() {
-    return gulp
-        .src('./scripts/src/stars_*.js')
-        .pipe(uglify())
-        .pipe(rename('stars.js'))
-        .pipe(gulp.dest('./scripts/dist'));
-});
-
 gulp.task('lint', function() {
     return gulp
         .src('./scripts/src/**/*.js')
         .pipe(jshint());
 });
 
-gulp.task('importLibs:js', function(){
-    var scripts =  gulp
+gulp.task('importLibs', function(){
+    var scripts = gulp
         .src(mainBowerFiles(), {base: 'bower_components'})
-        .pipe(filter('./**/*.js'))
+        .pipe(filter('**/*.js'))
         .pipe(concat('core_libs.js'))
         .pipe(uglify())
-        .pipe(gulp.dest('scripts/dist/libs'));
+        .pipe(gulp.dest('./scripts/dist/libs'));
 
     var styles = gulp
         .src('./bower_components/normalize-css/normalize.css')
         .pipe(rename('_normalize.scss'))
         .pipe(gulp.dest('./styles/src/partials'));
+
+    return merge(scripts, styles);
 });
 
 gulp.task('clean', function() {
@@ -73,5 +60,11 @@ gulp.task('watch', function() {
     gulp.watch('./styles/src/*.js', ['scss']);
 });
 
-gulp.task('js', ['importLibs:js', 'js:timer', 'js:clock', 'js:stars']);
-gulp.task('default', ['scss', 'js']);
+gulp.task('js', ['importLibs', 'js:timer'], function() {
+    return gulp
+        .src(['./scripts/src/*.js', '!./scripts/src/_*.js'])
+        .pipe(uglify())
+        .pipe(gulp.dest('./scripts/dist'));
+});
+
+gulp.task('default', ['scss', 'js', 'lint']);
