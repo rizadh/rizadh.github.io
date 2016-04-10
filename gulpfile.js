@@ -9,6 +9,7 @@ var bower = require('main-bower-files');
 var filter = require('gulp-filter');
 var merge = require('merge-stream');
 var postcss = require('gulp-postcss');
+var sequence = require('gulp-sequence');
 
 gulp.task('scss', function() {
     processors = [
@@ -75,4 +76,4 @@ gulp.task('js', ['importLibs'], function() {
     return merge(general, timer);
 });
 
-gulp.task('default', ['lint', 'js', 'scss']);
+gulp.task('default', sequence('clean', ['lint', 'js', 'scss']));
