@@ -10,16 +10,11 @@ var filter = require('gulp-filter');
 var merge = require('merge-stream');
 var postcss = require('gulp-postcss');
 
-// CSS Processors
-var cssnano = require('cssnano');
-var autoprefixer = require('autoprefixer');
-var pixrem = require('pixrem');
-
 gulp.task('scss', function() {
     processors = [
-        autoprefixer(),
-        pixrem(),
-        cssnano()
+        require('autoprefixer')(),
+        require('pixrem')(),
+        require('cssnano')()
     ];
 
     return gulp
