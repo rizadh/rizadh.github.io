@@ -1,15 +1,7 @@
 var gulp  = require('gulp');
-var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
-var concat = require('gulp-concat');
-var rename = require('gulp-rename');
-var clean = require('gulp-clean');
-var jshint = require('gulp-jshint');
-var bower = require('main-bower-files');
-var filter = require('gulp-filter');
-var merge = require('merge-stream');
-var postcss = require('gulp-postcss');
-var sequence = require('gulp-sequence');
+var plugins = require('gulp-load-plugins')({
+    pattern: ['gulp-*', 'gulp.*', 'main-bower-files', 'merge-stream']
+});
 
 gulp.task('scss', function() {
     processors = [
@@ -20,37 +12,37 @@ gulp.task('scss', function() {
 
     return gulp
         .src('./styles/src/*.scss')
-        .pipe(sass({outputStyle: 'compressed'}))
-        .pipe(postcss(processors))
+        .pipe(plugins.sass({outputStyle: 'compressed'}))
+        .pipe(plugins.postcss(processors))
         .pipe(gulp.dest('./styles/dist'));
 });
 
 gulp.task('lint', function() {
     return gulp
         .src('./scripts/src/**/*.js')
-        .pipe(jshint());
+        .pipe(plugins.jshint());
 });
 
 gulp.task('importLibs', function(){
     var scripts = gulp
-        .src(bower(), {base: 'bower_components'})
-        .pipe(filter('**/*.js'))
-        .pipe(concat('core_libs.js'))
-        .pipe(uglify())
+        .src(plugins.mainBowerFiles(), {base: 'bower_components'})
+        .pipe(plugins.filter('**/*.js'))
+        .pipe(plugins.concat('core_libs.js'))
+        .pipe(plugins.uglify())
         .pipe(gulp.dest('./scripts/dist/libs'));
 
     var styles = gulp
         .src('./bower_components/normalize-css/normalize.css')
-        .pipe(rename('_normalize.scss'))
+        .pipe(plugins.rename('_normalize.scss'))
         .pipe(gulp.dest('./styles/src/partials'));
 
-    return merge(scripts, styles);
+    return plugins.mergeStream(scripts, styles);
 });
 
 gulp.task('clean', function() {
     return gulp
         .src(['./scripts/dist', './styles/dist'])
-        .pipe(clean());
+        .pipe(plugins.clean());
 });
 
 gulp.task('watch', function() {
@@ -58,10 +50,10 @@ gulp.task('watch', function() {
     gulp.watch('./styles/src/*.js', ['scss']);
 });
 
-gulp.task('js', ['importLibs'], function() {
+gulp.task('js', function() {
     var general = gulp
         .src(['./scripts/src/*.js', '!./scripts/src/_*.js'])
-        .pipe(uglify())
+        .pipe(plugins.uglify())
         .pipe(gulp.dest('./scripts/dist'));
 
     var timer = gulp
@@ -69,11 +61,16 @@ gulp.task('js', ['importLibs'], function() {
                   './scripts/src/libs/ripple.js',
                   './scripts/src/libs/sticky_hover_fix.js',
                   './scripts/src/_timer_*.js'])
-            .pipe(concat('timer.js'))
-            .pipe(uglify())
+            .pipe(plugins.concat('timer.js'))
+            .pipe(plugins.uglify())
             .pipe(gulp.dest('./scripts/dist'));
 
-    return merge(general, timer);
+    return plugins.mergeStream(general, timer);
 });
 
-gulp.task('default', sequence('clean', ['lint', 'js', 'scss']));
+gulp.task('default', plugins.sequence(
+    'clean',
+    'importLibs',
+    ['lint', 'js', 'scss']
+));
+gulp.task('quick', ['js', 'scss']);
