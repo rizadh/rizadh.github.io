@@ -24,19 +24,21 @@ gulp.task('lint', function() {
 });
 
 gulp.task('importLibs', function(){
-    var scripts = gulp
+    var js_filter = plugins.filter(
+        ['**/jquery.js', '**/velocity*.js', '**/fastclick.js'],
+        { restore: true }
+    );
+
+    return gulp
         .src(plugins.mainBowerFiles(), {base: 'bower_components'})
-        .pipe(plugins.filter('**/*.js'))
+        .pipe(js_filter)
         .pipe(plugins.concat('core_libs.js'))
         .pipe(plugins.uglify())
-        .pipe(gulp.dest('./scripts/dist/libs'));
-
-    var styles = gulp
-        .src('./bower_components/normalize-css/normalize.css')
+        .pipe(gulp.dest('./scripts/dist/libs'))
+        .pipe(js_filter.restore)
+        .pipe(plugins.filter('**/normalize.css'))
         .pipe(plugins.rename('_normalize.scss'))
         .pipe(gulp.dest('./styles/src/partials'));
-
-    return plugins.mergeStream(scripts, styles);
 });
 
 gulp.task('clean', function() {
