@@ -5,7 +5,6 @@
   "main": "index.html",
   "devDependencies": {
     "autoprefixer": "^6.3.6",
-    "bower": "^1.7.2",
     "cssnano": "^3.5.2",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
@@ -31,5 +30,6 @@
   "bugs": {
     "url": "https://github.com/rizadh/rizadh.github.io/issues"
   },
-  "homepage": "https://github.com/rizadh/rizadh.github.io#readme"
+  "homepage": "https://github.com/rizadh/rizadh.github.io#readme",
+  "dependencies": {}
 }
