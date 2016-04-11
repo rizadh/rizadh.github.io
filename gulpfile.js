@@ -4,16 +4,14 @@ var plugins = require('gulp-load-plugins')({
 });
 
 gulp.task('scss', function() {
-    processors = [
-        require('autoprefixer')(),
-        require('pixrem')(),
-        require('cssnano')()
-    ];
-
     return gulp
         .src('./styles/src/*.scss')
         .pipe(plugins.sass())
-        .pipe(plugins.postcss(processors))
+        .pipe(plugins.postcss([
+            require('autoprefixer')(),
+            require('pixrem')(),
+            require('cssnano')()
+        ]))
         .pipe(gulp.dest('./styles/dist'));
 });
 
@@ -24,18 +22,17 @@ gulp.task('lint', function() {
 });
 
 gulp.task('importLibs', function(){
-    var js_filter = plugins.filter(
-        ['**/jquery.js', '**/velocity*.js', '**/fastclick.js'],
-        { restore: true }
-    );
+    var jsFilter = plugins.filter('**/+(jquery|velocity|fastclick)*.js', {
+        restore: true
+    });
 
     return gulp
         .src(plugins.mainBowerFiles(), {base: 'bower_components'})
-        .pipe(js_filter)
+        .pipe(jsFilter)
         .pipe(plugins.concat('core_libs.js'))
         .pipe(plugins.uglify())
         .pipe(gulp.dest('./scripts/dist/libs'))
-        .pipe(js_filter.restore)
+        .pipe(jsFilter.restore)
         .pipe(plugins.filter('**/normalize.css'))
         .pipe(plugins.rename('_normalize.scss'))
         .pipe(gulp.dest('./styles/src/partials'));
@@ -53,26 +50,28 @@ gulp.task('watch', function() {
 });
 
 gulp.task('js', function() {
-    var general = gulp
-        .src(['./scripts/src/*.js', '!./scripts/src/_*.js'])
-        .pipe(plugins.uglify())
-        .pipe(gulp.dest('./scripts/dist'));
-
-    var timer = gulp
-            .src(['./scripts/src/libs/events.js',
-                  './scripts/src/libs/ripple.js',
-                  './scripts/src/libs/sticky_hover_fix.js',
-                  './scripts/src/_timer_*.js'])
+    return plugins.mergeStream(
+        gulp
+            .src([
+                './scripts/src/*.js',
+                '!./scripts/src/_*.js'
+            ])
+            .pipe(plugins.uglify())
+            .pipe(gulp.dest('./scripts/dist')),
+        gulp
+            .src([
+                './scripts/src/libs/events.js',
+                './scripts/src/libs/ripple.js',
+                './scripts/src/libs/sticky_hover_fix.js',
+                './scripts/src/_timer_*.js'
+            ])
             .pipe(plugins.concat('timer.js'))
             .pipe(plugins.uglify())
-            .pipe(gulp.dest('./scripts/dist'));
-
-    return plugins.mergeStream(general, timer);
+            .pipe(gulp.dest('./scripts/dist'))
+    );
 });
 
-gulp.task('default', plugins.sequence(
-    'clean',
-    'importLibs',
-    ['lint', 'js', 'scss']
-));
+gulp.task('default',
+    plugins.sequence('clean', 'importLibs', ['lint', 'js', 'scss'])
+);
 gulp.task('quick', ['js', 'scss']);
