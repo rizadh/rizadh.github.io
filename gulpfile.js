@@ -51,25 +51,17 @@ gulp.task('watch', function() {
 });
 
 gulp.task('js', function() {
-    return plugins.mergeStream(
-        gulp
-            .src([
-                './src/js/*.js',
-                '!**/_*.js'
-            ])
-            .pipe(plugins.uglify())
-            .pipe(gulp.dest('./dist/js/')),
-        gulp
-            .src([
-                './src/js/libs/events.js',
-                './src/js/libs/ripple.js',
-                './src/js/libs/sticky_hover_fix.js',
-                './src/js/_timer_*.js'
-            ])
-            .pipe(plugins.concat('timer.js'))
-            .pipe(plugins.uglify())
-            .pipe(gulp.dest('./dist/js/'))
-    );
+    return gulp
+        .src([
+            './src/js/libs/events.js',
+            './src/js/libs/ripple.js',
+            './src/js/libs/sticky_hover_fix.js',
+            './src/js/_timer_*.js'
+        ])
+        .pipe(plugins.concat('timer.js'))
+        .pipe(plugins.addSrc(['./src/js/!(_)*.js']))
+        .pipe(plugins.uglify())
+        .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('jade', function() {
