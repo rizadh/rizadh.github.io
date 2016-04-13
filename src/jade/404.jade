@@ -1,0 +1,14 @@
+include ./partials/_head
+
+doctype html
+html
+  head
+    title 404: Page Not Found
+    +head
+    link(rel='stylesheet', type='text/css', href='styles/dist/404.css')
+  body
+    #message
+      #message-title 
+        | The requested #[span page] could #[span not] be #[span found]
+      #message-desc 
+        | You may have mistyped the URL or followed a link to a deleted page.

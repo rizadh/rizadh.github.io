@@ -1,0 +1,13 @@
+include ./partials/_head
+
+doctype html
+html
+  head
+    +app_head('clock')
+  body
+    svg(viewbox='0 0 100 100')
+      circle#frame(cx='50', cy='50', r='40')
+      line#minute-hand(x1='50', y1='50', x2='50', y2='15')
+      line#hour-hand(x1='50', y1='50', x2='50', y2='25')
+      line#second-hand(x1='50', y1='50', x2='50', y2='15')
+      circle#center(cx='50', cy='50', r='2')

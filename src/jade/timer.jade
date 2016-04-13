@@ -1,0 +1,71 @@
+include ./partials/_head
+
+doctype html
+html
+  head
+    +app_head('timer')
+  body
+    #notification-banner
+      span
+      div
+    #content
+      #keyboard-help-wrapper
+        table#keyboard-help
+          tr.title
+            td(colspan='2') Keyboard Help
+          tr.shortcut
+            td Enter
+            td Start/Cancel Timer
+          tr.shortcut
+            td
+            td Select highlighted option
+              br
+              span when notification is shown
+          tr.shortcut
+            td Space
+            td Show/Hide Keyboard Help
+          tr.shortcut
+            td
+            td Pause/Resume Timer
+              br
+              span when timer is running
+          tr.shortcut
+            td Enter
+            td Start/Cancel Timer
+          tr.shortcut
+            td Esc
+            td Cancel Timer
+          tr.shortcut
+            td
+            td Dismiss notification
+              br
+              span when notification is shown
+          tr.shortcut
+            td 0 - 9
+            td Enter Numbers into Display
+          tr.shortcut
+            td.delete Backspace
+            td Remove Numbers from Display
+          tr.dismiss
+            td(colspan='2') Click or tap to dismiss
+      #display
+        svg#dial-ring(viewbox='0 0 100 100')
+          circle(cx='50', cy='50', r='40')
+          path(d='')
+        #display-text-wrapper
+          #display-text Enter a time
+      #edit-button
+        svg(viewbox='0 0 200 200')
+          polyline(points='40,130 100,80 160,130')
+      table#keypad
+        - var i = 0
+        while i < 3
+          tr
+            - var j = 0
+            while j < 3
+              td= 3 * i + j++ + 1
+          - i++
+        tr
+          td.text-cell Clear
+          td 0
+          td.text-cell Start

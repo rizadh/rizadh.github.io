@@ -1,0 +1,18 @@
+mixin head
+    -
+      var content = 'width=device-width, initial-scale=1.0,' + 
+                    'maximum-scale=1.0, user-scalable=no'
+    meta(charset='UTF-8')
+    meta(name='viewport', content=content)
+
+mixin app_head(app_name)
+    title= app_name[0].toUpperCase() + app_name.slice(1)
+    +head
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style', content='black')
+    link(rel='apple-touch-icon-precomposed', \
+         href='icons/#{app_name}-precomposed.png')
+    link(rel='icon', href='icons/#{app_name}-precomposed.png')
+    link(rel='stylesheet', type='text/css', href='css/#{app_name}.css')
+    script(src='js/libs/core_libs.js')
+    script(src='js/#{app_name}.js')
