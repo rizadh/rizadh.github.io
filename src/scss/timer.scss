@@ -9,8 +9,6 @@ $resting-transition-time: .3s; // 300ms is the base animation time
 $hover-transition-time: $resting-transition-time / 2;
 $active-transition-time: 0s; // No animation for active state
 
-$drop-shadow-blur-1: .1rem;
-$drop-shadow-blur-2: .5rem;
 $drop-shadow: .1rem, .5rem;
 
 // Add a dark background to an element, translucent for supported devices
