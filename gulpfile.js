@@ -1,9 +1,9 @@
 var gulp  = require('gulp');
 var plugins = require('gulp-load-plugins')({
-    pattern: ['gulp-*', 'gulp.*', 'main-bower-files', 'merge-stream']
+    pattern: ['gulp-*', 'gulp.*', 'main-bower-files']
 });
 
-gulp.task('scss', function() {
+gulp.task('scss', ['importSCSS'], function() {
     return gulp
         .src('./src/scss/*.scss')
         .pipe(plugins.sass())
@@ -21,21 +21,27 @@ gulp.task('lint', function() {
         .pipe(plugins.jshint());
 });
 
-gulp.task('importLibs', function(){
-    var jsFilter = plugins.filter('**/+(jquery|velocity|fastclick)*.js', {
-        restore: true
-    });
-
+gulp.task('importJS', function() {
     return gulp
         .src(plugins.mainBowerFiles(), {base: 'bower_components'})
-        .pipe(jsFilter)
+        .pipe(plugins.filter('**/+(jquery|velocity|fastclick)*.js'))
         .pipe(plugins.concat('core_libs.js'))
         .pipe(plugins.uglify())
-        .pipe(gulp.dest('./dist/js/libs/'))
-        .pipe(jsFilter.restore)
+        .pipe(gulp.dest('./dist/js/'));
+});
+
+gulp.task('importSCSS', function() {
+    return gulp
+        .src(plugins.mainBowerFiles(), {base: 'bower_components'})
         .pipe(plugins.filter('**/normalize.css'))
-        .pipe(plugins.rename('_normalize.scss'))
-        .pipe(gulp.dest('./src/scss/partials/'));
+        .pipe(plugins.rename({dirname: ''}))
+        .pipe(gulp.dest('./dist/css/'));
+});
+
+gulp.task('importResources', function() {
+    return gulp
+        .src('./src/resources/**/*')
+        .pipe(gulp.dest('./dist/resources/'));
 });
 
 gulp.task('clean', function() {
@@ -72,6 +78,16 @@ gulp.task('jade', function() {
 });
 
 gulp.task('default',
-    plugins.sequence('clean', 'importLibs', ['jade', 'lint', 'js', 'scss'])
+    plugins.sequence('clean', 'compile')
 );
-gulp.task('quick', ['js', 'scss']);
+
+gulp.task('compile', [
+    'importResources',
+    'importJS',
+    'jade',
+    'lint',
+    'js',
+    'scss'
+]);
+
+gulp.task('quick', ['jade', 'js', 'scss']);

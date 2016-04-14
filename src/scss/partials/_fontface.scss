@@ -1,5 +1,5 @@
 @mixin fontFace($family, $src) {
-	$src: "../../resources/fonts/" + $src;
+	$src: "../resources/fonts/" + $src;
 	@font-face {
 		font-family: $family;
 		src: url('#{$src}.eot'); // IE9 compat
