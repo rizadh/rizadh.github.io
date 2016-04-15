@@ -3,7 +3,7 @@ var plugins = require('gulp-load-plugins')({
     pattern: ['gulp-*', 'gulp.*', 'main-bower-files']
 });
 
-gulp.task('scss', ['importSCSS'], function() {
+gulp.task('scss', function() {
     return gulp
         .src('./src/scss/*.scss')
         .pipe(plugins.sass())
@@ -77,17 +77,14 @@ gulp.task('jade', function() {
         .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('default',
-    plugins.sequence('clean', 'compile')
-);
-
-gulp.task('compile', [
+gulp.task('default', plugins.sequence('clean', [
     'importResources',
     'importJS',
+    'importSCSS',
     'jade',
     'lint',
     'js',
     'scss'
-]);
+]));
 
 gulp.task('quick', ['jade', 'js', 'scss']);
