@@ -86,5 +86,3 @@ gulp.task('default', plugins.sequence('clean', [
     'js',
     'scss'
 ]));
-
-gulp.task('quick', ['jade', 'js', 'scss']);
