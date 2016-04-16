@@ -26,6 +26,7 @@ gulp.task('importJS', function() {
         .src(plugins.mainBowerFiles(), {base: 'bower_components'})
         .pipe(plugins.filter('**/+(jquery|velocity|fastclick)*.js'))
         .pipe(plugins.concat('core_libs.js'))
+        .pipe(plugins.babel())
         .pipe(plugins.uglify())
         .pipe(gulp.dest('./dist/js/'));
 });
@@ -66,6 +67,7 @@ gulp.task('js', function() {
         ])
         .pipe(plugins.concat('timer.js'))
         .pipe(plugins.addSrc(['./src/js/!(_)*.js']))
+        .pipe(plugins.babel())
         .pipe(plugins.uglify())
         .pipe(gulp.dest('./dist/js/'));
 });
