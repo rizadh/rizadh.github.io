@@ -73,8 +73,12 @@ gulp.task('js', function() {
 });
 
 gulp.task('jade', function() {
+    gulp
+        .src('./src/jade/index.jade')
+        .pipe(plugins.jade())
+        .pipe(gulp.dest('./'));
     return gulp
-        .src('./src/jade/*.jade')
+        .src('./src/jade/!(index)*.jade')
         .pipe(plugins.jade())
         .pipe(gulp.dest('./dist/'));
 });
