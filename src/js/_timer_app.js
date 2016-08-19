@@ -4,7 +4,6 @@ var App = (function() {
     var $window, $document;
 
     function init() {
-        Ripple.enable('1.5em', 'white', 750);
         FastClick.attach(document.body);
 
         var $window = $(window);

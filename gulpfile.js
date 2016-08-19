@@ -61,7 +61,6 @@ gulp.task('js', function() {
     return gulp
         .src([
             './src/js/libs/events.js',
-            './src/js/libs/ripple.js',
             './src/js/libs/sticky_hover_fix.js',
             './src/js/_timer_*.js'
         ])
