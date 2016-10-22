@@ -1,0 +1,102 @@
+<html>
+<head>
+    <title>Seven</title>
+    <script src="../libraries/master.js"></script>
+    <script>
+        var stillthere = true;
+        
+        $(document).on("mousemove", spawn );
+        
+        $(document).on("touchmove", spawn );
+        
+        $(document).on("click", function(event) {
+            var pr = Math.floor((Math.random() * 255) + 1),
+                pg = Math.floor((Math.random() * 255) + 1),
+                pb = Math.floor((Math.random() * 255) + 1);
+            $("body").velocity("stop").velocity({backgroundColorRed: pr, backgroundColorGreen: pg, backgroundColorBlue: pb}, 200);  
+            $("#text").velocity({colorRed: 255-pr, colorGreen: 255-pg, colorBlue: 255-pb}, {duration: 200, queue: false} );  
+        });
+        
+        $(document).on("contextmenu", function(e) {
+            e.preventDefault();
+            $("body").velocity("stop").velocity({ backgroundColor: "#1a1a1a"}, 200, function() {
+                document.location.href = "../index.html";
+            });
+        });
+        
+        function spawn() {
+            if (stillthere) {
+                stillthere = false;
+                $("#text").velocity("fadeOut", 1000);
+            }
+            var px = Math.floor((Math.random() * 100) + 1),
+                py = Math.floor((Math.random() * 100) + 1),
+                ps = Math.floor((Math.random() * 3) + 1),
+                pr = Math.floor((Math.random() * 255) + 1),
+                pg = Math.floor((Math.random() * 255) + 1),
+                pb = Math.floor((Math.random() * 255) + 1),
+                rz = Math.floor((Math.random() * 360) - 179),
+                rx = Math.floor((Math.random() * 360) - 179),
+                ry = Math.floor((Math.random() * 360) - 179),
+                le = (Math.random() > 0.01) ? 7 : 8,
+                fo = (Math.random() > 0.5) ? "robotobold" : "robotolight",
+                du = Math.floor((Math.random() * 1000) + 501);
+            
+            $("body").append("<div class='seven'>"+le+"</div>");
+            $(".seven").last().css("opacity",0).css("top", event.pageY).css("left", event.pageX).css("font-family", fo)
+                .velocity({
+                    translateX: "-50%",
+                    translateY: "-50%",
+                    colorRed: pr,
+                    colorGreen: pg,
+                    colorBlue: pb,
+                    scale: 0,
+                    opacity: 1
+                }, 0).velocity({
+                    top: px+"%",
+                    left: py+"%",
+                    opacity: 0,
+                    scale: ps,
+                    rotateX: rx,
+                    rotateY: ry,
+                    rotateZ: rz
+                }, {
+                    duration: du,
+                    easing: "easeOutSine",
+                    complete: function() { $(this).remove() }
+                });
+        }
+    </script>
+    
+    <link rel="stylesheet" type="text/css" href="../libraries/fonts.css">
+    <link rel="stylesheet" type="text/css" href="../libraries/reset.css">
+    <style>
+        body {
+            background: #303030;
+            overflow: hidden;
+        }
+        
+        .seven {
+            position: absolute;
+            pointer-events: none;
+            color: #fff;
+            font-size: 80px;
+        }
+        
+        #text {
+            position: absolute;
+            font-size: 80px;
+            font-family: 'robotolight';
+            color: #bbb;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            transform: translate(-50%,-50%);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="text">Move your mouse!</div>
+</body>
+</html>

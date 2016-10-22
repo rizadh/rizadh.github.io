@@ -1,0 +1,550 @@
+@font-face {
+    font-family: 'UbuntuRegular';
+    src: url('Ubuntu-R-webfont.eot');
+    src: url('Ubuntu-R-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Ubuntu-R-webfont.woff') format('woff'),
+         url('Ubuntu-R-webfont.ttf') format('truetype'),
+         url('Ubuntu-R-webfont.svg#UbuntuRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'UbuntuMedium';
+    src: url('Ubuntu-M-webfont.eot');
+    src: url('Ubuntu-M-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Ubuntu-M-webfont.woff') format('woff'),
+         url('Ubuntu-M-webfont.ttf') format('truetype'),
+         url('Ubuntu-M-webfont.svg#UbuntuMedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'UbuntuLight';
+    src: url('Ubuntu-L-webfont.eot');
+    src: url('Ubuntu-L-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Ubuntu-L-webfont.woff') format('woff'),
+         url('Ubuntu-L-webfont.ttf') format('truetype'),
+         url('Ubuntu-L-webfont.svg#UbuntuLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'SourceSansProLight';
+    src: url('SourceSansPro-Light-webfont.eot');
+    src: url('SourceSansPro-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('SourceSansPro-Light-webfont.woff') format('woff'),
+         url('SourceSansPro-Light-webfont.ttf') format('truetype'),
+         url('SourceSansPro-Light-webfont.svg#SourceSansProLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'SourceSansProRegular';
+    src: url('SourceSansPro-Regular-webfont.eot');
+    src: url('SourceSansPro-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('SourceSansPro-Regular-webfont.woff') format('woff'),
+         url('SourceSansPro-Regular-webfont.ttf') format('truetype'),
+         url('SourceSansPro-Regular-webfont.svg#SourceSansProRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'telegramarender';
+    src: url('telegrama_render-webfont.eot');
+    src: url('telegrama_render-webfont.eot?#iefix') format('embedded-opentype'),
+         url('telegrama_render-webfont.woff') format('woff'),
+         url('telegrama_render-webfont.ttf') format('truetype'),
+         url('telegrama_render-webfont.svg#telegramarender') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'UbuntuCondensedRegular';
+    src: url('Ubuntu-C-webfont.eot');
+    src: url('Ubuntu-C-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Ubuntu-C-webfont.woff') format('woff'),
+         url('Ubuntu-C-webfont.ttf') format('truetype'),
+         url('Ubuntu-C-webfont.svg#UbuntuCondensedRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@-webkit-keyframes nopath
+{
+0%		{background:rgba(255,0,0,0);}
+50%		{background:rgba(255,0,0,0.4)}
+100%	{background:rgba(255,0,0,0);}
+}
+
+*
+{
+margin:0;
+padding:0;
+}
+
+body
+{
+background:rgb(20,20,20);
+color:rgb(190,190,190);
+font-family:'UbuntuLight';
+-webkit-user-select:none;
+}
+
+a
+{
+text-decoration:none;
+color:rgb(150,150,150);
+}
+
+#content
+{
+z-index:-1;
+position:absolute;
+top:60px;
+width:100%;
+background:rgb(35,35,35);
+box-shadow:0 0 5px black;
+}
+
+#content_in
+{
+margin:5px;
+}
+
+.link
+{
+top:0px;
+width:50%;
+height:60px;
+position:fixed;
+background:rgb(70,70,70);
+text-align:center;
+box-shadow:0 0 3px black;
+-webkit-transition:background 200ms;
+}
+
+.link.touch
+{
+background:#666;
+}
+
+#link1
+{
+z-index:1;
+left:0;
+}
+
+#link2
+{
+z-index:4;
+left:50%;
+margin-left:-45px;
+height:65px;
+width:90px;
+border-radius:0 0 5px 5px;
+-webkit-transition:height 1s, box-shadow 1s, border-radius 1s;
+}
+
+#link2.push
+{
+height:60px;
+box-shadow:none;
+border-radius:none;
+}
+
+#link3
+{
+z-index:3;
+right:0;
+}
+
+#link3.clicked
+{
+box-shadow:none;
+}
+
+.navicon
+{
+padding-top:9px;
+height:42px;
+width:42px;
+opacity:1;
+}
+
+#back
+{
+margin-right:45px;
+}
+
+#dots
+{
+margin-left:45px;
+}
+
+#menu
+{
+z-index:2;
+position:fixed;
+top:60px;
+left:50%;
+width:50%;
+background:rgb(70,70,70);
+color:rgb(200,200,200);
+font-size:1.5em;
+border-radius:0 0 0 5px;
+box-shadow:0 0 3px black;
+text-align:center;
+padding-top:10px;
+padding-bottom:5px;
+text-shadow:0 1px 1px rgba(0,0,0,0.8);
+font-family:'UbuntuCondensedRegular';
+-webkit-transition:opacity 0.25s;
+}
+
+#menu.hide
+{
+opacity:0;
+}
+
+#menu.gone
+{
+display:none;
+}
+
+#menu.show
+{
+opacity:1;
+}
+
+#menu.here
+{
+display:block;
+opacity:0;
+}
+
+.current
+{
+color:rgb(100,100,100);
+text-shadow:none;
+}
+
+.hr
+{
+background:rgb(200,200,200);
+box-shadow:0 1px 1px rgba(0,0,0,0.8);
+width:90%;
+height:1px;
+margin-top:5px;
+margin-bottom:5px;
+margin-right:auto;
+margin-left:auto;
+}
+
+h1
+{
+margin-top:20px;
+margin-bottom:5px;
+font-family:'UbuntuRegular';
+font-size:2em;
+color:#c00;
+text-shadow:0 -1px #000;
+}
+
+h2
+{
+margin-top:10px;
+color:#dddddd;
+font-family:'UbuntuCondensedRegular';
+font-size:1.5em;
+text-shadow:0 1px #000;
+}
+
+#email
+{
+color:#e77;
+}
+
+span.yellow
+{
+color:yellow;
+}
+
+span.green
+{
+color:green;
+}
+
+#maze_start
+{
+margin-top:10px;
+display:block;
+height:48px;
+width:100px;
+border-radius:10px;
+border-style:solid;
+border-width:2px;
+border-color:#400;
+background:#800;
+font-family:'telegramarender';
+font-size:1.5em;
+color:#400;
+box-shadow:0 1px 2px black;
+}
+
+#maze_start.pressed
+{
+box-shadow:0 1px black;
+position:relative;
+top:1px;
+}
+
+#maze_board
+{
+position:relative;
+margin-top:0;
+margin-bottom:0;
+margin-right:auto;
+margin-left:auto;
+width:320px;
+height:320px;
+background:#333;
+}
+
+.square
+{
+width:16px;
+height:16px;
+font-size:0.5em;
+}
+
+.flash
+{
+-webkit-animation:nopath 500ms;
+}
+
+#player
+{
+width:12px;
+height:12px;
+background:#c00;
+border-radius:6px;
+margin-top:2px;
+margin-left:2px;
+box-shadow:inset 0 -6px 6px -6px rgba(0,0,0,0.5), inset 0 6px 6px -6px rgba(255,255,255,1), 0 1px 1px rgba(0,0,0,0.75);
+box-shadow: 0 1px 1px rgba(0,0,0,0.75);
+}
+
+.control
+{
+width:60px;
+height:60px;
+background:rgba(0,0,0,0.25);
+position:absolute;
+border-radius:5px;
+-webkit-transition:background 150ms;
+}
+
+#left_control
+{
+top:130px;
+left:5px;
+box-shadow:1px 0 3px black;
+-webkit-transform:rotate(90deg);
+}
+
+#right_control
+{
+top:130px;
+right:5px;
+box-shadow:-1px 0 3px black;
+-webkit-transform:rotate(-90deg);
+}
+
+#up_control
+{
+left:130px;
+top:5px;
+box-shadow:0 -1px 3px black;
+-webkit-transform:rotate(180deg);
+}
+
+#down_control
+{
+left:130px;
+bottom:5px;
+box-shadow:0 1px 3px black;
+}
+
+.control_arrow
+{
+width:30px;
+height:30px;
+position:absolute;
+top:15px;
+left:15px;
+}
+
+.control.pressed
+{
+background:rgba(0,0,0,0.5);
+}
+
+#calDisplay
+{
+height:80px;
+width:100%;
+text-align:right;
+border:none;
+background:#eee;
+}
+
+.calButton
+{
+font-family:'UbuntuRegular';
+font-size:50px;
+outline:solid black 1px;
+height:69px;
+padding-top:10px;
+width:79px;
+background:rgb(35,35,35);
+color:rgb(200,200,200);
+text-align:center;
+position:absolute;
+}
+
+#calClear
+{
+top:81px;
+left:0px;
+color:#d55;
+font-size:50px;
+padding-top:12px;
+height:67px
+}
+
+#calBraL
+{
+top:81px;
+left:80px;
+}
+
+#calBraR
+{
+top:81px;
+left:160px;
+}
+
+#calDiv
+{
+top:81px;
+left:240px;
+}
+
+#calMul
+{
+top:160px;
+left:240px;
+}
+
+#calAdd
+{
+top:240px;
+left:240px;
+}
+
+#calSub
+{
+top:320px;
+left:240px;
+}
+
+#calEqual
+{
+top:400px;
+left:240px;
+}
+
+#calBra
+{
+top:80px;
+left:80px;
+}
+
+#cal7
+{
+top:160px;
+left:0px;
+}
+
+#cal8
+{
+top:160px;
+left:80px;
+}
+
+#cal9
+{
+top:160px;
+left:160px;
+}
+
+#cal4
+{
+top:240px;
+left:0px;
+}
+
+#cal5
+{
+top:240px;
+left:80px;
+}
+
+#cal6
+{
+top:240px;
+left:160px;
+}
+
+#cal1
+{
+top:320px;
+left:0px;
+}
+
+#cal2
+{
+top:320px;
+left:80px;
+}
+
+#cal3
+{
+top:320px;
+left:160px;
+}
+
+#cal0
+{
+top:400px;
+left:80px;
+}
+
+#calDot
+{
+top:400px;
+left:0px;
+}

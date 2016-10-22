@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1, user-scalable=0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Rizadh">
+<link rel="apple-touch-icon-precomposed" href="iphone-icon.png"/>
+<link rel="apple-touch-startup-image" href="startup.png" />
+<script src="script.js" language=javascript>
+</script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>
+Maze Game
+</title>
+</head>
+<body>
+<div id="link1" onTouchStart="touchOn(this)" onTouchEnd="touchOff(this)" class="link" onClick="goBack()">
+<img src="back.svg" id="back" class="navicon" />
+</div>
+<div id="link2" onTouchStart="touchOn(this)" onTouchEnd="touchOff(this)" class="link" onClick="location.href='http://rizadh.kissr.com/m/'">
+<img src="home.svg" class="navicon" />
+</div>
+<div id="link3" onTouchStart="touchOn(this)" onTouchEnd="touchOff(this)" class="link" onClick="menuToggle2()">
+<img src="dots.svg" id="dots" class="navicon" />
+</div>
+<div id="menu" class="gone">
+<span class="current">
+GAMES
+</span>
+<div class="hr">
+</div>
+<span onClick="location.href='tools.html'"  onTouchStart="touchOn2(this)" onTouchEnd="touchOff2(this)">
+APPS
+</span>
+<div class="hr">
+</div>
+<span onClick="location.href='#contact'"  onTouchStart="touchOn2(this)" onTouchEnd="touchOff2(this)">
+CONTACT ME
+</span>
+</div>
+<div id="content">
+<div id="content_in">
+<h1>
+Hidden Maze
+</h1>
+<h2>
+INSTRUCTIONS
+</h2>
+Use the onscreen controls to control the dot from the start of the game (<span class="yellow">yellow</span> square) to the end (<span class="green">green</span> square). Along the way you will bump into hidden obstacles. Avoid these obstacles and try to find the right path to get you to the end!
+<button id="maze_start" onTouchStart="start_maze();" onClick="start_maze();">
+PLAY
+</button>
+</div>
+</div>
+</body>
+</html>

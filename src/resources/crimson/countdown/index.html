@@ -1,0 +1,151 @@
+<!--<html manifest="countdown.appcache">-->
+<html>
+	<head>
+        
+		<title>Countdown</title>
+        <meta charset="UTF-8">
+        
+        <!-- WEB APP COMPATABILITY -->
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="apple-mobile-web-app-title" content="Countdown">
+		<meta name="viewport" content="width = 640, initial-scale = 0.5, user-scalable = no">
+        <link rel="icon" href="../libraries/countdown-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="../libraries/countdown-precomposed.png">
+		
+        <link rel="stylesheet" type="text/css" href="../libraries/master.css">
+		<link rel="stylesheet" type="text/css" href="countdown.css" data-PolyCalc="1">
+        
+        <script src="../libraries/jquery.js"></script>
+        <script src="../libraries/jquery.velocity.js"></script>
+        <script src="../libraries/velocity.ui.js"></script>
+        <script src="../libraries/prefix.js"></script>
+        <script src="../libraries/fastclick.js"></script>
+        <script src="../libraries/jquery.ripple.js"></script>
+        <script src="../libraries/modernizr.js"></script>
+        
+        <script src="../libraries/countdown.master.js"></script>
+		<script src="countdown.js"></script>
+        
+	</head>
+	<body>
+		
+		<svg id="menu" class="icon" viewBox="0 0 18 18" alt="Open Menu">
+            <path d="M0 0h18v18h-18z" fill="none"/>
+            <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"/>
+        </svg>
+		
+        <svg id="full" class="icon" viewBox="0 0 18 18" alt="Enter Fullscreen">
+            <path d="M0 0h18v18h-18z" fill="none"/>
+            <path d="M4.5 11h-1.5v4h4v-1.5h-2.5v-2.5zm-1.5-4h1.5v-2.5h2.5v-1.5h-4v4zm10.5 6.5h-2.5v1.5h4v-4h-1.5v2.5zm-2.5-10.5v1.5h2.5v2.5h1.5v-4h-4z"/>
+        </svg>
+            
+        <svg id="holiday" class="set icon"  viewBox="0 0 18 18" alt="Holidays">
+            <path d="M0 0h18v18h-18z" fill="none"/>
+            <path d="M13 9h-4v4h4v-4zm2-7h-1v-1h-2v1h-6v-1h-2v1h-1c-.55 0-1 .45-1 1v12c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-12c0-.55-.45-1-1-1zm-1 12h-10v-8h10v8z"/>
+        </svg>
+
+        <svg id="custom" class="set icon" viewBox="0 0 24 24" alt="Set Custom Time">
+            <path d="M3 17.25v3.75h3.75l11.06-11.06-3.75-3.75-11.06 11.06zm17.71-10.21c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+            <path d="M0 0h24v24h-24z" fill="none"/>
+        </svg>
+        
+		<div id="alert">
+            
+			<div id="alerttext">
+				No Alerts Yet
+			</div>
+            
+		</div>
+        
+        <div id="hint">
+		</div>
+		
+		<div contenteditable="true" id="copyText"></div>
+		
+        <div id="unit-selector">
+            <span>Years</span>
+            <span>Months</span>
+            <span>Weeks</span>
+            <span>Days</span>
+            <span>Hours</span>
+            <span>Minutes</span>
+            <span>Seconds</span>
+        </div>
+        
+		<div id="drawer">
+			<div>
+			Show Milliseconds
+			</div>
+			<div>
+			Show Copyable Text
+			</div>
+            <div>
+			Enable Lite Mode
+			</div>
+            <div>
+			Disable Ripple
+			</div>
+            <div>
+			Go to Home
+			</div>
+		</div>
+		
+		<div id="countdownwrapper" class="wrapper">
+            <svg id="info" class="icon subicon" viewBox="0 0 24 24" alt="Date Info">
+                <path d="M0 0h24v24h-24z" fill="none"/>
+                <path d="M11 17h2v-6h-2v6zm1-15c-5.52 0-10 4.48-10 10s4.48 10 10 10 10-4.48 10-10-4.48-10-10-10zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-11h2v-2h-2v2z"/>
+            </svg>
+            
+            <svg id="refresh" class="icon subicon" viewBox="0 0 18 18" alt="Restart App">
+                <path d="M0 0h18v18h-18z" fill="none"/>
+                <path d="M9 13.5c-2.49 0-4.5-2.01-4.5-4.5s2.01-4.5 4.5-4.5c1.24 0 2.36.52 3.17 1.33l-2.17 2.17h5v-5l-1.76 1.76c-1.09-1.08-2.58-1.76-4.24-1.76-3.31 0-5.99 2.69-5.99 6s2.68 6 5.99 6c2.97 0 5.43-2.16 5.9-5h-1.52c-.46 2-2.24 3.5-4.38 3.5z"/>
+            </svg>
+            
+            <svg id="speak" class="icon subicon" viewBox="0 0 24 24" alt="Speak Countdown">
+                <path d="M17 20c-.29 0-.56-.06-.76-.15-.71-.37-1.21-.88-1.71-2.38-.51-1.56-1.47-2.29-2.39-3-.79-.61-1.61-1.24-2.32-2.53C9.29 10.98 9 9.93 9 9c0-2.8 2.2-5 5-5s5 2.2 5 5h2c0-3.93-3.07-7-7-7S7 5.07 7 9c0 1.26.38 2.65 1.07 3.9.91 1.65 1.98 2.48 2.85 3.15.81.62 1.39 1.07 1.71 2.05.6 1.82 1.37 2.84 2.73 3.55.51.23 1.07.35 1.64.35 2.21 0 4-1.79 4-4h-2c0 1.1-.9 2-2 2zM7.64 2.64L6.22 1.22C4.23 3.21 3 5.96 3 9s1.23 5.79 3.22 7.78l1.41-1.41C6.01 13.74 5 11.49 5 9s1.01-4.74 2.64-6.36zM11.5 9c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5-2.5 1.12-2.5 2.5z"/>
+                <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+            
+            <svg id="settings" class="icon subicon" viewBox="0 0 24 24" alt="Select Units">
+                <path d="M0 0h24v24h-24z" fill="none"/>
+                <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65c-.03-.24-.24-.42-.49-.42h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zm-7.43 2.52c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+            </svg>
+
+			<div id="countdown">
+				ERROR
+				<br />
+				until <span id="countTo">Nothing</span>
+			</div>
+            
+        </div>
+            <div id="holiday_selector" class="selector wrapper">
+                <table>
+                </table>
+            </div>
+
+            <div id="exam_selector" class="selector wrapper">
+                <table>
+                </table>
+            </div>
+
+            <div id="custom_selector" class="selector wrapper">
+                <span>Enter a Date</span>
+                <input id ="customInputD" type="text" />
+                <div id="overlay">mm/dd/yyyy</div>
+                <svg id="goicon" class="icon" viewBox="0 0 24 24" alt="Start Countdown">
+                    <path d="M8.59 16.34l4.58-4.59-4.58-4.59 1.41-1.41 6 6-6 6z"/>
+                    <path d="M0-.25h24v24h-24z" fill="none"/>
+                </svg>
+                <div id="customLabel">ADD A CUSTOM LABEL</div>
+                <input id="customInputL" type="text" />
+                <svg id="recenticon" class="icon" viewBox="0 0 24 24" alt="Recents">
+                    <path d="M0 0h24v24h-24z" fill="none"/>
+                    <path opacity=".9" d="M13 3c-4.97 0-9 4.03-9 9h-3l3.89 3.89.07.14 4.04-4.03h-3c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42c1.63 1.63 3.87 2.64 6.36 2.64 4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08v-4.25h-1.5z"/>
+                </svg>
+                <div id="recents">
+                </div>
+            </div>
+	</body>
+    
+</html>

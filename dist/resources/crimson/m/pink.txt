@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, user-scalable=0"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-mobile-web-app-title" content="Calculator">
+		<link rel="apple-touch-icon-precomposed" href="app_icons/iphone-icon.png"/>
+		<link rel="apple-touch-startup-image" href="startup.png" />
+		<link rel="icon" type="image/svg+xml" href="home.svg"/>
+		<script src="jquery-2.0.3.min.js">
+		</script>
+		<script>
+		var x = "";
+		var symPressed = true;
+		var sumDisplayed = false;
+		
+		$(document).ready(function () {
+			setSize();
+		});
+		
+		$(window).resize(function () {
+			setSize();
+			fitScreen(0);
+		});
+		
+		function setSize() {
+			calWidth = window.innerWidth;
+			calHeight = window.innerHeight;
+			cutLine = 2.3;
+			if (cutLine*calWidth > calHeight){
+				butSize = calHeight;
+			}
+			else {
+				butSize = calWidth*cutLine;
+			}
+			braSize = butSize / 7.3 + "px";
+			butSize = butSize / 7 + "px";
+			butWidth = calWidth / 4;
+			butHeight = calHeight/6;
+			$('.calButton').css('font-size',butSize);
+			$('.calButton').css('width',butWidth);
+			$('.calButton').css('height',butHeight);
+			$('#calEqual').css('width',butWidth*2);
+			$('#calBraL').css('font-size',braSize);
+			$('#calBraR').css('font-size',braSize);
+			$('#calDisplay').css('height',butHeight);
+			$('#calDisplay').css('font-size',butSize);
+			$('#calDisplay').css('width',calWidth);
+			setPos(calWidth,calHeight);
+		}
+		
+		function setPos(calWidth,calHeight) {
+			x1 = 0;
+			x2 = x1 + calWidth/4;
+			x3 = x2 + calWidth/4;
+			x4 = calWidth * (3/4);
+			y1 = Math.round(calHeight/6);
+			y2 = y1 + y1;
+			y3 = y2 + y1;
+			y4 = y3 + y1;
+			y5 = y1*5;
+			lastHeight = calHeight - y5;
+			$('#calDot').css('height',lastHeight);
+			$('#cal0').css('height',lastHeight);
+			$('#calEqual').css('height',lastHeight);
+			$('#calClear').css('left',x1);
+			$('#calBraL').css('left',x2);
+			$('#calBraR').css('left',x3);
+			$('#calDiv').css('left',x4);
+			$('#calDiv').css('left',x4);
+			$('#cal7').css('left',x1);
+			$('#cal8').css('left',x2);
+			$('#cal9').css('left',x3);
+			$('#calMul').css('left',x4);
+			$('#cal4').css('left',x1);
+			$('#cal5').css('left',x2);
+			$('#cal6').css('left',x3);
+			$('#calAdd').css('left',x4);
+			$('#cal1').css('left',x1);
+			$('#cal2').css('left',x2);
+			$('#cal3').css('left',x3);
+			$('#calSub').css('left',x4);
+			$('#calDot').css('left',x1);
+			$('#cal0').css('left',x2);
+			$('#calEqual').css('left',x3);
+			$('#calClear').css('top',y1);
+			$('#cal7').css('top',y2);
+			$('#cal4').css('top',y3);
+			$('#cal1').css('top',y4);
+			$('#calDot').css('top',y5);
+			$('#calBraL').css('top',y1);
+			$('#cal8').css('top',y2);
+			$('#cal5').css('top',y3);
+			$('#cal2').css('top',y4);
+			$('#cal0').css('top',y5);
+			$('#calBraR').css('top',y1);
+			$('#cal9').css('top',y2);
+			$('#cal6').css('top',y3);
+			$('#cal3').css('top',y4);
+			// $('#cal0').css('top',y5);
+			$('#calDiv').css('top',y1);
+			$('#calMul').css('top',y2);
+			$('#calAdd').css('top',y3);
+			$('#calSub').css('top',y4);
+			$('#calEqual').css('top',y5);
+			setFunc();
+			//alert(x1 + " " + x2 + " " + x3 + " " + x3 + " " + x4);
+			//alert(y1 + " " + y2 + " " + y3 + " " + y3 + " " + y4 + " " + y5);
+		}
+		
+		function setFunc() {
+			$(".calButton").attr("onTouchStart","press(this);");
+			$(".calButton").attr("onMouseDown","press(this);");
+			$(".calButton").attr("onTouchEnd","unPress(this)");
+			$(".calButton").attr("onMouseUp","unPress(this)");
+			$(".calButton").attr("onMouseLeave","unPress(this)");
+			$(".calButton").attr("onClick","butClick(this)");
+		}
+		
+		function press(id) {
+			$(id).addClass('active');
+		}
+		
+		function unPress(id) {
+			$(id).removeClass('active');
+		}
+		function butClick(id) {
+			if ($(id).attr("data-val")) {
+				x = x + $(id).attr("data-val");
+				if ($(id).attr("data-val") >= 0 || $(id).attr("data-val") == ".") {
+					if (sumDisplayed == true) {
+						x = "";
+						x = $(id).attr("data-val");
+						symPressed = false;
+						sumDisplayed = false;
+						disNumber(x);
+					}
+					else if (symPressed == true) {
+						temp = $(id).attr("data-val");
+						disNumber(temp);
+						symPressed = false;
+					}
+					else {
+						temp = $("#calNumbers").text() + $(id).attr("data-val");
+						disNumber(temp);
+					}
+				}
+				else {
+					symPressed = true;
+					sumDisplayed = false;
+				}
+			}
+			else if ($(id).attr("id") == "calEqual") {
+				try {
+					var equ = eval(x);
+					disNumber(equ);
+					x = equ;
+					symPressed = true;
+					fitScreen(0);
+					sumDisplayed = true;
+				}
+				catch(err) {
+					var manIn = confirm("You have entered an invalid input!/nWould you like to input manually? Click cancel to return to calculator.");
+					if (manIn == true) {
+						var realX = prompt("Fix input below:",x);
+						x = realX;
+						butClick($("#calEqual"));
+					}
+					else {
+						x = "";
+						disNumber(0);
+						symPressed = true;
+					}
+				}
+			}
+			else {
+				x = "";
+				disNumber(0);
+				symPressed = true;
+			}
+			autoScroll();
+		}
+		
+		function disNumber(num)
+		{
+			$("#calNumbers").text(num);
+		}
+		
+		function autoScroll() {
+			
+		}
+		
+		function fitScreen(done) {
+			var disWidth = $('#calNumbers').innerWidth();
+			var texWidth = $('#calNumbers')[0].scrollWidth;
+			if (texWidth > disWidth) {
+				var sumLength = toString(x).length;
+				if (toString(x).indexOf(".") != -1) {
+					sumLength = sumLength - 1;
+				}
+				var displayedNumber = parseFloat(x).toPrecision(sumLength-done);
+				disNumber(displayedNumber);
+				fitScreen(done+1);
+			}
+		}
+		</script>
+		<link rel="stylesheet" type="text/css" href="pink.css">
+		<title>
+		Calculator
+		</title>
+	</head>
+	<body>
+		<div id="calDisplay">
+		<div id="calNumbers">
+		0
+		</div>
+		</div>
+		<div id="cal0" class="calButton" data-val="0" >
+		0
+		</div>
+		<div id="cal1" class="calButton" data-val="1" >
+		1
+		</div>
+		<div id="cal2" class="calButton" data-val="2" >
+		2
+		</div>
+		<div id="cal3" class="calButton" data-val="3" >
+		3
+		</div>
+		<div id="cal4" class="calButton" data-val="4" >
+		4
+		</div>
+		<div id="cal5" class="calButton" data-val="5" >
+		5
+		</div>
+		<div id="cal6" class="calButton" data-val="6" >
+		6
+		</div>
+		<div id="cal7" class="calButton" data-val="7" >
+		7
+		</div>
+		<div id="cal8" class="calButton" data-val="8" >
+		8
+		</div>
+		<div id="cal9" class="calButton" data-val="9" >
+		9
+		</div>
+		<div id="calDot" class="calButton" data-val="." >
+		.
+		</div>
+		<div id="calAdd" class="calButton" data-val="+" >
+		+
+		</div>
+		<div id="calSub" class="calButton" data-val="-" >
+		-
+		</div>
+		<div id="calMul" class="calButton" data-val="*" >
+		&times;
+		</div>
+		<div id="calDiv" class="calButton" data-val="/" >
+		&divide;
+		</div>
+		<div id="calBraL" class="calButton" data-val="(" >
+		(
+		</div>
+		<div id="calBraR" class="calButton" data-val=")" >
+		)
+		</div>
+		<div id="calEqual" class="calButton" >
+		=
+		</div>
+		<div id="calClear" class="calButton" >
+		C
+		</div>
+	</body>
+</html>

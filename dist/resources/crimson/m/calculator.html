@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, user-scalable=0"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-mobile-web-app-title" content="Calculator">
+        <link rel="icon" href="../libraries/calculator-precomposed.png"/>
+		<link rel="apple-touch-icon-precomposed" href="../libraries/calculator-precomposed.png"/>
+		<link rel="apple-touch-startup-image" href="startup_cal.png" />
+		<link rel="icon" type="image/svg+xml" href="home.svg"/> 
+        
+		<link rel="stylesheet" type="text/css" href="../libraries/fonts.css">
+		<link rel="stylesheet" type="text/css" href="../libraries/reset.css">
+		<link rel="stylesheet" type="text/css" href="calculator.css">
+		<script src="../libraries/jquery.js"></script>
+		<script src="../libraries/jquery.velocity.js"></script>
+		<script src="../libraries/velocity.ui.js"></script>
+		<script src="../libraries/fastclick.js"></script>
+		<script src="../libraries/dotimeout.js"></script>
+		<script src="../libraries/prefix.js"></script>
+		<script src="../libraries/auto.js"></script>
+        <script src="../libraries/jqueryCustom.js"></script>
+		<script src="../libraries/SimpleCssParser.js"></script>
+		<script src="../libraries/polycalc.js"></script>
+        <!--<script src="../libraries/ripple.js"></script>-->
+		<script src="../libraries/parser.js"></script>
+		<script src="calculator.js"> </script>
+		<title>
+		Calculator
+		</title>
+	</head>
+	<body>
+		<div id="calDisplay">
+		<div id="calNumbers">
+		v1.4d
+		</div>
+		</div>
+		<div id="cal0" class="calButton" data-val="0" >
+		0
+		</div>
+		<div id="cal1" class="calButton" data-val="1" >
+		1
+		</div>
+		<div id="cal2" class="calButton" data-val="2" >
+		2
+		</div>
+		<div id="cal3" class="calButton" data-val="3" >
+		3
+		</div>
+		<div id="cal4" class="calButton" data-val="4" >
+		4
+		</div>
+		<div id="cal5" class="calButton" data-val="5" >
+		5
+		</div>
+		<div id="cal6" class="calButton" data-val="6" >
+		6
+		</div>
+		<div id="cal7" class="calButton" data-val="7" >
+		7
+		</div>
+		<div id="cal8" class="calButton" data-val="8" >
+		8
+		</div>
+		<div id="cal9" class="calButton" data-val="9" >
+		9
+		</div>
+		<div id="calDot" class="calButton" data-val="." >
+		.
+		</div>
+		<div id="calAdd" class="calButton" data-val="+" >
+		+
+		</div>
+		<div id="calSub" class="calButton" data-val="-" >
+		-
+		</div>
+		<div id="calMul" class="calButton" data-val="*" >
+		&times;
+		</div>
+		<div id="calDiv" class="calButton" data-val="/" >
+		&divide;
+		</div>
+		<div id="calBraL" class="calButton" data-val="(" >
+		(
+		</div>
+		<div id="calBraR" class="calButton" data-val=")" >
+		)
+		</div>
+		<div id="calEqual" class="calButton" >
+		=
+		</div>
+		<div id="calClear" class="calButton" >
+		C
+		</div>
+		<div id="disable">
+		</div>
+		<div id="error">
+			<div id="errorMessage">
+			Invalid input. Please re-enter below.
+			</div>
+			<input id="inputField" type="text" />
+			<div id="errorCancel" onClick="manualInput('hide');">
+			Cancel
+			</div>
+			<div id="errorAccept" onClick="manualInput('enter')">
+			OK
+			</div>
+		</div>
+	</body>
+</html>

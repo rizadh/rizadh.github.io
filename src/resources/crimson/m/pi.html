@@ -1,0 +1,49 @@
+<html>
+<head>
+<script src="jquery-2.0.3.min.js">
+		</script>
+<title>
+Pi Finder
+</title>
+</head>
+<body>
+<div id="progress" style="background:red;width:1;height:2px;">
+</div>
+<table>
+<script>
+
+var m = 0;
+start();
+function start() {
+	if (m < 25) {
+		var ma = Math.pow(2,m);
+		getPi(ma);
+		$("#progress").css('width',m);
+		m++;
+		alert($("#progress").css('width') + " " + m);
+		start();
+	}
+}
+
+function getPi(max) {
+	var n = 1;
+	var d = 1;
+	var i = 1
+	var start = +new Date();
+	while (i < max) {
+		//document.write("<tr><td>"+n+"/"+d+"</td><td>"+n/d+"</td><td>"+ Math.abs(Math.PI-n/d) +"</td></tr>");
+		if (n/d > Math.PI) {
+			d++;
+		}
+		else if (n/d < Math.PI) {
+			n++;
+		}
+		i++;
+	}
+	var end = +new Date();
+	var dif = end - start;
+	document.write("<tr><td>" + dif + "</td></tr>");
+}
+</script>
+</table>
+</body>

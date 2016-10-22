@@ -1,0 +1,143 @@
+
+<html> 
+<head><title>http://heydsouza.com</title> 
+<style><!-- a{text-decoration:none;} --></style> 
+<META HTTP-EQUIV="no-cache"></head> 
+<body alink="#0000ff" background="pink.jpg" link="#0000ff" vlink="#0000ff"> 
+ 
+<center><table border="0" cellpadding="5"><tbody><tr align="center"> 
+<td align=center><center><table border="0" width="100%"><tbody> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+1">
+<a href="mcv1.5.html">Properties of Limits</A><br>
+<a href="mcv1.6.html">Limits and Continuity</A><br>
+<a href="mcvC1R.html">Chapter One Review</A><br>
+<a href="mcvDfirst.html">Derivatives from first principles</A><br> 
+<a href="mcvDpower.html">Using the power rule</A><br> 
+<a href="mcvDsumDiff.html">Derivatives of a sum and or difference</A><br> 
+<a href="mcvDproduct.html">Derivatives with the product rule</A><br> 
+<a href="mcvDquotient.html">Derivatives using the quotient rule</A><br> 
+<a href="mcvDchain.html">Linking it all with the chain rule</A><br> 
+Derivatives <a href="mcvC2R.html">Chapter 2 Review</a> and 
+<a href="mcvC2T.html">Chapter TWO Test</a><br> 
+<a href="mcvN3.1.html">Higher-Order Derivatives, Velocity, and Acceleration</A><br>
+<a href="mcvN3.2.html">Maximum and Minimum on an Interval<A><br>
+<a href="mcvN3.3.html">Optimization Problems (word problems)<A><br>
+<a href="mcvN3.4.html">Optimization Problems (Economics and Science)<A><br>
+<a href="mcvC3R.html">Applications of the Derivative Chapter Three Review<A><br>
+<a href="mcvC3T.html">Applications of the Derivative Chapter Three Test (from text)<A><br>
+<a href="mcvC4R.html">Curve Sketching Chapter Review</a><br> 
+<a href="mcvN5.1.html">Derivatives of the exponential function</A><br>
+<a href="mcvN5.2.html">Derivatives of the general exponential function</A><br>
+<a href="mcvN5.4.html">Derivatives of the sine and cosine function</A><br>
+<a href="mcvN5.5.html">Derivatives of the tangent function</A><br>
+Derivatives of Exponential and Trigonometric Functions<br> 
+<a href="mcvMC5R.html">Mid Chapter Review</a>, 
+<a href="mcvC5R.html">Chapter Review</a>, and <a href="mcvC5T.html">Chapter Test</a><br> 
+</font></th></tr> 
+ 
+
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+
+<tr><th><font size="+1">
+<a href="mcfvertexCW.html">Extracting Information from the Vertex Form of a Quadratic</A><br> 
+<a href="mcfstandardVertexCW.html">Extracting Information from the Standard Form of a Quadratic</A><br>
+<a href="mcfpolynomialMultCW.html">Multiplying Polynomials</A><br> 
+<a href="mcfspecialQuadraticsMultCW.html">Multiplying Perfect Squares and Difference of Squares</A><br> 
+<a href="mcffactorbyGroupingCW.html">Factoring by Grouping</A><br>
+<a href="mcffactorbyDecomposition.html">Factoring by Decomposition</A><br>
+<a href="mcffactoringSpecialQuadraticsCW.html">Factoring Perfect Squares and Difference of Squares</A><br>
+<a href="mcfsolvingQuadraticsFactoring.html">Solving Quadratic Equations by Factoring</A><br>
+<a href="mcfSQEbCTS.html">Solving Quadratic Equations by Completing the Square</A><br>
+<a href="mp2mGQ.html">Graphing Quadratics</A><br>
+<a href="mhfPage74.html">Polynomial Functions Chapter Review</A><br> 
+<a href="mhfPage78.html">Polynomial Functions Practice Test</A><br> 
+<a href="mhfPage140.html">Polynomial Equations and Inequalities Chapter Review</A><br> 
+<a href="mhfPage142.html">Polynomial Equations and Inequalities Practice Test</A><br> 
+<a href="mhfPage328.html">Logarithms</A><br> 
+<a href="mhfPage347.html">Power Law of Logarithms</A><br> 
+<a href="mhfPage356.html">Chapter 6 Review</A><br> 
+<a href="mhfPage368.html">Equivalent Forms of Exponential Equations</A><br> 
+<a href="mhfPage375.html">Techniques for Solving Exponential Equations</A><br> 
+<a href="mhfPage384.html">Product and Quotient Laws of Logarithms</A><br> 
+<a href="mhfPage391.html">Techniques for Solving Logarithmic Equations</A><br> 
+<a href="mhfPage408.html">Chapter 7 Review</A><br> 
+<a href="mp2mTrigSCT.html">Applying the Primary Trigonometric Ratios</A><br> 
+<a href="mp2mTrigRTP.html">Solving Problems Involving Right Triangles</A><br>
+<a href="mp2mTrig1R.html">Trigonometry Review Part One</A><br> 
+<a href="mp2mTrig2R.html">Trigonometry Review Part Two</A><br> <br>
+<a href="mcfExpIntegers.html">Working with Integer Exponents</A><br> 
+<a href="mcfExpRational.html">Working with Rational Exponents</A><br> 
+<a href="mcfExpGrowth.html">Solving Problems Involving Exponential Growth</A><br> 
+<a href="mcfExpDecay.html">Solving Problems Involving Exponential Decay</A><br> <br>
+<a href="mhfPage208.html">Radian Measure</A><br> 
+<a href="mhfPage216.html">Trigonometric Ratios and Special Angles</A><br> 
+<a href="mhfPage232.html">Compound Angle Formulas</A><br> 
+<a href="mhfPage240.html">Prove Trigonometric Identities</A><br> 
+<a href="mhfPage244.html">Trigonometry Chapter Review</A><br> 
+<a href="mhfPage246.html">Trigonometry Practice Test</A><br> 
+<a href="mhfPage304.html">Trigonometry Chapter 4 and 5 Review</A><br> 
+<a href="mhfSolvingTrigEquationsPd.html">Solving Trigonometric Equations (part deux)</A><br> 
+</font></th></tr> 
+
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+<tr><th><font size="+2">&nbsp;</font></th></tr> 
+
+<tr><th><font size="+1">sine sine cosine sine<br>
+three point one four one five nine<br>
+two six five three five eight nine<br>
+two point seven one eight two eight<br>
+one eight two eight four five nine</font></th></tr>
+ 
+</tbody></table></center></td></tr></tbody></table></center> 
+
+<!-- ARCHIVE
+
+<a href="mp2mN2.1.html">Midpoint</A> and <a href="mp2mN2.2.html">Length</A> Formula<br> 
+<a href="mp2mN2.3.html">Equation of a Circle</A><br> 
+<a href="mp2mN2.5.html">Verifying Properties of Geometric Figures</A><br> 
+<a href="mp2mN2.7.html">Using Slope, Midpoint, and Length to Solve Problems</A><br> 
+<a href="mp2mNC2CT.html">Chapter 2 Chapter Task (Analytic Geometry)</A><br> 
+<a href="mp2mNST2.html">Chapter 2 Self-Test (Analytic Geometry)</A><br> 
+<a href="mp2mProbSol.html">Problem Solving with Linear Systems of Equations</A><br>  
+<a href="mp2mNC2R.html">Analytic Geometry Practice Questions for Review</A><br> 
+Solving Linear Systems of Equations<br> 
+<a href="mp2mMOG.html">Graphing</a>, &nbsp;
+<a href="mp2mMOS.html">Substitution</A>, &nbsp;
+<a href="mp2mMOE.html">Elimination</A><br> 
+<a href="mp2mC1R.html">Linear Systems Chapter Review</A><br> 
+<a href="mp2mQuadraticsStage2.html">Suggested Solutions to Stage 2 Quadratics Assignment</A><br>
+<a href="mcf8.2.html">Compound Interest: Determining Future Value</A><br> 
+<a href="mcf8.3.html">Compound Interest: Determining Present Value</A><br> 
+<a href="mcf8.5.html">Regular Annuities: Determining Future Value</A><br> 
+<a href="mcf8.6.html">Regular Annuities: Determining Present Value</A><br> 
+<a href="mcvRfactor.html">Factoring Handout</A><br> 
+<a href="mcvRfraction.html">Fractions Handout</A><br>
+-->
+
+</body></html>
+
+<!-- Hosting24 Analytics Code -->
+<script type="text/javascript" src="http://stats.hosting24.com/count.php"></script>
+<!-- End Of Analytics Code -->

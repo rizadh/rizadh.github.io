@@ -1,0 +1,175 @@
+html.touch {
+    font-size: 1.5rem;
+}
+
+body {
+    background: #303030;
+    opacity: 0;
+    -webkit-user-select: none;
+}
+
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4rem;
+    z-index: 1;
+    overflow: hidden;
+    padding-left: 4.5rem;
+    
+    line-height: 4rem;
+    font-size: 1.5rem;
+    font-family: 'robotomedium';
+    
+    background: #f44336;
+    color: #fff;
+    
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.5);
+    
+}
+
+section a {
+    color: #f44336;
+}
+
+section a:hover {
+    text-decoration: underline;
+}
+
+.cardlabel {
+    font-size: 1rem;
+    padding: 1rem;
+    
+    font-family: 'robotomedium';
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+} 
+
+h1 {
+    padding-top: 1.5rem;
+    padding-left: 1rem;
+    font-weight: normal;
+    font-size: 1.5rem;
+    font-family: 'robotoregular';
+    color: rgba(255,255,255,1)
+}
+
+p {
+    padding: 1rem;
+    padding-bottom: 1.5rem;
+    color: rgba(255,255,255,0.7);
+    font-size: 0.875rem;
+    font-family: 'robotoregular';
+}
+
+#cardwrapper {
+    position: absolute;
+    padding: 0 0.5rem;
+    
+    box-sizing: border-box;
+    top: 0;
+    width: 25rem;
+    left: 50%;
+    z-index: 0;
+    max-width: 100%;
+    min-width: 50%;
+}
+
+#cardwrapper > *:first-child {
+    margin-top: 4.5rem;
+}
+
+section {
+    width: 100%;
+    margin: 0.5rem 0;
+    line-height: 1.5rem;
+    
+    background: #424242;
+    box-shadow:  0 0.125rem 0.125rem rgba(0,0,0,0.2), 0 0 0.25rem rgba(0,0,0,0.1);
+    border-radius: 0.125rem;
+    transition: background 250ms;
+}
+
+a section:hover {
+    background: #616161;
+    transition: background 100ms;
+}
+
+a section:active {
+    background: #757575;
+    transition: none;
+}
+
+#menubutton {
+    position: fixed;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 2;
+    width: 4rem;
+    height: 4rem;
+    top: 0;
+    left: 0;
+    background: #f44336;
+    cursor: pointer;
+    transition: background 250ms;
+}
+
+#menubutton:hover {
+    background: #E53935;
+    transition: background 100ms;
+}
+
+#menubutton:active {
+    background: #D32F2F;
+    transition: none;
+}
+
+#menu {
+    top: 1rem;
+    left: 1rem;
+    position: fixed;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 3;
+    background: #616161;
+    box-shadow:  0 0.125rem 0.25rem rgba(0,0,0,0.2), 0 0 0.25rem rgba(0,0,0,0.1);
+    border-radius: 0.125rem;
+    
+    transform-origin: 0 0;
+}
+
+#menu div {
+    height: 3rem;
+    line-height: 3rem;
+    font-family: 'robotoregular';
+    font-size: 1rem;
+    padding: 0 1rem;
+    color: rgba(255,255,255,1);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background 250ms;
+}
+
+#menu div:hover {
+    background: #757575;
+    transition: background 100ms;
+}
+
+#menu div:active {
+    background: #9E9E9E;
+    transition: none;
+}
+
+#menuicon {
+    position: fixed;
+    fill: #fff;
+    width: 2rem;
+    height: 2rem;
+    top: 1rem;
+    left: 1rem;
+}

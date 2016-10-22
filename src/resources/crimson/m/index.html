@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1, user-scalable=0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="Crimson">
+<link rel="apple-touch-icon-precomposed" href="iphone-icon.png"/>
+<link rel="apple-touch-startup-image" href="startup.png" />
+<link rel="icon" type="image/svg+xml" href="home.svg"/>
+<script src="script.js" language=javascript>
+</script>
+<link rel="stylesheet" type="text/css" href="style.css">
+<title>
+Crimson Studios
+</title>
+</head>
+<body>
+<div id="link1" onTouchStart="touchOn(this)" onTouchEnd="touchOff(this)" class="link" onClick="history.back()">
+<img src="back.svg" id="back" class="navicon" />
+</div>
+<div id="link2" onTouchStart="touchOn(this)" onTouchEnd="touchOff(this)" class="link" onClick="location.href='index.html'">
+<img src="home.svg" class="navicon" />
+</div>
+<div id="link3" onTouchStart="touchOn(this)" onTouchEnd="touchOff(this)" class="link" onClick="menuToggle2()">
+<img src="dots.svg" id="dots" class="navicon" />
+</div>
+<div id="menu" class="gone">
+<span onClick="location.href='maze.html'" onTouchStart="touchOn2(this)" onTouchEnd="touchOff2(this)">
+GAMES
+</span>
+<div class="hr">
+</div>
+<span onClick="location.href='tools.html'"  onTouchStart="touchOn2(this)" onTouchEnd="touchOff2(this)">
+APPS
+</span>
+<div class="hr">
+</div>
+<span onClick="location.href='../fill.html'"  onTouchStart="touchOn2(this)" onTouchEnd="touchOff2(this)">
+CONTACT ME
+</span>
+</div>
+<div id="content">
+<div id="content_in">
+<h1>Crimson Studios</h1>
+<h2>WHAT THIS SITE'S ABOUT</h2>
+Right now, not much. Nevertheless, in the future this website will be filled all kinds of cool demos of powerful, responsive web applications.
+<h2>HOW I MADE IT</h2>
+Made from only browser in-built web technologies such as HTML5, CSS3 and Javscript, eliminating the use of extra plug-ins such as Java and Flash. The result is a collection of lean, quick-loading and powerful applications that can run in nearly every single browser in the world!
+<h2>CONTACT ME</h2>
+Feel free to contact me at <span id="email">rizadh@outlook.com</span> with ideas, suggestions, or even complaints for this website. Thank you for visiting, continue your explorations!
+</div>
+</div>
+</body>
+</html>

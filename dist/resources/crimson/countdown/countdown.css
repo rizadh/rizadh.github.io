@@ -1,0 +1,554 @@
+html.touch {
+    font-size: 1.5rem;
+}
+
+body {
+	background: #1a1a1a;
+	overflow: hidden;
+    perspective: 640px;
+    opacity: 0;
+	font-family: 'robotoregular';
+    -webkit-user-select: none;
+            user-select: none;
+}
+
+::selection {
+    color: white; 
+    background: #bbb;
+}
+
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.notransition {
+	transition: none !important;
+}
+
+.wrapper {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	background: #222;
+	box-shadow: 0 0 5px rgba(0,0,0,0.5);
+	z-index: 1;
+    overflow: hidden;  
+    backface-visibility: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+#countdown {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+	text-align:center;
+    max-height: 100%;
+	font-size: 2rem;
+	z-index: 2;
+	color: #666;
+	font-family: 'roboto_condensedlight';
+	line-height: 200%;
+    overflow: auto;
+	margin: 0 1em;
+	cursor: default;
+}
+
+#countTo {
+	font-family: 'roboto_condensedlight'!important;
+	font-size: 1.2em !important;
+}
+
+#countdown > span {
+	color:#bbb;
+	font-family: 'robotomedium';
+	font-size: 1.5em;
+}
+
+#displaybar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 10%;
+	height: 5em;
+	width: 100%;
+	z-index: 2;}
+
+#alert {
+	position: fixed;
+	top: 2.5rem;
+	left: 50%;
+	padding: 1rem;
+	z-index: 4;
+	font-family: 'robotoregular';
+	font-size: 1.2rem;
+    line-height: 1.5em;
+	background: rgba(0,0,0,0.5);
+	color: #bbb;
+	border-radius: 2px;
+	cursor: pointer;
+	text-align: center;
+}
+
+#alert:active {
+    opacity: 0.5 !important;
+}
+
+#copyText {
+	top: 50%;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%,-50%);
+	background: #bbb;
+	text-align: center;
+	font-size: 1.5em;
+	font-family: 'roboto_condensedregular';
+	color: #666;
+	padding: 1rem;
+	transition: background 250ms;
+	border-radius: 2px;
+	z-index: 4;
+	box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    -webkit-user-select: text;
+            user-select: text;
+}
+
+#hint {
+    position: absolute;
+    border-radius: 2px;
+    background: rgba(0,0,0,0.5);
+    padding: 0.5rem;
+    color: #fff;
+    z-index: 4;
+    pointer-events: none;
+}
+
+#unit-selector {
+	position: absolute;
+    top: 4rem;
+	left: 50%;
+    background: #2a2a2a;
+    padding: 1rem;
+    font-size: 1.25rem;
+    border-radius: 2px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    z-index: 1;
+    text-align: center;
+    line-height: 1.5em;
+}
+
+#unit-selector > span {
+    color: #666;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'roboto_condensedregular';
+    transition: border-color 250ms, color 250ms;
+    border-bottom: solid 3px rgba(0,0,0,0);
+}
+
+#unit-selector > span.active {
+    color: #bbb;
+    font-family: 'roboto_condensedbold';
+}
+
+#unit-selector > span:hover {
+    color: white;
+    border-color: white;
+    transition: border-color 100ms, color 100ms;
+}
+
+#unit-selector > span:active {
+    color: #666;
+    border-color: #666;
+    transition: none
+}
+
+.icon {
+	position: absolute;
+	width: 2rem;
+	height: 2rem;
+    padding: 1rem;
+	fill: #bbb;
+	transition: fill 250ms;
+	cursor: pointer;
+}
+
+.set.active {
+	fill: #fff;
+}
+
+.set.dead {
+	fill: #666;
+}
+
+.icon:hover {
+	transition: fill 100ms;
+	fill: #fff;
+}
+
+.icon:active {
+	transition: none;
+	fill: #666;
+}
+#menu.icon {
+    top: 0;
+	left: 0;
+}
+
+#full.icon {
+    top: 0;
+	right: 0;
+	z-index: 3;
+}
+
+#holiday.icon {
+    bottom: 0;
+    left: 0;
+}
+
+#custom.icon {
+    bottom: 0;
+    right: 0;
+}
+
+.subicon {
+    top: auto;
+    fill: #666;
+	z-index: 2;
+}
+
+#info.icon {
+    top: 0;
+    right: 0;
+}
+
+#info.icon:hover {
+    fill: #0bb;
+}
+
+#info.icon.active {
+    fill: #0ff;
+}
+
+#info.icon:active {
+    fill: #066;
+}
+
+#refresh.icon {
+    top: 0;
+	left: 0;
+}
+
+#refresh.icon:hover {
+    fill: #0b0;
+}
+
+#refresh.icon:active {
+    fill: #060;
+}
+
+#speak.icon {
+	bottom: 0;
+    right: 0;
+}
+
+#speak.icon:hover {
+    fill: #b60;
+}
+
+#speak.icon.active {
+    fill: #f60;
+}
+
+#speak.icon:active {
+    fill: #640;
+}
+
+#settings.icon {
+	bottom: 0;
+    left: 0;
+}
+
+#settings.icon:hover {
+    fill: #bb0;
+}
+
+#settings.icon.active {
+    fill: #ff0;
+}
+
+#settings.icon:active {
+    fill: #660;
+}
+
+.selector {
+	display: none;
+    overflow: auto;
+    color: #bbb;
+    border-radius: 2px;
+    
+    min-width: 50%;
+    max-width: 80%;
+    width: 20em;
+    left: 50%;
+    background: #2a2a2a;
+}
+
+.selector table {
+    position: absolute;
+	top: 0;
+	left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.selector td {
+	vertical-align: middle;
+	text-align: center;
+	font-family: 'robotoregular';
+	font-size: 1.25em;
+    cursor: hand;
+	transition: background 250ms, color 250ms; 
+	height: 4em;
+    color: #bbb;
+    position: relative;
+}
+
+.selector td:hover {
+	transition: background 100ms, color 100ms;
+	background: #353535;
+	color: #fff;
+}
+
+.selector td:active {
+	transition: none;
+	background: #1f1f1f;
+	color: #666;
+}
+
+.paper {
+	display: none;
+    width: 33.33%;
+}
+
+#custom_selector td {
+	position: relative;
+	vertical-align: middle;
+}
+
+#overlay {
+	bottom: 50%;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%,0);
+	text-align: center;
+	font-size: 150%;
+	font-family: 'roboto_condensedregular';
+	color: #666;
+	width: 6em;
+	height: 2em;
+    line-height: 2em;
+    pointer-events: none;
+}
+
+#customInputD, #customInputL {
+	bottom: 50%;
+	left: 50%;
+	position: absolute;
+	height: 100%;
+	background: none;
+	border: none;
+	border-bottom: 2px solid #bbb;
+	text-align: center;
+	font-size: 1.5rem;
+	font-family: 'roboto_condensedregular';
+	color: #bbb;
+	min-width: 9rem;
+	width: 9rem;
+	height: 3rem;
+	max-width: 90%;
+	transition: color 250ms, border 250ms;
+	border-radius: 0;
+}
+
+#customInputL {
+    top: 50%;
+	border: none;
+    height: 3rem;
+    font-family: 'roboto_condensedbold';
+    font-size: 1.25rem;
+}
+
+#customInputD:hover {
+	transition: color 100ms, border 100ms;
+	color: #fff;
+	border-bottom-color: #fff;
+}
+
+
+#customInputD:active {
+    transition: none;
+	color: #666;
+	border-bottom-color: #666;
+}
+
+#customInputD:focus {
+	color: #fff;
+	border-bottom-color: #fff;
+}
+
+#goicon {
+	position: absolute;
+    width: 3rem;
+    height: 3rem;
+    padding: 1rem;
+	left: 50%;
+    top: auto;
+	bottom: 25%;
+	transform: translate(-50%, 50%);
+    margin-top: 1em;
+}
+
+#goicon.valid {
+	fill: #0b0;
+}
+
+#goicon.valid:hover {
+	fill: #0f0;
+}
+
+#goicon.valid:active {
+	fill: #050;
+}
+
+#recenticon {
+    top: auto;
+    bottom: 0;
+}
+
+#custom_selector span {
+	position: absolute;
+	display: block;
+	top: 25%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-family: 'roboto_condensedregular';
+	font-size: 1.75rem;
+	cursor: default;
+    text-align: center;
+}
+
+#customLabel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #666;
+    font-family: 'roboto_condensedbold';
+    height: 2rem;
+    line-height: 2rem;
+    transform: translate(-50%, 0);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 250ms;
+}
+
+#customLabel:hover {
+    color: #bbb;
+    transition: color 100ms;
+}
+
+#recents {
+    position: absolute;
+    transform: translate(1.25rem, -5rem);
+    bottom: 0;
+    left: 0;
+    background: #bbb;
+    font-family: 'roboto_condensedregular';
+    font-size: 1.5rem;
+    color: #666;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    border-radius: 2px;
+    cursor: pointer;
+    overflow: auto;
+    max-height: 80%;
+}
+
+#recents div:first-child {
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+#recents div:last-child {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#recents div {
+    padding: 1rem;
+    transition: background 250ms;
+}
+
+#recents div:hover {
+    background: #ddd;
+    transition: background 100ms;
+
+}
+
+#recents div:active {
+    background: #999;
+    transition: none;
+}
+
+#drawer {
+    top: 1rem;
+    left: 1rem;
+    position: fixed;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 3;
+    background: #424242;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2), 0px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    
+    transform-origin: 0 0;
+}
+
+#drawer > div {
+    height: 3rem;
+    line-height: 3rem;
+    font-family: 'robotoregular';
+    font-size: 1rem;
+    padding: 0 1rem;
+    color: rgba(255,255,255,1);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background 250ms;
+}
+
+#drawer > div:hover {
+    background: #616161;
+    transition: background 100ms;
+}
+
+#drawer > div:active {
+    background: #757575;
+    transition: none;
+}
+
+#drawer > #scale {
+    padding: 0;
+}
+
+#drawer > #scale:hover,#drawer >  #scale:active {
+    background: none;
+}
+
+#drawer > #scale > div {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+}
+
+#drawer > #scale > div:hover {
+    background: red;
+}

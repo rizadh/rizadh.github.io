@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, user-scalable=0"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="apple-mobile-web-app-title" content="Calculator">
+		<script src="jquery-2.0.3.min.js">
+		</script>
+		<script src="triangle.js">
+		</script>
+		<!--
+		<script src="fastclick.js">
+		</script>
+		-->
+		<link rel="stylesheet" type="text/css" href="reset.css">
+		<link rel="stylesheet" type="text/css" href="triangle.css">
+		<title>
+			Triangle Analyzer
+		</title>
+	</head>
+	
+	<body>
+		<!--
+		<span>
+			Fill in three values including at least one side value! Angles are in degrees.
+		</span>
+		-->
+		<div id="A_label" class="inputLabel">
+			Angle A
+		</div>
+		<input id="A_field" class="inputField" type="text" val="hello" />
+		<div id="B_label" class="inputLabel">
+			Angle B
+		</div>
+		<input id="B_field" class="inputField" type="text" />
+		<div id="C_label" class="inputLabel">
+			Angle C
+		</div>
+		<input id="C_field" class="inputField" type="text" />
+		<div id="a_label" class="inputLabel">
+			Side a
+		</div>
+		<input id="a_field" class="inputField" type="text" />
+		<div id="b_label" class="inputLabel">
+			Side b
+		</div>
+		<input id="b_field" class="inputField" type="text" />
+		<div id="c_label" class="inputLabel">
+			Side c
+		</div>
+		<input id="c_field" class="inputField" type="text" />
+		<div id="x_label" class="inputLabel">
+			Dec. Places
+		</div>
+		<input id="x_field" class="inputField" type="text" value="3" />
+		<div id="solveButton">
+			Solve
+		</div>
+		<div id="clearButton">
+			Clear
+		</div>
+		<div id="status">
+		Status: <span id="msg">Fill in values</span>
+		</div>
+	</body>
+</html>
