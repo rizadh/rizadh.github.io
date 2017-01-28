@@ -10,6 +10,10 @@ Simple app to count down from a user inputted time. Supports quick-links to auto
 
 Modern, blue-themed analog clock. Displays current time and sports a very simplistic, sparse design. A notable design addition is the realistically simulated clock hand physics.
 
+### [Clock (Canvas Edition)](http://rizadh.github.io/clock)
+
+Second analog clock implementation using HTML5 Canvas instead of SVG graphics. Color theme is customizable by pressing and holding page!
+
 ### [Stars](http://rizadh.github.io/dist/stars.html)
 
 A fun side-project. Not functionally useful but an interesting exhibition of the power of JavaScript based animation. Can be used as an arbitrary benchmark of device graphic performance.
