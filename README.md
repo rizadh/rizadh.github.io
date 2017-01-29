@@ -18,6 +18,10 @@ Second analog clock implementation using HTML5 Canvas instead of SVG graphics. C
 
 A fun side-project. Not functionally useful but an interesting exhibition of the power of JavaScript based animation. Can be used as an arbitrary benchmark of device graphic performance.
 
+### [Stars (Canvas Edition)](http://rizadh.github.io/stars)
+
+Again, same as above, but using HTML5 Canvas instead of HTML `div` elements Should be a significant performance improvement.
+
 ### [Crimsons Studios](http://rizadh.github.io/dist/resources/crimson/)
 
 My older site hosting a few older projects, the most notable being the countdown app.
