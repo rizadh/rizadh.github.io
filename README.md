@@ -20,7 +20,7 @@ A fun side-project. Not functionally useful but an interesting exhibition of the
 
 ### [Stars (Canvas Edition)](http://rizadh.github.io/stars)
 
-Again, same as above, but using HTML5 Canvas instead of HTML `div` elements Should be a significant performance improvement.
+Again, same as above, but using HTML5 Canvas instead of HTML `div` elements Should be a significant performance improvement. Click to set density.
 
 ### [Crimsons Studios](http://rizadh.github.io/dist/resources/crimson/)
 
